@@ -70,12 +70,12 @@ pip install .
 This package features a ready to use commandline interface.
 
 - Quick response
-   `python -m tgpt2 generate "<Your prompt>"`
+   `python -m tgpt2 generate -P "<Your prompt>"`
 
 - Interactive mode 
-   `python -m tgpt2 interactive`
+   `python -m tgpt2 interactive -P "<Kickoff prompt but not a must>"`
 
-Instead of `python -m tgpt2`, ypu can as well use just `tgpt2`
+Instead of `python -m tgpt2`, you can as well just use `tgpt2`
 
 <details>
 
