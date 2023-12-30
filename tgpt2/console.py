@@ -3,6 +3,7 @@ import click
 import cmd
 import logging
 import os
+import sys
 import clipman
 import re
 import rich
@@ -16,6 +17,7 @@ from rich.markdown import Markdown
 from rich.live import Live
 from rich.prompt import Prompt
 from typing import Iterator
+from tgpt2.utils import Optimizers
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -211,7 +213,7 @@ class Main(cmd.Cmd):
             "Enter code_theme", choices=rich_code_themes, default=self.code_theme
         )
         self.prettify = click.confirm(
-            "Prettify markdown response", default=self.prettify
+            "\nPrettify markdown response", default=self.prettify
         )
         self.color = click.prompt("Response stdout font color", default=self.color)
 
@@ -295,6 +297,30 @@ class Main(cmd.Cmd):
             self.default(issued_prompt)
 
     @busy_bar.run()
+    def do_code(self, line):
+        """Enhance prompt for code generation
+            usage : 
+                  code <Code description>
+        """
+        self.default(Optimizers.code(line))
+
+    @busy_bar.run()
+    def do_shell(self, line):
+        """Enhance prompt for system command (shell) generation
+           Usage:
+                shell <Action to be accomplished>
+        """
+        self.default(Optimizers.shell_command(line))
+        if click.confirm("Do you wish to run the command(s) generated in your system"):
+            self.do_sys(self.bot.get_message(self.bot.last_response))
+
+    def do_clear(self,line):
+        """Clear console"""
+        sys.stdout.write("\u001b[2J\u001b[H")
+        sys.stdout.flush()
+
+
+    @busy_bar.run()
     def default(self, line):
         """Chat with ChatGPT"""
         if not bool(line):
@@ -327,7 +353,11 @@ class Main(cmd.Cmd):
 
     def do_sys(self, line):
         """Execute system commands
-        shortcut [./<command>]
+           shortcut [./<command>]
+           Usage: 
+               sys <System command>
+                     or
+                ./<System command>
         """
         os.system(line)
 

@@ -50,11 +50,11 @@ class Imager:
         }
 
         response = session.post(self.image_gen_endpoint, json=payload)
-        #out = lambda data: print(json.dumps(dict(data), indent=4))
-        #out(response.headers)
+        # out = lambda data: print(json.dumps(dict(data), indent=4))
+        # out(response.headers)
         try:
             pass
-            #out(response.json())
+            # out(response.json())
         except:
             pass
         return response.text

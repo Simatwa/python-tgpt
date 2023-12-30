@@ -1,9 +1,11 @@
 <h1 align="center"> tgpt2 </h1>
 
 <p align="center">
+<!--
 <a href="https://github.com/Simatwa/tgpt2/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/tgpt2/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
-<a href="LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=GNUv3&label=License"/></a>
-<a href="https://pypi.org/project/tgpt2"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.0.1&color=green"/></a>
+-->
+<a href="LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
+<a href="https://pypi.org/project/tgpt2"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.0.2&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/tgpt2/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/tgpt2/actions/workflows/python-package.yml/badge.svg"/></a>
@@ -21,11 +23,12 @@ AI for all
 </p> 
 
 ```python
-from tgpt2 import TGPT
-bot = TGPT()
-resp = bot.chat('<Your prompt>')
-print(resp)
-# Output : How may I help you.
+>>> import tgpt2
+>>> bot = tgpt2.TGPT()
+>>> bot.chat('Hello there')
+"  Hello! It's nice to meet you. Is there something I can help you with or would you like to chat?"
+>>> 
+
 ```
 
 This project allows you to interact with AI ([LLaMA](https://ai.meta.com/llama/)) without API Key.
@@ -58,7 +61,7 @@ pip install git+https://github.com/Simatwa/tgpt2.git
 
 ```
 git clone https://github.com/Simatwa/tgpt2.git
-cd tgp2
+cd tgpt2
 pip install .
 ```
 
@@ -149,8 +152,25 @@ for value in resp:
 
 </details>
 
+<details>
 
-> **Note** : At the time of wriiting this, Chatting conversational is not supported
+<summary>
+
+- To get better feedback, you can make use of [optimizers](tgpt2/utils.py) using parameter `optimizer` with values *(code or system_command)*
+
+</summary>
+
+```python
+from tgpt2 import TGPT
+bot = TGPT()
+resp = bot.ask('<Your Prompt>', optimizer='code')
+print(resp)
+```
+
+</details>
+
+
+> **Note** : At the time of writing this, Chatting conversationally is not supported
 
 ## Acknowledgements
 

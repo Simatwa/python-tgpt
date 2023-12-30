@@ -12,7 +12,7 @@ if not PATH.exists():
 
 setup(
     name="tgpt2",
-    version="0.0.1",
+    version="0.0.2",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",

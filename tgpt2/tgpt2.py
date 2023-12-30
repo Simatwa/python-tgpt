@@ -1,5 +1,6 @@
 import requests
 import json
+from .utils import Optimizers
 
 session = requests.Session()
 
@@ -41,15 +42,27 @@ class TGPT:
             "x-brave-key": brave_key,
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
         }
+        self.__available_optimizers = (
+            method
+            for method in dir(Optimizers)
+            if callable(getattr(Optimizers, method)) and not method.startswith("__")
+        )
         session.headers.update(self.headers)
 
-    def ask(self, prompt: str, stream: bool = False, raw: bool = False) -> dict:
+    def ask(
+        self,
+        prompt: str,
+        stream: bool = False,
+        raw: bool = False,
+        optimizer: str = None,
+    ) -> dict:
         """Chat with AI
 
         Args:
             prompt (str): Prompt to be sent
             stream (bool, optional): Flag for streaming response. Defaults to False.
             raw (bool, optional): Stream back raw response as received
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
         Returns:
            dict : {}
         ```json
@@ -64,11 +77,19 @@ class TGPT:
         }
         ```
         """
+        if optimizer:
+            if optimizer in self.__available_optimizers:
+                prompt = getattr(Optimizers, optimizer)(prompt)
+            else:
+                raise Exception(
+                    f"Optimizer is not one of {self.__available_optimizers}"
+                )
+
         session.headers.update(self.headers)
         payload = {
             "max_tokens_to_sample": self.max_tokens_to_sample,
             "model": self.model,
-            "prompt": prompt,
+            "prompt": f"[INST] {prompt} [/INST]",
             "self.stop_sequence": self.stop_sequences,
             "stream": stream,
             "top_k": self.top_k,
@@ -117,21 +138,22 @@ class TGPT:
 
         return for_stream() if stream else for_non_stream()
 
-    def chat(self, prompt: str, stream: bool = False) -> str:
+    def chat(self, prompt: str, stream: bool = False, optimizer: str = None) -> str:
         """Generate response `str`
         Args:
             prompt (str): Prompt to be sent
             stream (bool, optional): Flag for streaming response. Defaults to False.
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
         Returns:
             str: Response generated
         """
 
         def for_stream():
-            for response in self.ask(prompt, stream=True):
+            for response in self.ask(prompt, True, optimizer):
                 yield self.get_message(response)
 
         def for_non_stream():
-            return self.get_message(self.ask(prompt, stream=False))
+            return self.get_message(self.ask(prompt, False, optimizer))
 
         return for_stream() if stream else for_non_stream()
 

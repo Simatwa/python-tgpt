@@ -50,10 +50,16 @@ class TestTgpt(unittest.TestCase):
         for value in resp:
             self.assertIsInstance(value, str)
 
+    def test_optimizer_usage(self):
+        """Code optimization"""
+        resp = self.bot.chat(self.prompt,optimizer='code')
+        self.assertIsInstance(resp, str)
+
     def test_last_response(self):
         """Last response availability"""
         self.bot.chat(self.prompt)
         self.assertIsInstance(self.bot.last_response, dict)
+
 
 
 if __name__ == "__main__":
