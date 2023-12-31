@@ -11,3 +11,9 @@
 - Prompt optimizers added - *[code, shell_command]*
 - Prompt optimizers added - *Console*
 - Clear console  - *Console*
+
+## v0.0.3
+
+**What's new?**
+- Busy bar index bug **fixed** - *(Console)*
+- Other minor fixed.

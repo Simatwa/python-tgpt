@@ -215,6 +215,7 @@ class Main(cmd.Cmd):
         self.prettify = click.confirm(
             "\nPrettify markdown response", default=self.prettify
         )
+        busy_bar.spin_index = click.prompt('Spin bar index [0:/, 1:■█■■■, 2:⣻]', default=busy_bar.spin_index,type=click.IntRange(0,2))
         self.color = click.prompt("Response stdout font color", default=self.color)
 
     @busy_bar.run(help="System error")
@@ -450,7 +451,7 @@ def interactive(
 ):
     """Chat with AI interactively"""
     bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
-    busy_bar.index = busy_bar_index
+    busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
     bot.color = color
     bot.prettify = prettify
@@ -542,7 +543,7 @@ def generate(
 ):
     """Generate a quick response with AI"""
     bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
-    busy_bar.index = busy_bar_index
+    busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
     bot.color = color
     bot.prettify = prettify
