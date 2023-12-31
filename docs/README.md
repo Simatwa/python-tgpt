@@ -15,6 +15,7 @@
 <!--<a href="https://github.com/Simatwa/tgpt2/releases"><img src="https://img.shields.io/github/downloads/Simatwa/tgpt2/total?label=Downloads&color=success" alt="Downloads"></img></a> -->
 <a href="https://github.com/Simatwa/tgpt2/releases"><img src="https://img.shields.io/github/v/release/Simatwa/tgpt2?color=success&label=Release&logo=github" alt="Latest release"></img></a>
 <a href="https://github.com/Simatwa/tgpt2/releases"><img src="https://img.shields.io/github/release-date/Simatwa/tgpt2?label=Release date&logo=github" alt="release date"></img></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/tgpt2"/></a>      
 <a href="https://wakatime.com/badge/github/Simatwa/tgpt2"><img src="https://wakatime.com/badge/github/Simatwa/tgpt2.svg" alt="wakatime"></a>
 </p>
 
