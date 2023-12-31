@@ -22,6 +22,11 @@
 AI for all
 </p> 
 
+<p align="center">
+<img src="https://github.com/Simatwa/tgpt2/blob/main/assets/console-demo.gif" width='100%'/>
+</p>
+
+
 ```python
 >>> import tgpt2
 >>> bot = tgpt2.TGPT()
