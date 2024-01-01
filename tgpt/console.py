@@ -336,6 +336,7 @@ class Main(cmd.Cmd):
             os.system(line[2:])
         else:
             try:
+                busy_bar.start_spinning()
                 generated_response = self.bot.chat(line, stream=True)
                 if self.quiet:
                     busy_bar.stop_spinning()
@@ -441,7 +442,7 @@ def tgpt2_():
     type=click.IntRange(0, 2),
     default=2,
 )
-@click.option("-c", "--color", help="Stdout font color")
+@click.option("-fc", "--font-color", help="Stdout font color")
 @click.option(
     "-to", "--timeout", help="Http requesting timeout", type=click.INT, default=30
 )
@@ -463,7 +464,7 @@ def interactive(
     brave_key,
     code_theme,
     busy_bar_index,
-    color,
+    font_color,
     timeout,
     prompt,
     prettify,
@@ -473,7 +474,7 @@ def interactive(
     bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout, quiet)
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
-    bot.color = color
+    bot.color = font_color
     bot.prettify = prettify
     if prompt:
         bot.default(prompt)
@@ -534,8 +535,8 @@ def interactive(
     default=2,
 )
 @click.option(
-    "-c",
-    "--color",
+    "-fc",
+    "--font-color",
     help="Stdout font color",
 )
 @click.option(
@@ -550,6 +551,27 @@ def interactive(
     help="Flag for controlling response-framing",
     default=False,
 )
+@click.option(
+    "-w",
+    "--whole",
+    is_flag=True,
+    default=True,
+    help="Give response back as a whole text (Default)",
+)
+@click.option(
+    "-c",
+    "--code",
+    is_flag=True,
+    default=False,
+    help="Optimize prompt for code generation",
+)
+@click.option(
+    "-s",
+    "--shell",
+    is_flag=True,
+    default=False,
+    help="Optimize prompt for shell command generation",
+)
 def generate(
     model,
     temperature,
@@ -559,25 +581,33 @@ def generate(
     brave_key,
     code_theme,
     busy_bar_index,
-    color,
+    font_color,
     timeout,
     prompt,
     prettify,
     quiet,
+    whole,
+    code,
+    shell,
 ):
     """Generate a quick response with AI"""
     bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
+    prompt = Optimizers.code(prompt) if code else prompt
+    prompt = Optimizers.shell_command if shell else prompt
     if quiet:
         print(bot.bot.chat(prompt))
         return
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
-    bot.color = color
+    bot.color = font_color
     bot.prettify = prettify
     bot.default(prompt)
 
 
 def main():
+    args = sys.argv
+    if len(args) > 1 and args[1] not in ["interactive", "generate"]:
+        sys.argv.insert(1, "generate")  # Just a hack to make 'generate' a default command
     tgpt2_()
 
 
