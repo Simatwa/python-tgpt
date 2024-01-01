@@ -451,7 +451,9 @@ def tgpt2_():
     "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
 )
 @click.option(
-    "--quiet/--frame",
+    "-q",
+    "--quiet",
+    is_flag=True,
     help="Flag for controlling response-framing",
     default=False,
 )
@@ -547,7 +549,9 @@ def interactive(
     "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
 )
 @click.option(
-    "--quiet/--frame",
+    "-q",
+    "--quiet",
+    is_flag=True,
     help="Flag for controlling response-framing",
     default=False,
 )
