@@ -434,7 +434,7 @@ def tgpt2_():
 @click.option(
     "-to", "--timeout", help="Http requesting timeout", type=click.INT, default=30
 )
-@click.option("-P", "--prompt", help="Kickoff prompt")
+@click.argument("prompt", required=False)
 @click.option(
     "--prettify/--raw", help="Flag for displaying response in markdown", default=True
 )
@@ -524,9 +524,7 @@ def interactive(
 @click.option(
     "-to", "--timeout", help="Http requesting timeout", type=click.INT, default=30
 )
-@click.option(
-    "-P", "--prompt", help="Prompt to generate response for", prompt="Enter prompt"
-)
+@click.argument("prompt", required=True)
 @click.option(
     "--prettify/--raw", help="Flag for displaying response in markdown", default=True
 )

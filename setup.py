@@ -44,8 +44,7 @@ setup(
     keywords=[
         "chatgpt",
         "gpt",
-        "tgpt"
-        "chatgpt-cli",
+        "tgpt" "chatgpt-cli",
         "chatgpt-sdk",
         "chatgpt-api",
         "llama-api",

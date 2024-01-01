@@ -77,10 +77,10 @@ pip install .
 This package features a ready to use commandline interface.
 
 - Quick response
-   `python -m tgpt generate -P "<Your prompt>"`
+   `python -m tgpt generate "<Your prompt>"`
 
 - Interactive mode 
-   `python -m tgpt interactive -P "<Kickoff prompt but not a must>"`
+   `python -m tgpt interactive "<Kickoff prompt but not a must>"`
 
 Instead of `python -m tgpt`, you can as well just use `tgpt`
 
