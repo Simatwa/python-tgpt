@@ -14,6 +14,7 @@ from functools import wraps
 from rich.panel import Panel
 from rich.style import Style
 from rich.markdown import Markdown
+from rich.console import Console
 from rich.live import Live
 from rich.prompt import Prompt
 from typing import Iterator
@@ -174,6 +175,7 @@ class Main(cmd.Cmd):
         model,
         brave_key,
         timeout,
+        quiet=False,
         *args,
         **kwargs,
     ):
@@ -184,6 +186,7 @@ class Main(cmd.Cmd):
         self.prettify = True
         self.color = "cyan"
         self.code_theme = "monokai"
+        self.quiet = quiet
 
     @busy_bar.run("Settings saved")
     def do_settings(self, line):
@@ -333,18 +336,26 @@ class Main(cmd.Cmd):
             os.system(line[2:])
         else:
             try:
-                busy_bar.start_spinning()
                 generated_response = self.bot.chat(line, stream=True)
-                busy_bar.stop_spinning()
-                stream_output(
-                    generated_response,
-                    title="AI Response",
-                    is_markdown=self.prettify,
-                    style=Style(
-                        color=self.color,
-                    ),
-                    code_theme=self.code_theme,
-                )
+                if self.quiet:
+                    busy_bar.stop_spinning()
+                    console_ = Console()
+                    with Live(console=console_, refresh_per_second=16) as live:
+                        for response in generated_response:
+                            live.update(
+                                Markdown(response) if self.prettify else response
+                            )
+                else:
+                    busy_bar.stop_spinning()
+                    stream_output(
+                        generated_response,
+                        title="AI Response",
+                        is_markdown=self.prettify,
+                        style=Style(
+                            color=self.color,
+                        ),
+                        code_theme=self.code_theme,
+                    )
             except (KeyboardInterrupt, EOFError):
                 busy_bar.stop_spinning()
                 print("")
@@ -436,7 +447,12 @@ def tgpt2_():
 )
 @click.argument("prompt", required=False)
 @click.option(
-    "--prettify/--raw", help="Flag for displaying response in markdown", default=True
+    "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
+)
+@click.option(
+    "--quiet/--frame",
+    help="Flag for controlling response-framing",
+    default=False,
 )
 def interactive(
     model,
@@ -451,9 +467,10 @@ def interactive(
     timeout,
     prompt,
     prettify,
+    quiet,
 ):
     """Chat with AI interactively"""
-    bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
+    bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout, quiet)
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
     bot.color = color
@@ -526,7 +543,12 @@ def interactive(
 )
 @click.argument("prompt", required=True)
 @click.option(
-    "--prettify/--raw", help="Flag for displaying response in markdown", default=True
+    "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
+)
+@click.option(
+    "--quiet/--frame",
+    help="Flag for controlling response-framing",
+    default=False,
 )
 def generate(
     model,
@@ -541,9 +563,13 @@ def generate(
     timeout,
     prompt,
     prettify,
+    quiet,
 ):
     """Generate a quick response with AI"""
     bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
+    if quiet:
+        print(bot.bot.chat(prompt))
+        return
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
     bot.color = color
