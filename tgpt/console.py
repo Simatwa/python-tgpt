@@ -336,17 +336,20 @@ class Main(cmd.Cmd):
             os.system(line[2:])
         else:
             try:
-                busy_bar.start_spinning()
-                generated_response = self.bot.chat(line, stream=True)
                 if self.quiet:
+                    generated_response = self.bot.chat(line, stream=True)
                     busy_bar.stop_spinning()
                     console_ = Console()
                     with Live(console=console_, refresh_per_second=16) as live:
                         for response in generated_response:
                             live.update(
-                                Markdown(response) if self.prettify else response
+                                Markdown(response, code_theme=self.code_theme)
+                                if self.prettify
+                                else response
                             )
                 else:
+                    busy_bar.start_spinning()
+                    generated_response = self.bot.chat(line, stream=True)
                     busy_bar.stop_spinning()
                     stream_output(
                         generated_response,
@@ -431,7 +434,7 @@ def tgpt2_():
 @click.option(
     "-ct",
     "--code-theme",
-    help="Theme for displaying response",
+    help="Theme for displaying codes in response",
     type=click.Choice(rich_code_themes),
     default="monokai",
 )
@@ -525,7 +528,7 @@ def interactive(
 @click.option(
     "-ct",
     "--code-theme",
-    help="Theme for displaying response",
+    help="Theme for displaying codes in response",
     type=click.Choice(rich_code_themes),
     default="monokai",
 )
@@ -597,11 +600,9 @@ def generate(
     """Generate a quick response with AI (Default)"""
     bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
     prompt = Optimizers.code(prompt) if code else prompt
-    prompt = Optimizers.shell_command if shell else prompt
-    if quiet:
-        print(bot.bot.chat(prompt))
-        return
+    prompt = Optimizers.shell_command(prompt) if shell else prompt
     busy_bar.spin_index = busy_bar_index
+    bot.quiet = quiet
     bot.code_theme = code_theme
     bot.color = font_color
     bot.prettify = prettify
@@ -615,9 +616,7 @@ def main():
         and args[1] not in ["interactive", "generate"]
         and not "--help" in args
     ):
-        sys.argv.insert(
-            1, "generate"
-        )  # Just a hack to make 'generate' a default command
+        sys.argv.insert(1, "generate")  # Just a hack to make 'generate' default command
     tgpt2_()
 
 
