@@ -22,3 +22,9 @@
 
 **What's new?**
 - Minor fixes 
+
+## v0.0.5
+
+**What's new?**
+- Multiple variables renamed.
+- First release under `python-tgpt`

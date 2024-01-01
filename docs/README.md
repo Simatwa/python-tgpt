@@ -1,21 +1,22 @@
-<h1 align="center"> tgpt2 </h1>
+<h1 align="center"> python-tgpt </h1>
 
 <p align="center">
 <!--
-<a href="https://github.com/Simatwa/tgpt2/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/tgpt2/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
+<a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
-<a href="LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/tgpt2"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.0.3&color=green"/></a>
+<a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.0.5&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
-<a href="https://github.com/Simatwa/tgpt2/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/tgpt2/actions/workflows/python-package.yml/badge.svg"/></a>
+<a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
 <a href="#"><img alt="coverage" src="https://img.shields.io/static/v1?logo=Coverage&label=Coverage&message=90%&color=yellowgreen"/></a>
 <a href="#" alt="progress"><img alt="Progress" src="https://img.shields.io/static/v1?logo=Progress&label=Progress&message=95%&color=green"/></a>
 <a href="https://pepy.tech/project/tgpt2"><img src="https://static.pepy.tech/personalized-badge/tgpt2?period=total&units=international_system&left_color=grey&right_color=green&left_text=Downloads" alt="Downloads"></a>
-<!--<a href="https://github.com/Simatwa/tgpt2/releases"><img src="https://img.shields.io/github/downloads/Simatwa/tgpt2/total?label=Downloads&color=success" alt="Downloads"></img></a> -->
-<a href="https://github.com/Simatwa/tgpt2/releases"><img src="https://img.shields.io/github/v/release/Simatwa/tgpt2?color=success&label=Release&logo=github" alt="Latest release"></img></a>
-<a href="https://github.com/Simatwa/tgpt2/releases"><img src="https://img.shields.io/github/release-date/Simatwa/tgpt2?label=Release date&logo=github" alt="release date"></img></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/tgpt2"/></a>      
+<a href="https://pepy.tech/project/python-tgpt"><img src="https://static.pepy.tech/personalized-badge/python-tgpt?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Downloads"></a>
+<!--<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/downloads/Simatwa/python-tgpt/total?label=Downloads&color=success" alt="Downloads"></img></a> -->
+<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/v/release/Simatwa/python-tgpt?color=success&label=Release&logo=github" alt="Latest release"></img></a>
+<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/release-date/Simatwa/python-tgpt?label=Release date&logo=github" alt="release date"></img></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/python-tgpt"/></a>      
 <a href="https://wakatime.com/badge/github/Simatwa/tgpt2"><img src="https://wakatime.com/badge/github/Simatwa/tgpt2.svg" alt="wakatime"></a>
 </p>
 
@@ -23,16 +24,14 @@
 AI for all
 </p> 
 
-> **Warning** : This project has transitioned from being maintained under `tgpt2` to [python-tgpt](https://pypi.org/project/python-tgpt/) in response to a raised concern detailed [here](https://github.com/aandrew-me/tgpt/issues/180).
-
 <p align="center">
-<img src="https://github.com/Simatwa/tgpt2/blob/main/assets/console-demo.gif" width='100%'/>
+<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/console-demo.gif?raw=True" width='100%'/>
 </p>
 
 
 ```python
->>> import tgpt2
->>> bot = tgpt2.TGPT()
+>>> import tgpt
+>>> bot = tgpt.TGPT()
 >>> bot.chat('Hello there')
 "  Hello! It's nice to meet you. Is there something I can help you with or would you like to chat?"
 >>> 
@@ -41,7 +40,7 @@ AI for all
 
 This project allows you to interact with AI ([LLaMA](https://ai.meta.com/llama/)) without API Key.
 
-The name *tgpt2* is inherited from it's parent project [tgpt](https://github.com/aandrew-me/tgpt) which runs on [golang](https://go.dev/).
+The name *python-tgpt* is inherited from it's parent project [tgpt](https://github.com/aandrew-me/tgpt) which runs on [golang](https://go.dev/).
 
 ## Prerequisite
 
@@ -56,20 +55,20 @@ Pick either of the following ways to get started.
 1. From pypi:
 
 ```
-pip install tgpt2
+pip install python-tgpt
 ```
 
 2. Direct from source
 
 ```
-pip install git+https://github.com/Simatwa/tgpt2.git
+pip install git+https://github.com/Simatwa/python-tgpt.git
 ```
 
 3. Clone and Install
 
 ```
-git clone https://github.com/Simatwa/tgpt2.git
-cd tgpt2
+git clone https://github.com/Simatwa/python-tgpt.git
+cd python-tgpt
 pip install .
 ```
 
@@ -78,12 +77,12 @@ pip install .
 This package features a ready to use commandline interface.
 
 - Quick response
-   `python -m tgpt2 generate -P "<Your prompt>"`
+   `python -m tgpt generate -P "<Your prompt>"`
 
 - Interactive mode 
-   `python -m tgpt2 interactive -P "<Kickoff prompt but not a must>"`
+   `python -m tgpt interactive -P "<Kickoff prompt but not a must>"`
 
-Instead of `python -m tgpt2`, you can as well just use `tgpt2`
+Instead of `python -m tgpt`, you can as well just use `tgpt`
 
 <details>
 
@@ -96,7 +95,7 @@ Instead of `python -m tgpt2`, you can as well just use `tgpt2`
 1. Generate a quick response
 
 ```python
-from tgpt2 import TGPT
+from tgpt import TGPT
 bot = TGPT()
 resp = bot.chat('<Your prompt>')
 print(resp)
@@ -106,7 +105,7 @@ print(resp)
 2. Get back whole response
 
 ```python
-from tgpt2 import TGPT
+from tgpt import TGPT
 bot = TGPT()
 resp = bot.ask('<Your Prompt')
 print(resp)
@@ -123,7 +122,7 @@ Just add parameter `stream` with value  `true`.
 1. Text Generated only 
 
 ```python
-from tgpt2 import TGPT
+from tgpt import TGPT
 bot = TGPT()
 resp = bot.chat('<Your prompt>', stream=True)
 for value in resp:
@@ -140,7 +139,7 @@ How may I help you today?
 2. Whole Response
 
 ```python
-from tgpt2 import TGPT
+from tgpt import TGPT
 bot = TGPT()
 resp = bot.ask('<Your Prompt>', stream=True)
 for value in resp:
@@ -164,12 +163,12 @@ for value in resp:
 
 <summary>
 
-- To get better feedback, you can make use of [optimizers](tgpt2/utils.py) using parameter `optimizer` with values *(code or system_command)*
+- To get better feedback, you can make use of [optimizers](tgpt/utils.py) using parameter `optimizer` with values *(code or system_command)*
 
 </summary>
 
 ```python
-from tgpt2 import TGPT
+from tgpt import TGPT
 bot = TGPT()
 resp = bot.ask('<Your Prompt>', optimizer='code')
 print(resp)

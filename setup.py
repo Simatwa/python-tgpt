@@ -11,14 +11,14 @@ if not PATH.exists():
             f2.write(f1.read())
 
 setup(
-    name="tgpt2",
-    version="0.0.4",
+    name="python-tgpt",
+    version="0.0.5",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
     author_email="simatwacaleb@proton.me",
     description="Interact with AI without API key",
-    packages=["tgpt2"],
+    packages=["tgpt"],
     url="https://github.com/Simatwa/python-tgpt",
     project_urls={
         "Bug Report": "https://github.com/Simatwa/python-tgpt/issues/new",
@@ -30,7 +30,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "tgpt2 = tgpt2.console:main",
+            "tgpt = tgpt.console:main",
         ],
     },
     install_requires=[
@@ -44,6 +44,7 @@ setup(
     keywords=[
         "chatgpt",
         "gpt",
+        "tgpt"
         "chatgpt-cli",
         "chatgpt-sdk",
         "chatgpt-api",

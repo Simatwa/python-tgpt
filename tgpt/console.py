@@ -1,4 +1,4 @@
-import tgpt2
+import tgpt
 import click
 import cmd
 import logging
@@ -17,7 +17,7 @@ from rich.markdown import Markdown
 from rich.live import Live
 from rich.prompt import Prompt
 from typing import Iterator
-from tgpt2.utils import Optimizers
+from tgpt.utils import Optimizers
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -162,8 +162,8 @@ class busy_bar:
 
 
 class Main(cmd.Cmd):
-    intro = f"Welcome to AI Chat in terminal. Type 'help' or '?' for usage info \n Submit any bug at {tgpt2.__repo__}/issues/new"
-    prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT2](v{tgpt2.__version__})\n╰─>"
+    intro = f"Welcome to AI Chat in terminal. Type 'help' or '?' for usage info \n Submit any bug at {tgpt.__repo__}/issues/new"
+    prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT2](v{tgpt.__version__})\n╰─>"
 
     def __init__(
         self,
@@ -178,7 +178,7 @@ class Main(cmd.Cmd):
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
-        self.bot = tgpt2.TGPT(
+        self.bot = tgpt.TGPT(
             max_tokens, temperature, top_k, top_p, model, brave_key, timeout
         )
         self.prettify = True

@@ -1,6 +1,6 @@
 import unittest
 import types
-from tgpt2 import TGPT
+from tgpt import TGPT
 
 
 class TestTgpt(unittest.TestCase):
