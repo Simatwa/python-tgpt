@@ -12,21 +12,21 @@ if not PATH.exists():
 
 setup(
     name="tgpt2",
-    version="0.0.3",
+    version="0.0.4",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
     author_email="simatwacaleb@proton.me",
     description="Interact with AI without API key",
     packages=["tgpt2"],
-    url="https://github.com/Simatwa/tgpt2",
+    url="https://github.com/Simatwa/python-tgpt",
     project_urls={
-        "Bug Report": "https://github.com/Simatwa/tgpt2/issues/new",
-        "Homepage": "https://github.com/Simatwa/tgpt2",
-        "Source Code": "https://github.com/Simatwa/tgpt2",
-        "Issue Tracker": "https://github.com/Simatwa/tgpt2/issues",
-        "Download": "https://github.com/Simatwa/tgpt2/releases",
-        "Documentation": "https://github.com/Simatwa/tgpt2/blob/main/docs",
+        "Bug Report": "https://github.com/Simatwa/python-tgpt/issues/new",
+        "Homepage": "https://github.com/Simatwa/python-tgpt",
+        "Source Code": "https://github.com/Simatwa/python-tgpt",
+        "Issue Tracker": "https://github.com/Simatwa/python-tgpt/issues",
+        "Download": "https://github.com/Simatwa/python-tgpt/releases",
+        "Documentation": "https://github.com/Simatwa/python-tgpt/blob/main/docs",
     },
     entry_points={
         "console_scripts": [

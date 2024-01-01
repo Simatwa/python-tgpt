@@ -17,3 +17,8 @@
 **What's new?**
 - Busy bar index bug **fixed** - *(Console)*
 - Other minor fixed.
+
+## v0.0.4
+
+**What's new?**
+- Minor fixes 

@@ -215,7 +215,11 @@ class Main(cmd.Cmd):
         self.prettify = click.confirm(
             "\nPrettify markdown response", default=self.prettify
         )
-        busy_bar.spin_index = click.prompt('Spin bar index [0:/, 1:■█■■■, 2:⣻]', default=busy_bar.spin_index,type=click.IntRange(0,2))
+        busy_bar.spin_index = click.prompt(
+            "Spin bar index [0:/, 1:■█■■■, 2:⣻]",
+            default=busy_bar.spin_index,
+            type=click.IntRange(0, 2),
+        )
         self.color = click.prompt("Response stdout font color", default=self.color)
 
     @busy_bar.run(help="System error")
@@ -300,26 +304,25 @@ class Main(cmd.Cmd):
     @busy_bar.run()
     def do_code(self, line):
         """Enhance prompt for code generation
-            usage : 
-                  code <Code description>
+        usage :
+              code <Code description>
         """
         self.default(Optimizers.code(line))
 
     @busy_bar.run()
     def do_shell(self, line):
         """Enhance prompt for system command (shell) generation
-           Usage:
-                shell <Action to be accomplished>
+        Usage:
+             shell <Action to be accomplished>
         """
         self.default(Optimizers.shell_command(line))
         if click.confirm("Do you wish to run the command(s) generated in your system"):
             self.do_sys(self.bot.get_message(self.bot.last_response))
 
-    def do_clear(self,line):
+    def do_clear(self, line):
         """Clear console"""
         sys.stdout.write("\u001b[2J\u001b[H")
         sys.stdout.flush()
-
 
     @busy_bar.run()
     def default(self, line):
@@ -354,11 +357,11 @@ class Main(cmd.Cmd):
 
     def do_sys(self, line):
         """Execute system commands
-           shortcut [./<command>]
-           Usage: 
-               sys <System command>
-                     or
-                ./<System command>
+        shortcut [./<command>]
+        Usage:
+            sys <System command>
+                  or
+             ./<System command>
         """
         os.system(line)
 

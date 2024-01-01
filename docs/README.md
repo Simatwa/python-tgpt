@@ -23,6 +23,8 @@
 AI for all
 </p> 
 
+> **Warning** : This project has transitioned from being maintained under `tgpt2` to [python-tgpt](https://pypi.org/project/python-tgpt/) in response to a raised concern detailed [here](https://github.com/aandrew-me/tgpt/issues/180).
+
 <p align="center">
 <img src="https://github.com/Simatwa/tgpt2/blob/main/assets/console-demo.gif" width='100%'/>
 </p>
