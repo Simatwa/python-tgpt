@@ -590,7 +590,7 @@ def generate(
     code,
     shell,
 ):
-    """Generate a quick response with AI"""
+    """Generate a quick response with AI (Default)"""
     bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
     prompt = Optimizers.code(prompt) if code else prompt
     prompt = Optimizers.shell_command if shell else prompt
@@ -606,8 +606,14 @@ def generate(
 
 def main():
     args = sys.argv
-    if len(args) > 1 and args[1] not in ["interactive", "generate"]:
-        sys.argv.insert(1, "generate")  # Just a hack to make 'generate' a default command
+    if (
+        len(args) > 1
+        and args[1] not in ["interactive", "generate"]
+        and not "--help" in args
+    ):
+        sys.argv.insert(
+            1, "generate"
+        )  # Just a hack to make 'generate' a default command
     tgpt2_()
 
 
