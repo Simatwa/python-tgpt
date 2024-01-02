@@ -55,7 +55,7 @@ Pick either of the following ways to get started.
 1. From pypi:
 
 ```
-pip install python-tgpt
+pip install --upgrade python-tgpt
 ```
 
 2. Direct from source
@@ -179,7 +179,7 @@ print(resp)
 </details>
 
 
-> **Note** : As of [v0.0.7](https://github.com/Simatwa/python-tgpt/releases/), chatting conversationally has been featured *(Experimental)* : `bot = tgpt.TGPT(is_conversation=True)` at console just append flag `--conversation`. NB: *Tends to fail after relative lengthy chat.*
+> **Note** : As of [v0.0.7](https://github.com/Simatwa/python-tgpt/releases/), chatting conversationally has been featured *(Experimental)* : `bot = tgpt.TGPT(is_conversation=True)`, at console just append flag `--conversation`. NB: *Tends to fail after relative lengthy chat.*
 
 ## Acknowledgements
 
