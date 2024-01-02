@@ -32,6 +32,6 @@
 ## v0.0.6
 
 **What's new?**
-- `Generate is the default command`. Thanks to @sameedzahoor
+- `generate` is the default command. Thanks to @sameedzahoor
 - Control response framing `--quiet`
-- `Generate` based prompt optimizaion - `--code` & `--shell`
+- `generate` based prompt optimizaion - `--code` & `--shell`
