@@ -753,7 +753,6 @@ def generate(
         )  # Not to wait for long. I was thinking of making it 2 but I found it awful, what's your take?
         try:
             prompt = click.get_text_stream("stdin").read()
-            print(prompt)
         except TimeoutError as e:
             help_info = (
                 "Usage: tgpt generate [OPTIONS] PROMPT\n"
