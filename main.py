@@ -1,5 +1,5 @@
 # Create executable
-# pyinstaller main.py 
+# pyinstaller main.py
 from tgpt.console import main
 
 main()

@@ -57,3 +57,66 @@ class Optimizers:
             "is a valid shell command. If multiple steps required try to combine "
             f"them together. Prompt: {prompt}\n\nCommand:"
         )
+
+
+class Conversation:
+    """Handles prompt generation based on history"""
+
+    intro = (
+        "You're a Large Language Model for chatting with people"
+        "Your role: Provide ONLY response."
+    )
+
+    def __init__(
+        self, status: bool = True, filepath: str = None, update_file: bool = True
+    ):
+        """Initializes Conversation
+
+        Args:
+            status (bool, optional): Flag to control history. Defaults to True.
+            filepath (str, optional): Path to file containing conversation history. Defaults to None.
+            update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
+        """
+        # I was thinking of introducing offset so as to control payload size. (prompt)
+        #  What's your thought on that? Give a PR or raise an issue
+        self.status = status
+        self.chat_history = self.intro
+        self.history_format = "\nUser : %(user)s\nLLM :%(llm)s"
+        if filepath:
+            with open(filepath, encoding="utf-8") as fh:
+                self.chat_history = fh.read()
+
+        self.file = filepath
+        self.update_file = update_file
+
+    def gen_complete_prompt(self, prompt: str) -> str:
+        """Generates a kinda like incomplete conversation
+
+        Args:
+            prompt (str): _description_
+
+        Returns:
+            str: _description_
+        """
+        if self.status:
+            resp = self.chat_history + self.history_format % dict(user=prompt, llm="")
+        else:
+            resp = prompt
+        return resp
+
+    def update_chat_history(self, prompt: str, response: str) -> None:
+        """Updates chat history
+
+        Args:
+            prompt (str): user prompt
+            response (str): LLM response
+        """
+        if not self.status:
+            return
+        new_history = self.history_format % dict(user=prompt, llm=response)
+        # self.chat_history += new_history
+        # import click
+        # click.secho(self.chat_history,fg='blue')
+        if self.file and self.update_file:
+            with open(self.file, "a") as fh:
+                fh.write(new_history)
