@@ -9,6 +9,7 @@ import re
 import rich
 import getpass
 import json
+import re
 from time import sleep
 from threading import Thread as thr
 from functools import wraps
@@ -210,6 +211,47 @@ class Main(cmd.Cmd):
         self.code_theme = "monokai"
         self.quiet = quiet
 
+    def output_bond(
+        self,
+        title: str,
+        text: str,
+        color: str = "cyan",
+        frame: bool = True,
+        is_json: bool = False,
+    ):
+        """Print prettified output
+
+        Args:
+            title (str): Title
+            text (str): Info to be printed
+            color (str, optional): Output color. Defaults to "cyan".
+            frame (bool, optional): Add frame. Defaults to True.
+        """
+        if is_json:
+            text = f"""
+```json
+{json.dumps(text,indent=4)}
+```
+"""
+        rich.print(
+            Panel(
+                Markdown(text, code_theme=self.code_theme),
+                title=title.title(),
+                style=Style(
+                    color=color,
+                    frame=frame,
+                ),
+            ),
+        )
+        if is_json and click.confirm("Do you wish to save this"):
+            default_path = title + ".json"
+            save_to = click.prompt(
+                "Enter path to save to", default=default_path, type=click.STRING
+            )
+            with open(save_to, "a") as fh:
+                json.dump(text, fh, indent=4)
+            click.secho(f"Successfuly saved to `{save_to}`", fg="green")
+
     @busy_bar.run("Settings saved")
     def do_settings(self, line):
         """Configre settings"""
@@ -348,6 +390,32 @@ class Main(cmd.Cmd):
         """Clear console"""
         sys.stdout.write("\u001b[2J\u001b[H")
         sys.stdout.flush()
+
+    @busy_bar.run("While handling history")
+    def do_history(self, line):
+        """Show current conversation history"""
+        history = self.bot.conversation.chat_history
+        history = re.sub(
+            "\nLLM :",
+            "\n\n**LLM** :",
+            re.sub("\nUser :", "\n\n**User** :", history),
+        )
+        self.output_bond("Chat History", history, self.color)
+        if click.confirm("Do you wish to save this chat"):
+            save_to = click.prompt(
+                "Enter path/file-name", default="llama-conversation.txt"
+            )
+            with open(save_to, "a") as fh:
+                fh.write(history)
+            click.secho(f"Conversation saved successfully to '{save_to}'", fg="cyan")
+
+    @busy_bar.run("while resetting conversation")
+    def do_reset(self, line):
+        """Start new conversation thread"""
+        self.bot.conversation.chat_history = click.prompt(
+            "Introductory prompt", default=self.bot.conversation.intro
+        )
+        click.secho("Conversation reset successfully. New one created.", fg="cyan")
 
     @busy_bar.run()
     def default(self, line):

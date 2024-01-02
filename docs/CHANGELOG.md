@@ -43,3 +43,11 @@
 - Maintain chat history *.txt*
 - Load chat history from file
 - Chain request through *proxies*
+
+## v0.0.8
+
+**What's new?**
+- Reading piped input as prompt - *(Console)*. Thanks to @sameedzahoor
+- Reset conversation - *(Console)*
+- View conversation history - *(Console)*
+- Other minor fixes

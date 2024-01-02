@@ -64,7 +64,7 @@ class Conversation:
     """Handles prompt generation based on history"""
 
     intro = (
-        "You're a Large Language Model for chatting with people"
+        "You're a Large Language Model for chatting with people "
         "Your role: Provide ONLY response."
     )
 
@@ -89,7 +89,7 @@ class Conversation:
                     pass
             else:
                 with open(filepath, encoding="utf-8") as fh:
-                    self.chat_history = fh.read()
+                    self.chat_history = self.chat_history + fh.read()
 
         self.file = filepath
         self.update_file = update_file
