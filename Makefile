@@ -35,4 +35,4 @@ build: install
 
 # Target to clean up build artifacts
 clean:
-	rm -rf build/ dist/ your_script.spec
+	rm -rf build/ dist/ main.spec
