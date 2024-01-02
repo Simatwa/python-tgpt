@@ -80,7 +80,7 @@ This package features a ready to use commandline interface.
    `python -m tgpt generate "<Your prompt>"`
 
 - Interactive mode 
-   `python -m tgpt interactive "<Kickoff prompt but not a must>"`
+   `python -m tgpt interactive "<Kickoff prompt though not a must>"`
 
 Instead of `python -m tgpt`, you can as well just use `tgpt`
 
@@ -179,7 +179,7 @@ print(resp)
 </details>
 
 
-> **Note** : As of [v0.0.7](https://github.com/Simatwa/python-tgpt/releases/), chatting conversationally has been featured *(Experimenta)* : `bot = tgpt.TGPT(is_conversation=True)`
+> **Note** : As of [v0.0.7](https://github.com/Simatwa/python-tgpt/releases/), chatting conversationally has been featured *(Experimental)* : `bot = tgpt.TGPT(is_conversation=True)` at console just append flag `--conversation`. NB: *Tends to fail after relative lengthy chat.*
 
 ## Acknowledgements
 
