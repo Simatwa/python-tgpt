@@ -24,7 +24,7 @@ build: install
 	$(PYINSTALLER) main.py \
 	--onefile \
 	--exclude pandas \
-	#--paths $(shell pwd) \
+	--paths $(shell pwd) \
 	--distpath dist/$(shell uname) \
 	--workpath build/$(shell uname) \
 	--log-level INFO \
