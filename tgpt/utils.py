@@ -1,6 +1,7 @@
 import os
 import platform
 import subprocess
+import logging
 
 
 class Optimizers:
@@ -83,8 +84,12 @@ class Conversation:
         self.chat_history = self.intro
         self.history_format = "\nUser : %(user)s\nLLM :%(llm)s"
         if filepath:
-            with open(filepath, encoding="utf-8") as fh:
-                self.chat_history = fh.read()
+            if not os.path.isfile(filepath):
+                with open(filepath, "a") as fh:  # Try creating new file
+                    pass
+            else:
+                with open(filepath, encoding="utf-8") as fh:
+                    self.chat_history = fh.read()
 
         self.file = filepath
         self.update_file = update_file
@@ -111,12 +116,8 @@ class Conversation:
             prompt (str): user prompt
             response (str): LLM response
         """
-        if not self.status:
-            return
         new_history = self.history_format % dict(user=prompt, llm=response)
-        # self.chat_history += new_history
-        # import click
-        # click.secho(self.chat_history,fg='blue')
         if self.file and self.update_file:
             with open(self.file, "a") as fh:
                 fh.write(new_history)
+        self.chat_history += new_history if self.status else ""

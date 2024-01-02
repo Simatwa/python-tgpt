@@ -17,9 +17,10 @@ class TGPT:
         model: str = "llama-2-13b-chat",
         brave_key: str = "qztbjzBqJueQZLFkwTTJrieu8Vw3789u",
         timeout: int = 30,
-        intro: str = Conversation.intro,
+        intro: str = None,
         filepath: str = None,
         update_file: bool = True,
+        proxies: dict = {},
     ):
         """Instantiate TGPT
 
@@ -58,8 +59,9 @@ class TGPT:
             if callable(getattr(Optimizers, method)) and not method.startswith("__")
         )
         session.headers.update(self.headers)
-        Conversation.intro = intro
+        Conversation.intro = intro or Conversation.intro
         self.conversation = Conversation(is_conversation, filepath, update_file)
+        session.proxies = proxies
 
     def ask(
         self,

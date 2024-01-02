@@ -35,3 +35,11 @@
 - `generate` is the default command. Thanks to @sameedzahoor
 - Control response framing `--quiet`
 - `generate` based prompt optimizaion - `--code` & `--shell`
+
+## v0.0.7
+
+**What's new?**
+- Chat conversationally - *(Experimental)*
+- Maintain chat history *.txt*
+- Load chat history from file
+- Chain request through *proxies*

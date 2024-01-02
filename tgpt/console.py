@@ -8,6 +8,7 @@ import clipman
 import re
 import rich
 import getpass
+import json
 from time import sleep
 from threading import Thread as thr
 from functools import wraps
@@ -175,13 +176,34 @@ class Main(cmd.Cmd):
         model,
         brave_key,
         timeout,
+        conversation,
+        filepath,
+        update_file,
+        intro,
+        proxy_path,
         quiet=False,
         *args,
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
+        if proxy_path:
+            with open(proxy_path) as fh:
+                proxies = json.load(fh)
+        else:
+            proxies = {}
         self.bot = tgpt.TGPT(
-            max_tokens, temperature, top_k, top_p, model, brave_key, timeout
+            conversation,
+            max_tokens,
+            temperature,
+            top_k,
+            top_p,
+            model,
+            brave_key,
+            timeout,
+            intro,
+            filepath,
+            update_file,
+            proxies,
         )
         self.prettify = True
         self.color = "cyan"
@@ -454,6 +476,36 @@ def tgpt2_():
     "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
 )
 @click.option(
+    "-C",
+    "--conversation",
+    is_flag=True,
+    default=False,
+    help="Chat conversationally (Experimental)",
+)
+@click.option(
+    "-fp",
+    "--filepath",
+    type=click.Path(),
+    help="Path to chat history - new will be created incase doesn't exist",
+)
+@click.option(
+    "--update-file/--retain-file",
+    help="Controls updating chat history in file",
+    default=True,
+)
+@click.option(
+    "-i",
+    "--intro",
+    help="Conversation introductory prompt",
+)
+@click.option(
+    "-pp",
+    "--proxy-path",
+    type=click.Path(exists=True),
+    envvar="proxy_path",
+    help="Path to .json file containing proxies",
+)
+@click.option(
     "-q",
     "--quiet",
     is_flag=True,
@@ -473,10 +525,29 @@ def interactive(
     timeout,
     prompt,
     prettify,
+    conversation,
+    filepath,
+    update_file,
+    intro,
+    proxy_path,
     quiet,
 ):
     """Chat with AI interactively"""
-    bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout, quiet)
+    bot = Main(
+        max_tokens,
+        temperature,
+        top_k,
+        top_p,
+        model,
+        brave_key,
+        timeout,
+        conversation,
+        filepath,
+        update_file,
+        intro,
+        proxy_path,
+        quiet,
+    )
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
     bot.color = font_color
@@ -552,13 +623,6 @@ def interactive(
     "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
 )
 @click.option(
-    "-q",
-    "--quiet",
-    is_flag=True,
-    help="Flag for controlling response-framing",
-    default=False,
-)
-@click.option(
     "-w",
     "--whole",
     is_flag=True,
@@ -579,6 +643,43 @@ def interactive(
     default=False,
     help="Optimize prompt for shell command generation",
 )
+@click.option(
+    "-C",
+    "--conversation",
+    is_flag=True,
+    default=False,
+    help="Chat conversationally (Experimental)",
+)
+@click.option(
+    "-fp",
+    "--filepath",
+    type=click.Path(),
+    help="Path to chat history - new will be created incase doesn't exist",
+)
+@click.option(
+    "--update-file/--retain-file",
+    help="Controls updating chat history in file",
+    default=True,
+)
+@click.option(
+    "-i",
+    "--intro",
+    help="Conversation introductory prompt",
+)
+@click.option(
+    "-pp",
+    "--proxy-path",
+    type=click.Path(exists=True),
+    envvar="proxy_path",
+    help="Path to .json file containing proxies",
+)
+@click.option(
+    "-q",
+    "--quiet",
+    is_flag=True,
+    help="Flag for controlling response-framing",
+    default=False,
+)
 def generate(
     model,
     temperature,
@@ -592,17 +693,35 @@ def generate(
     timeout,
     prompt,
     prettify,
-    quiet,
     whole,
     code,
     shell,
+    conversation,
+    filepath,
+    update_file,
+    intro,
+    proxy_path,
+    quiet,
 ):
     """Generate a quick response with AI (Default)"""
-    bot = Main(max_tokens, temperature, top_k, top_p, model, brave_key, timeout)
+    bot = Main(
+        max_tokens,
+        temperature,
+        top_k,
+        top_p,
+        model,
+        brave_key,
+        timeout,
+        conversation,
+        filepath,
+        update_file,
+        intro,
+        proxy_path,
+        quiet,
+    )
     prompt = Optimizers.code(prompt) if code else prompt
     prompt = Optimizers.shell_command(prompt) if shell else prompt
     busy_bar.spin_index = busy_bar_index
-    bot.quiet = quiet
     bot.code_theme = code_theme
     bot.color = font_color
     bot.prettify = prettify
