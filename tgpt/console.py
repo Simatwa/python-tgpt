@@ -533,6 +533,27 @@ def interactive(
     quiet,
 ):
     """Chat with AI interactively"""
+    if not 1:  # I tried this but it failed; just continuously raising EOFError.
+        # Consider giving it a fix if possible
+        # Let's try to read piped input
+        import signal
+
+        def timeout_handler(signum, frame):
+            raise TimeoutError("Timed out while waiting for input")
+
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(
+            1
+        )  # Not to wait for long. I was thinking of making it 2 but I found it awful, what's your take?
+        try:
+            piped_input = click.get_text_stream("stdin").read()
+        except (TimeoutError, EOFError) as e:
+            pass
+        else:
+            prompt = piped_input
+        finally:
+            signal.alarm(0)  # Reset the alarm if input is read successfully
+            # Just incase the previous timeout was not 0
     bot = Main(
         max_tokens,
         temperature,
@@ -618,7 +639,7 @@ def interactive(
 @click.option(
     "-to", "--timeout", help="Http requesting timeout", type=click.INT, default=30
 )
-@click.argument("prompt", required=True)
+@click.argument("prompt", required=False)
 @click.option(
     "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
 )
@@ -719,6 +740,34 @@ def generate(
         proxy_path,
         quiet,
     )
+    if not prompt:
+        # Let's try to read piped input
+        import signal
+
+        def timeout_handler(signum, frame):
+            raise TimeoutError("Timed out while waiting for input")
+
+        signal.signal(signal.SIGALRM, timeout_handler)
+        signal.alarm(
+            1
+        )  # Not to wait for long. I was thinking of making it 2 but I found it awful, what's your take?
+        try:
+            prompt = click.get_text_stream("stdin").read()
+            print(prompt)
+        except TimeoutError as e:
+            help_info = (
+                "Usage: tgpt generate [OPTIONS] PROMPT\n"
+                "Try 'tgpt generate --help' for help.\n"
+                "Error: Missing argument 'PROMPT'.\n"
+            )
+            click.secho(
+                help_info
+            )  # Let's try to mimic the click's missing argument help info
+            exit(1)
+        else:
+            signal.alarm(0)  # Reset the alarm if input is read successfully
+            # Just incase the previous timeout was not 0
+
     prompt = Optimizers.code(prompt) if code else prompt
     prompt = Optimizers.shell_command(prompt) if shell else prompt
     busy_bar.spin_index = busy_bar_index
