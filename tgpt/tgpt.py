@@ -25,7 +25,7 @@ class TGPT:
         """Instantiate TGPT
 
         Args:
-            conersationally (str, optional): Flag for chatting conversationally. Defaults to False.
+            conversationally (str, optional): Flag for chatting conversationally. Defaults to False.
             brave_key (str, optional): Brave API access key. Defaults to "qztbjzBqJueQZLFkwTTJrieu8Vw3789u".
             model (str, optional): Text generation model name. Defaults to "llama-2-13b-chat".
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
