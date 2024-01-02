@@ -4,7 +4,7 @@
 # Define variables
 PYTHON := python3
 PI := pip
-PYINSTALLER := pyinstaller
+PYINSTALLER := $(PYTHON) -m PyInstaller
 
 # Default target
 default: install test build
