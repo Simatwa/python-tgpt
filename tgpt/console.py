@@ -22,7 +22,6 @@ from rich.prompt import Prompt
 from typing import Iterator
 from tgpt.utils import Optimizers
 from tgpt.utils import default_path
-from tgpt import __version__
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -168,7 +167,7 @@ class busy_bar:
 
 class Main(cmd.Cmd):
     intro = f"Welcome to AI Chat in terminal. Type 'help' or '?' for usage info \n Submit any bug at {tgpt.__repo__}/issues/new"
-    prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT2](v{tgpt.__version__})\n╰─>"
+    prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT](v{tgpt.__version__})\n╰─>"
 
     def __init__(
         self,
@@ -910,7 +909,7 @@ def main():
     args = sys.argv
     if "--version" in args:
         # Lets show version here and exit
-        click.secho(f"tgpt v{__version__}")
+        click.secho(f"tgpt v{tgpt.__version__}")
         sys.exit(0)
     if (
         len(args) > 1
