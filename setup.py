@@ -12,7 +12,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.0.9",
+    version="0.1.0",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -39,7 +39,7 @@ setup(
         "rich==13.3.4",
         "clipman==3.1.0",
         "pyperclip==1.8.2",
-        "appdirs==1.4.4"
+        "appdirs==1.4.4",
     ],
     python_requires=">=3.9",
     keywords=[

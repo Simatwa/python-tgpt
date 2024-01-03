@@ -21,6 +21,7 @@ from rich.live import Live
 from rich.prompt import Prompt
 from typing import Iterator
 from tgpt.utils import Optimizers
+from tgpt.utils import default_path
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -177,7 +178,7 @@ class Main(cmd.Cmd):
         model,
         brave_key,
         timeout,
-        conversation,
+        disable_conversation,
         filepath,
         update_file,
         intro,
@@ -196,7 +197,7 @@ class Main(cmd.Cmd):
             proxies = {}
         try:
             self.bot = tgpt.TGPT(
-                conversation,
+                disable_conversation,
                 max_tokens,
                 temperature,
                 top_k,
@@ -564,16 +565,17 @@ def tgpt2_():
     "--prettify/--raw", help="Flag for prettifying markdowned response", default=True
 )
 @click.option(
-    "-C",
-    "--conversation",
+    "-dc",
+    "--disable-conversation",
     is_flag=True,
-    default=False,
-    help="Chat conversationally (Experimental)",
+    default=True,  # is_conversation = True
+    help="Disable chatting conversationally (Stable)",
 )
 @click.option(
     "-fp",
     "--filepath",
     type=click.Path(),
+    default=os.path.join(default_path, "chat-history.txt"),
     help="Path to chat history - new will be created incase doesn't exist",
 )
 @click.option(
@@ -628,7 +630,7 @@ def interactive(
     timeout,
     prompt,
     prettify,
-    conversation,
+    disable_conversation,
     filepath,
     update_file,
     intro,
@@ -667,7 +669,7 @@ def interactive(
         model,
         brave_key,
         timeout,
-        conversation,
+        disable_conversation,
         filepath,
         update_file,
         intro,
@@ -772,16 +774,17 @@ def interactive(
     help="Optimize prompt for shell command generation",
 )
 @click.option(
-    "-C",
-    "--conversation",
+    "-dc",
+    "--disable-conversation",
     is_flag=True,
-    default=False,
-    help="Chat conversationally (Experimental)",
+    default=True,  # is_conversation = True
+    help="Disable chatting conversationally (Stable)",
 )
 @click.option(
     "-fp",
     "--filepath",
     type=click.Path(),
+    default=os.path.join(default_path, "chat-history.txt"),
     help="Path to chat history - new will be created incase doesn't exist",
 )
 @click.option(
@@ -839,7 +842,7 @@ def generate(
     whole,
     code,
     shell,
-    conversation,
+    disable_conversation,
     filepath,
     update_file,
     intro,
@@ -857,7 +860,7 @@ def generate(
         model,
         brave_key,
         timeout,
-        conversation,
+        disable_conversation,
         filepath,
         update_file,
         intro,

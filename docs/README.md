@@ -5,7 +5,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.0.9&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.1.0&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
@@ -40,6 +40,16 @@ AI for all
 This project enables seamless interaction with [LLaMA](https://ai.meta.com/llama/) AI without requiring an API Key.
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with LLaMA's capabilities, fostering a smoother AI interaction experience.
+
+## Features
+
+- 🗨️ Enhanced conversational chat experience
+- 💾 Capability to save prompts and responses (Conversation)
+- 🔄 Ability to load previous conversations
+- ⌨️ Command-line interface
+- 🐍 Python package
+- 🌊 Stream and non-stream response
+- 🚀 Ready to use (No API key required)
 
 ## Prerequisites
 
@@ -168,7 +178,7 @@ for value in resp:
 
 <summary>
 
-- To get better feedback, you can make use of [optimizers](tgpt/utils.py) using parameter `optimizer` with values *(code or system_command)*
+To obtain more tailored responses, consider utilizing [optimizers](tgpt/utils.py) using the `optimizer` parameter. Its values can be set to either `code` or `system_command`.
 
 </summary>
 
@@ -181,17 +191,15 @@ print(resp)
 
 </details>
 
+**Note**: Commencing from [v0.1.0](https://github.com/Simatwa/python-tgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
 
-
-**Note**: Starting from [v0.0.7](https://github.com/Simatwa/python-tgpt/releases/), we've introduced an experimental conversational chatting feature:
+You can still disable the mode:
 
 ```python
-bot = tgpt.TGPT(is_conversation=True)
+bot = tgpt.TGPT(is_conversation=False)
 ```
 
-When interacting via the console, simply append the `--conversation` flag. Customize the `history_offset` parameter during the initialization of `TGPT` and utilize the `--history-offset` flag at the console entry point for the same.
-
-This conversational mode opens up a more interactive and engaging experience, allowing greater control over the chat history's handling for a more tailored conversation.
+Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
 
 
 ## Acknowledgements

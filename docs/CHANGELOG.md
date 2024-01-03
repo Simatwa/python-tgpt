@@ -56,3 +56,8 @@
 
 **What's new?**
 - Chatting conversationally - **Stable**
+
+## v0.1.0
+
+**What's new?**
+- Chatting conversationally - **Default Mode**

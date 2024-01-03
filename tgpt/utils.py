@@ -150,6 +150,8 @@ class Conversation:
             prompt (str): user prompt
             response (str): LLM response
         """
+        if not self.status:
+            return
         new_history = self.history_format % dict(user=prompt, llm=response)
         if self.file and self.update_file:
             with open(self.file, "a") as fh:
