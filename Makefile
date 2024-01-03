@@ -20,7 +20,7 @@ test:
 
 # Target to create an executable using PyInstaller
 build: install
-	$(PI) install pyinstaller
+	$(PI) install --upgrade pyinstaller
 	$(PYINSTALLER) main.py \
 	--onefile \
 	--exclude pandas \
