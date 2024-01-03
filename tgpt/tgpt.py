@@ -2,6 +2,7 @@ import requests
 import json
 from .utils import Optimizers
 from .utils import Conversation
+from .utils import AwesomePrompts
 
 session = requests.Session()
 
@@ -22,6 +23,7 @@ class TGPT:
         update_file: bool = True,
         proxies: dict = {},
         history_offset: int = 10250,
+        act: str = None,
     ):
         """Instantiate TGPT
 
@@ -38,6 +40,7 @@ class TGPT:
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
+            act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
         self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
@@ -61,7 +64,13 @@ class TGPT:
             if callable(getattr(Optimizers, method)) and not method.startswith("__")
         )
         session.headers.update(self.headers)
-        Conversation.intro = intro or Conversation.intro
+        Conversation.intro = (
+            AwesomePrompts().get_act(
+                act, raise_not_found=True, default=None, case_insensitive=True
+            )
+            if act
+            else intro or Conversation.intro
+        )
         self.conversation = Conversation(
             is_conversation, self.max_tokens_to_sample, filepath, update_file
         )

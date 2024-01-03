@@ -21,8 +21,8 @@ class Imager:
             token (str, optional): API token. Defaults to None.
         """
         self.token = token
-        self.model = (model,)
-        self.negative_prompt = (negative_prompt,)
+        self.model = model
+        self.negative_prompt = negative_prompt
         self.version = version
         self.image_gen_endpoint = "https://api.craiyon.com/v3"
         self.image_down_endpoint = "https://img.craiyon.com/"

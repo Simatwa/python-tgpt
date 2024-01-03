@@ -2,6 +2,11 @@ import os
 import platform
 import subprocess
 import logging
+import appdirs
+
+appdir = appdirs.AppDirs("tgpt", "Smartwa")
+
+default_path = appdir.user_cache_dir
 
 
 class Optimizers:
@@ -64,7 +69,7 @@ class Conversation:
     """Handles prompt generation based on history"""
 
     intro = (
-        "You're a Large Language Model for chatting with people "
+        "You're a Large Language Model for chatting with people. "
         "Your role: Provide ONLY response."
     )
 
@@ -92,7 +97,8 @@ class Conversation:
         if filepath:
             if not os.path.isfile(filepath):
                 with open(filepath, "a") as fh:  # Try creating new file
-                    pass
+                    # lets add intro here
+                    fh.write(self.intro)
             else:
                 with open(filepath, encoding="utf-8") as fh:
                     file_contents = fh.read()
@@ -133,9 +139,9 @@ class Conversation:
         """
         if self.status:
             resp = self.chat_history + self.history_format % dict(user=prompt, llm="")
-        else:
-            resp = prompt
-        return self.__trim_chat_history(resp)
+            return self.__trim_chat_history(resp)
+
+        return prompt
 
     def update_chat_history(self, prompt: str, response: str) -> None:
         """Updates chat history
@@ -149,3 +155,79 @@ class Conversation:
             with open(self.file, "a") as fh:
                 fh.write(new_history)
         self.chat_history += new_history if self.status else ""
+
+
+class AwesomePrompts:
+    awesome_prompt_url = (
+        "https://github.com/Simatwa/gpt-cli/blob/main/assets/all-acts.json?raw=true"
+    )
+    awesome_prompt_path = os.path.join(default_path, "all-acts.json")
+
+    def __init__(self):
+        if not os.path.exists(default_path):
+            os.makedirs(default_path)
+
+    @property
+    def all_acts(self) -> dict:
+        """All awesome_prompts
+
+        Returns:
+            dict: _description_
+        """
+        import json
+
+        resp = {}
+        if not os.path.isfile(self.awesome_prompt_path):
+            # Let's download the acts
+            logging.info("Downloading awesome prompts")
+            import requests
+
+            response = requests.get(self.awesome_prompt_url)
+            response.raise_for_status
+            prompt_dict = response.json()
+            with open(self.awesome_prompt_path, "w") as fh:
+                json.dump(prompt_dict, fh, indent=4)
+            resp.update(prompt_dict)
+        else:
+            with open(self.awesome_prompt_path) as fh:
+                prompt_dict = json.load(fh)
+
+            resp.update(prompt_dict)
+
+        for count, key_value in enumerate(prompt_dict.items()):
+            # Lets map also index to the value
+            resp.update({count: key_value[1]})
+
+        return resp
+
+    def get_act(
+        self,
+        key: str,
+        default: str = None,
+        case_insensitive: bool = True,
+        raise_not_found: bool = False,
+    ) -> str:
+        """Retrieves specific act of awesome_prompt
+
+        Args:
+            key (str|int): Act name or index
+            default (str): Value to be returned incase act not found.
+            case_insensitive (bool): Perform search key insensitive. Defaults to True.
+            raise_not_found (bool, optional): Control KeyError exception. Defaults to False.
+
+        Raises:
+            KeyError: Incase key not found
+
+        Returns:
+            str: Awesome prompt value
+        """
+        act = self.all_acts.get(key, default)
+        if not act:
+            if case_insensitive:
+                for key_, value in self.all_acts.items():
+                    if str(key).lower() in str(key_).lower():
+                        act = value
+                        break
+            if not act and raise_not_found:
+                raise KeyError(f"No act found for the key '{key}'")
+        return act

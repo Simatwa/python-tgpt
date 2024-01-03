@@ -182,6 +182,7 @@ class Main(cmd.Cmd):
         update_file,
         intro,
         history_offset,
+        awesome_prompt,
         proxy_path,
         quiet=False,
         *args,
@@ -193,21 +194,27 @@ class Main(cmd.Cmd):
                 proxies = json.load(fh)
         else:
             proxies = {}
-        self.bot = tgpt.TGPT(
-            conversation,
-            max_tokens,
-            temperature,
-            top_k,
-            top_p,
-            model,
-            brave_key,
-            timeout,
-            intro,
-            filepath,
-            update_file,
-            proxies,
-            history_offset,
-        )
+        try:
+            self.bot = tgpt.TGPT(
+                conversation,
+                max_tokens,
+                temperature,
+                top_k,
+                top_p,
+                model,
+                brave_key,
+                timeout,
+                intro,
+                filepath,
+                update_file,
+                proxies,
+                history_offset,
+                awesome_prompt,
+            )
+        except Exception as e:
+            logging.error(getExc(e))
+            click.secho("Quitting", fg="red")
+            exit(1)
         self.prettify = True
         self.color = "cyan"
         self.code_theme = "monokai"
@@ -588,6 +595,13 @@ def tgpt2_():
     default=10250,
 )
 @click.option(
+    "-ap",
+    "--awesome-prompt",
+    default="0",
+    callback=lambda ctx, param, value: int(value) if str(value).isdigit() else value,
+    help="Awesome prompt key or index. Alt. to intro",
+)
+@click.option(
     "-pp",
     "--proxy-path",
     type=click.Path(exists=True),
@@ -619,6 +633,7 @@ def interactive(
     update_file,
     intro,
     history_offset,
+    awesome_prompt,
     proxy_path,
     quiet,
 ):
@@ -657,6 +672,7 @@ def interactive(
         update_file,
         intro,
         history_offset,
+        awesome_prompt,
         proxy_path,
         quiet,
     )
@@ -787,6 +803,13 @@ def interactive(
     default=10250,
 )
 @click.option(
+    "-ap",
+    "--awesome-prompt",
+    default="0",
+    callback=lambda ctx, param, value: int(value) if str(value).isdigit() else value,
+    help="Awesome prompt key or index. Alt. to intro",
+)
+@click.option(
     "-pp",
     "--proxy-path",
     type=click.Path(exists=True),
@@ -821,6 +844,7 @@ def generate(
     update_file,
     intro,
     history_offset,
+    awesome_prompt,
     proxy_path,
     quiet,
 ):
@@ -838,6 +862,7 @@ def generate(
         update_file,
         intro,
         history_offset,
+        awesome_prompt,
         proxy_path,
         quiet,
     )
