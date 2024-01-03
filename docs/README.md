@@ -5,7 +5,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.0.8&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.0.9&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
@@ -35,56 +35,59 @@ AI for all
 >>> bot.chat('Hello there')
 "  Hello! It's nice to meet you. Is there something I can help you with or would you like to chat?"
 >>> 
-
 ```
 
-This project allows you to interact with AI ([LLaMA](https://ai.meta.com/llama/)) without API Key.
+This project enables seamless interaction with [LLaMA](https://ai.meta.com/llama/) AI without requiring an API Key.
 
-The name *python-tgpt* is inherited from it's parent project [tgpt](https://github.com/aandrew-me/tgpt) which runs on [golang](https://go.dev/).
+The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with LLaMA's capabilities, fostering a smoother AI interaction experience.
 
-## Prerequisite
+## Prerequisites
 
 - [x] [Python>=3.9](https://python.org)
 
-## Installation and usage
+## Installation and Usage
 
 ### Installation
 
-Pick either of the following ways to get started.
+Choose one of the following methods to get started.
 
-1. From pypi:
+1. From PyPI:
 
-```
-pip install --upgrade python-tgpt
-```
+   ```bash
+   pip install --upgrade python-tgpt
+   ```
 
-2. Direct from source
+2. Directly from the source:
 
-```
-pip install git+https://github.com/Simatwa/python-tgpt.git
-```
+   ```bash
+   pip install git+https://github.com/Simatwa/python-tgpt.git
+   ```
 
-3. Clone and Install
+3. Clone and Install:
 
-```
-git clone https://github.com/Simatwa/python-tgpt.git
-cd python-tgpt
-pip install .
-```
+   ```bash
+   git clone https://github.com/Simatwa/python-tgpt.git
+   cd python-tgpt
+   pip install .
+   ```
 
 ## Usage
 
-This package features a ready to use commandline interface.
+This package offers a convenient command-line interface.
 
-- Quick response
-   `python -m tgpt generate "<Your prompt>"`
+- For a quick response:
+  ```bash
+  python -m tgpt generate "<Your prompt>"
+  ```
 
-- Interactive mode 
-   `python -m tgpt interactive "<Kickoff prompt though not a must>"`
+- For interactive mode:
+  ```bash
+  python -m tgpt interactive "<Kickoff prompt (though not mandatory)>"
+  ```
 
-Instead of `python -m tgpt`, you can as well just use `tgpt`
+You can also simply use `tgpt` instead of `python -m tgpt`.
 
-As from [version 0.0.6](https://github.com/Simatwa/python-tgpt/releases), `generate` is the default command. So something like this will still work. `tgpt "<Your prompt>"`
+Starting from [version 0.0.6](https://github.com/Simatwa/python-tgpt/releases), `generate` is the default command. Therefore, something like this will still work: `tgpt "<Your prompt>"`.
 
 <details>
 
@@ -179,7 +182,17 @@ print(resp)
 </details>
 
 
-> **Note** : As of [v0.0.7](https://github.com/Simatwa/python-tgpt/releases/), chatting conversationally has been featured *(Experimental)* : `bot = tgpt.TGPT(is_conversation=True)`, at console just append flag `--conversation`. NB: *Tends to fail after relative lengthy chat.*
+
+**Note**: Starting from [v0.0.7](https://github.com/Simatwa/python-tgpt/releases/), we've introduced an experimental conversational chatting feature:
+
+```python
+bot = tgpt.TGPT(is_conversation=True)
+```
+
+When interacting via the console, simply append the `--conversation` flag. Customize the `history_offset` parameter during the initialization of `TGPT` and utilize the `--history-offset` flag at the console entry point for the same.
+
+This conversational mode opens up a more interactive and engaging experience, allowing greater control over the chat history's handling for a more tailored conversation.
+
 
 ## Acknowledgements
 

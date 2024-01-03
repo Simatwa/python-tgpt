@@ -21,6 +21,7 @@ class TGPT:
         filepath: str = None,
         update_file: bool = True,
         proxies: dict = {},
+        history_offset: int = 10250,
     ):
         """Instantiate TGPT
 
@@ -36,6 +37,7 @@ class TGPT:
             intro (str, optional): Conversation introductory prompt. Defaults to `Conversation.intro`.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
+            history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
         """
         self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
@@ -60,7 +62,10 @@ class TGPT:
         )
         session.headers.update(self.headers)
         Conversation.intro = intro or Conversation.intro
-        self.conversation = Conversation(is_conversation, filepath, update_file)
+        self.conversation = Conversation(
+            is_conversation, self.max_tokens_to_sample, filepath, update_file
+        )
+        self.conversation.history_offset = history_offset
         session.proxies = proxies
 
     def ask(

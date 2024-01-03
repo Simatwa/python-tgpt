@@ -51,3 +51,8 @@
 - Reset conversation - *(Console)*
 - View conversation history - *(Console)*
 - Other minor fixes
+
+## v0.0.9
+
+**What's new?**
+- Chatting conversationally - **Stable**

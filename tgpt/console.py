@@ -181,6 +181,7 @@ class Main(cmd.Cmd):
         filepath,
         update_file,
         intro,
+        history_offset,
         proxy_path,
         quiet=False,
         *args,
@@ -205,6 +206,7 @@ class Main(cmd.Cmd):
             filepath,
             update_file,
             proxies,
+            history_offset,
         )
         self.prettify = True
         self.color = "cyan"
@@ -395,12 +397,12 @@ class Main(cmd.Cmd):
     def do_history(self, line):
         """Show current conversation history"""
         history = self.bot.conversation.chat_history
-        history = re.sub(
+        formatted_history = re.sub(
             "\nLLM :",
             "\n\n**LLM** :",
             re.sub("\nUser :", "\n\n**User** :", history),
         )
-        self.output_bond("Chat History", history, self.color)
+        self.output_bond("Chat History", formatted_history, self.color)
         if click.confirm("Do you wish to save this chat"):
             save_to = click.prompt(
                 "Enter path/file-name", default="llama-conversation.txt"
@@ -416,6 +418,17 @@ class Main(cmd.Cmd):
             "Introductory prompt", default=self.bot.conversation.intro
         )
         click.secho("Conversation reset successfully. New one created.", fg="cyan")
+
+    @busy_bar.run("while loading conversation")
+    def do_load(self, line):
+        """Load conversation history from file"""
+        history_file = click.prompt("Enter path to history path", default=line)
+        while not os.path.isfile(history_file):
+            click.secho(f"Path `{history_file}` does not exist!", fg="red")
+            self.do_load("")
+        with open(history_file) as fh:
+            self.bot.conversation.chat_history = fh.read()
+        click.secho("Conversation loaded successfully.", fg="cyan")
 
     @busy_bar.run()
     def default(self, line):
@@ -567,6 +580,14 @@ def tgpt2_():
     help="Conversation introductory prompt",
 )
 @click.option(
+    "-ho",
+    "--history-offset",
+    envvar="history_offset",
+    help="Limit conversation history to this number of last texts",
+    type=click.IntRange(100, 16000),
+    default=10250,
+)
+@click.option(
     "-pp",
     "--proxy-path",
     type=click.Path(exists=True),
@@ -597,6 +618,7 @@ def interactive(
     filepath,
     update_file,
     intro,
+    history_offset,
     proxy_path,
     quiet,
 ):
@@ -634,6 +656,7 @@ def interactive(
         filepath,
         update_file,
         intro,
+        history_offset,
         proxy_path,
         quiet,
     )
@@ -756,6 +779,14 @@ def interactive(
     help="Conversation introductory prompt",
 )
 @click.option(
+    "-ho",
+    "--history-offset",
+    envvar="history_offset",
+    help="Limit conversation history to this number of last texts",
+    type=click.IntRange(100, 16000),
+    default=10250,
+)
+@click.option(
     "-pp",
     "--proxy-path",
     type=click.Path(exists=True),
@@ -789,6 +820,7 @@ def generate(
     filepath,
     update_file,
     intro,
+    history_offset,
     proxy_path,
     quiet,
 ):
@@ -805,6 +837,7 @@ def generate(
         filepath,
         update_file,
         intro,
+        history_offset,
         proxy_path,
         quiet,
     )

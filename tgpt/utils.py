@@ -69,18 +69,24 @@ class Conversation:
     )
 
     def __init__(
-        self, status: bool = True, filepath: str = None, update_file: bool = True
+        self,
+        status: bool = True,
+        max_tokens: int = 600,
+        filepath: str = None,
+        update_file: bool = True,
     ):
         """Initializes Conversation
 
         Args:
             status (bool, optional): Flag to control history. Defaults to True.
+            max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
         """
         # I was thinking of introducing offset so as to control payload size. (prompt)
         #  What's your thought on that? Give a PR or raise an issue
         self.status = status
+        self.max_tokens_to_sample = max_tokens
         self.chat_history = self.intro
         self.history_format = "\nUser : %(user)s\nLLM :%(llm)s"
         if filepath:
@@ -89,10 +95,32 @@ class Conversation:
                     pass
             else:
                 with open(filepath, encoding="utf-8") as fh:
-                    self.chat_history = self.chat_history + fh.read()
+                    file_contents = fh.read()
+                    if bool(file_contents.strip()):
+                        # Presume intro prompt is part of the file content
+                        self.chat_history = file_contents
 
         self.file = filepath
         self.update_file = update_file
+        self.history_offset = 10250
+        self.prompt_allowance = 10
+
+    def __trim_chat_history(self, chat_history: str) -> str:
+        """Ensures the len(prompt) and max_tokens_to_sample is not > 4096"""
+        len_of_intro = len(self.intro)
+        len_of_chat_history = len(chat_history)
+        total = (
+            self.max_tokens_to_sample + len_of_intro + len_of_chat_history
+        )  # + self.max_tokens_to_sample
+        if total > self.history_offset:
+            truncate_at = (total - self.history_offset) + self.prompt_allowance
+            # Remove head of total (n) of chat_history
+            new_chat_history = chat_history[truncate_at:]
+            self.chat_history = self.intro + "\n... " + new_chat_history
+            # print(len(self.chat_history))
+            return self.chat_history
+        # print(len(chat_history))
+        return chat_history
 
     def gen_complete_prompt(self, prompt: str) -> str:
         """Generates a kinda like incomplete conversation
@@ -107,7 +135,7 @@ class Conversation:
             resp = self.chat_history + self.history_format % dict(user=prompt, llm="")
         else:
             resp = prompt
-        return resp
+        return self.__trim_chat_history(resp)
 
     def update_chat_history(self, prompt: str, response: str) -> None:
         """Updates chat history
