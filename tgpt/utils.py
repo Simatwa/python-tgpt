@@ -11,6 +11,7 @@ default_path = appdir.user_cache_dir
 if not os.path.exists(default_path):
     os.makedirs(default_path)
 
+
 class Optimizers:
     @staticmethod
     def code(prompt):

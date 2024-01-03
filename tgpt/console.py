@@ -891,7 +891,7 @@ def generate(
             click.secho(
                 help_info
             )  # Let's try to mimic the click's missing argument help info
-            exit(1)
+            sys.exit(1)
         else:
             signal.alarm(0)  # Reset the alarm if input is read successfully
             # Just incase the previous timeout was not 0
