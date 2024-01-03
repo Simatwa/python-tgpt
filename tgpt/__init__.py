@@ -1,5 +1,8 @@
 from .tgpt import TGPT
 from .imager import Imager
+from .utils import Optimizers
+from .utils import Conversation
+from .utils import AwesomePrompts
 
 __version__ = "0.1.0"
 __author__ = "Smartwa"
