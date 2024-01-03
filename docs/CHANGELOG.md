@@ -66,3 +66,9 @@
 
 **What's new?**
 - Bug fixed - *file not found error*
+
+## v0.1.2
+
+**What's new?**
+- Check version - `--version`
+- Minor fixes.

@@ -22,6 +22,7 @@ from rich.prompt import Prompt
 from typing import Iterator
 from tgpt.utils import Optimizers
 from tgpt.utils import default_path
+from tgpt import __version__
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -907,6 +908,10 @@ def generate(
 
 def main():
     args = sys.argv
+    if "--version" in args:
+        # Lets show version here and exit
+        click.secho(f"tgpt v{__version__}")
+        sys.exit(0)
     if (
         len(args) > 1
         and args[1] not in ["interactive", "generate"]
