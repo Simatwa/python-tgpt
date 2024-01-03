@@ -8,6 +8,8 @@ appdir = appdirs.AppDirs("tgpt", "Smartwa")
 
 default_path = appdir.user_cache_dir
 
+if not os.path.exists(default_path):
+    os.makedirs(default_path)
 
 class Optimizers:
     @staticmethod
@@ -166,8 +168,7 @@ class AwesomePrompts:
     awesome_prompt_path = os.path.join(default_path, "all-acts.json")
 
     def __init__(self):
-        if not os.path.exists(default_path):
-            os.makedirs(default_path)
+        pass
 
     @property
     def all_acts(self) -> dict:
