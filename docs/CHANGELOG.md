@@ -61,3 +61,8 @@
 
 **What's new?**
 - Chatting conversationally - **Default Mode**
+
+## v0.1.1
+
+**What's new?**
+- Bug fixed - *file not found error*
