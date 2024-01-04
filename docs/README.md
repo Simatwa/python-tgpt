@@ -1,5 +1,8 @@
-<h1 align="center"> python-tgpt </h1>
+<p align="center">
+<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/py-tgpt.svg?raw=true" width='40%'>
+</p>
 
+<!-- <h1 align="center"> python-tgpt </h1> -->
 <p align="center">
 <!--
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
@@ -20,9 +23,9 @@
 <a href="https://wakatime.com/badge/github/Simatwa/tgpt2"><img src="https://wakatime.com/badge/github/Simatwa/tgpt2.svg" alt="wakatime"></a>
 </p>
 
-<p align="center">
-AI for all
-</p> 
+<h3 align="center">
+python-tgpt
+</h3> 
 
 <p align="center">
 <img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/console-demo.gif?raw=True" width='100%'/>
@@ -98,7 +101,7 @@ This package offers a convenient command-line interface.
 
 You can also simply use `tgpt` instead of `python -m tgpt`.
 
-Starting from [version 0.0.6](https://github.com/Simatwa/python-tgpt/releases), `generate` is the default command. Therefore, something like this will still work: `tgpt "<Your prompt>"`.
+Starting from [version 0.0.6](https://github.com/Simatwa/python-tgpt/releases), `generate` is the default command *(For Unix based systems)*. Therefore, something like this will still work: `tgpt "<Your prompt>"`.
 
 <details>
 

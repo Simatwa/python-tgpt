@@ -10,6 +10,7 @@ import rich
 import getpass
 import json
 import re
+import platform
 from time import sleep
 from threading import Thread as thr
 from functools import wraps
@@ -916,7 +917,9 @@ def main():
         and args[1] not in ["interactive", "generate"]
         and not "--help" in args
     ):
-        sys.argv.insert(1, "generate")  # Just a hack to make 'generate' default command
+        sys.argv.insert(
+            1, "interactive" if platform.system() == "Windows" else "generate"
+        )  # Just a hack to make default command
     tgpt2_()
 
 
