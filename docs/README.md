@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/py-tgpt.svg?raw=true" width='40%'>
+<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/py-tgpt.png?raw=true" width='40%'>
 </p>
 
 <!-- <h1 align="center"> python-tgpt </h1> -->
