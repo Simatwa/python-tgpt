@@ -32,7 +32,7 @@ build: install
 	--exclude matplotlib \
 	--exclude PyQt5 \
 	--exclude share \
-	--icon assets/py-tgpt.png
+	--icon assets/logo.png
 
 # Target to clean up build artifacts
 clean:
