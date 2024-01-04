@@ -432,9 +432,9 @@ class Main(cmd.Cmd):
     def do_load(self, line):
         """Load conversation history from file"""
         history_file = click.prompt("Enter path to history path", default=line)
-        while not os.path.isfile(history_file):
+        if not os.path.isfile(history_file):
             click.secho(f"Path `{history_file}` does not exist!", fg="red")
-            self.do_load("")
+            return
         with open(history_file) as fh:
             self.bot.conversation.chat_history = fh.read()
         click.secho("Conversation loaded successfully.", fg="cyan")
