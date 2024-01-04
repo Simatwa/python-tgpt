@@ -60,11 +60,15 @@ Got it! Here's an updated list, highlighting the support for "awesome-chatgpt" p
 
 ## Prerequisites
 
-- [x] [Python>=3.9](https://python.org)
+- [x] [Python>=3.9](https://python.org) *(Optional)*
 
 ## Installation and Usage
 
 ### Installation
+
+Download binaries for your system from [here.](https://github.com/Simatwa/python-tgpt/releases/tag/v0.1.2)
+
+Alternatively, you can install non-binaries. *(Recommended)*
 
 Choose one of the following methods to get started.
 
