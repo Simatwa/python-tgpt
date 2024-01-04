@@ -101,7 +101,7 @@ This package offers a convenient command-line interface.
 
 You can also simply use `tgpt` instead of `python -m tgpt`.
 
-Starting from [version 0.0.6](https://github.com/Simatwa/python-tgpt/releases), `generate` is the default command *(For Unix based systems)*. Therefore, something like this will still work: `tgpt "<Your prompt>"`.
+Starting from version 0.1.2, `generate` is the default command if you issue a prompt, and `interactive` takes action if you don't. Therefore, something like this will generate a response and exit `$ tgpt "<Your prompt>"` while `$ tgpt` will fire up an interactive prompt.
 
 <details>
 

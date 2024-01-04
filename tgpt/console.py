@@ -917,9 +917,11 @@ def main():
         and args[1] not in ["interactive", "generate"]
         and not "--help" in args
     ):
-        sys.argv.insert(
-            1, "interactive" if platform.system() == "Windows" else "generate"
-        )  # Just a hack to make default command
+        sys.argv.insert(1, "generate")  # Just a hack to make default command
+    elif (
+        len(args) == 1
+    ):  # and platform.system() == "Windows": What do you think about this?
+        sys.argv.insert(1, "interactive")
     tgpt2_()
 
 
