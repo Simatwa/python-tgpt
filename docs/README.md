@@ -44,8 +44,6 @@ This project enables seamless interaction with [LLaMA](https://ai.meta.com/llama
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with LLaMA's capabilities, fostering a smoother AI interaction experience.
 
-Got it! Here's an updated list, highlighting the support for "awesome-chatgpt" prompts as an independent feature:
-
 ### Features
 
 - 🗨️ Enhanced conversational chat experience
