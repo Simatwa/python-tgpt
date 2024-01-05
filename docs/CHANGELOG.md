@@ -72,3 +72,8 @@
 **What's new?**
 - Check version - `--version`
 - Minor fixes.
+
+## v0.1.3
+
+**What's new?**
+- Invalid response - **fixed**

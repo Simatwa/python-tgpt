@@ -55,6 +55,7 @@ class TGPT:
         self.last_response = {}
         self.headers = {
             "Content-Type": "application/json",
+            "accept": "text/event-stream",
             "x-brave-key": brave_key,
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
         }
@@ -76,6 +77,14 @@ class TGPT:
         )
         self.conversation.history_offset = history_offset
         session.proxies = proxies
+        self.system_prompt = (
+            "\n\nYour name is Leo, a helpful"
+            "respectful and honest AI assistant created by the company Brave. You will be replying to a user of the Brave browser. "
+            "Always respond in a neutral tone. Be polite and courteous. Answer concisely in no more than 50-80 words."
+            "\n\nPlease ensure that your responses are socially unbiased and positive in nature."
+            "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. "
+            "If you don't know the answer to a question, please don't share false information.\n"
+        )
 
     def ask(
         self,
@@ -122,7 +131,7 @@ class TGPT:
         payload = {
             "max_tokens_to_sample": self.max_tokens_to_sample,
             "model": self.model,
-            "prompt": f"[INST] {conversation_prompt} [/INST]",
+            "prompt": f"<s>[INST] <<SYS>>{self.system_prompt}<</SYS>>{conversation_prompt} [/INST]",
             "self.stop_sequence": self.stop_sequences,
             "stream": stream,
             "top_k": self.top_k,

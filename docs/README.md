@@ -8,7 +8,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.1.2&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.1.3&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
@@ -42,7 +42,7 @@ python-tgpt
 
 This project enables seamless interaction with [LLaMA](https://ai.meta.com/llama/) AI without requiring an API Key.
 
-The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with LLaMA's capabilities, fostering a smoother AI interaction experience.
+The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with LLaMA's capabilities *(alias **LEO** by Brave)*, fostering a smoother AI interaction experience.
 
 ### Features
 
@@ -64,7 +64,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 
 ### Installation
 
-Download binaries for your system from [here.](https://github.com/Simatwa/python-tgpt/releases/tag/v0.1.2)
+Download binaries for your system from [here.](https://github.com/Simatwa/python-tgpt/releases/tag/v0.1.3)
 
 Alternatively, you can install non-binaries. *(Recommended)*
 
