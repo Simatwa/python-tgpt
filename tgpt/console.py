@@ -440,7 +440,7 @@ class Main(cmd.Cmd):
         click.secho("Conversation loaded successfully.", fg="cyan")
 
     @busy_bar.run()
-    def default(self, line):
+    def default(self, line, exit_on_error: bool = False):
         """Chat with ChatGPT"""
         if not bool(line):
             return
@@ -481,6 +481,8 @@ class Main(cmd.Cmd):
                 # logging.exception(e)
                 busy_bar.stop_spinning()
                 logging.error(getExc(e))
+                if exit_on_error:
+                    sys.exit(1)
 
     def do_sys(self, line):
         """Execute system commands
@@ -903,7 +905,7 @@ def generate(
     bot.code_theme = code_theme
     bot.color = font_color
     bot.prettify = prettify
-    bot.default(prompt)
+    bot.default(prompt, True)
 
 
 def main():
