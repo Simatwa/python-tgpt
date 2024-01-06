@@ -57,6 +57,7 @@ class TGPT:
             "Content-Type": "application/json",
             "accept": "text/event-stream",
             "x-brave-key": brave_key,
+            "accept-language": "en-US,en;q=0.9",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
         }
         self.__available_optimizers = (

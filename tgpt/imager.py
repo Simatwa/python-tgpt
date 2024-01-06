@@ -27,6 +27,7 @@ class Imager:
         self.image_gen_endpoint = "https://api.craiyon.com/v3"
         self.image_down_endpoint = "https://img.craiyon.com/"
         self.headers = {
+            "Accept-Encoding": "gzip, deflate, br",
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
         }

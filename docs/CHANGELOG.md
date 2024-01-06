@@ -77,3 +77,8 @@
 
 **What's new?**
 - Invalid response - **fixed**
+
+## v0.1.4
+
+**What's new?**
+- Incomplete response - **fixed**
