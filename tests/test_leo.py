@@ -1,11 +1,11 @@
 import unittest
 import types
-from tgpt import TGPT
+import tgpt.leo as leo
 
 
 class TestTgpt(unittest.TestCase):
     def setUp(self):
-        self.bot = TGPT()
+        self.bot = leo.LEO()
         self.prompt = "Hello there"
 
     def test_ask_non_stream(self):
