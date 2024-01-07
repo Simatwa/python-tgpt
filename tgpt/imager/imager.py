@@ -11,6 +11,7 @@ class Imager:
         version: str = "c4ue22fb7kb6wlac",
         model: str = "photo",
         token: str = None,
+        proxies: dict = {},
     ):
         """Initializes `Imager`
 
@@ -19,6 +20,7 @@ class Imager:
             version (str, optional): Version name. Defaults to "c4ue22fb7kb6wlac".
             model (str, optional): Generation model. Defaults to 'photo'.
             token (str, optional): API token. Defaults to None.
+            proxies (dict, optional): Http request proxies (socks). Defaults to {}.
         """
         self.token = token
         self.model = model
@@ -31,6 +33,7 @@ class Imager:
             "Content-Type": "application/json",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
         }
+        session.proxies = proxies
 
     def generate(self, prompt: str) -> dict:
         """Generat image from prompt

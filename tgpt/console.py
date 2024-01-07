@@ -23,6 +23,7 @@ from rich.prompt import Prompt
 from typing import Iterator
 from tgpt.utils import Optimizers
 from tgpt.utils import default_path
+import tgpt.leo as leo
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -197,7 +198,7 @@ class Main(cmd.Cmd):
         else:
             proxies = {}
         try:
-            self.bot = tgpt.LEO(
+            self.bot = leo.LEO(
                 disable_conversation,
                 max_tokens,
                 temperature,

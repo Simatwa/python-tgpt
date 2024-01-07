@@ -1,5 +1,6 @@
 from .main import LEO
+from .main import session
 
-all = [
-    "TGPT",
-]
+__info__ = "Interact with LLaMA alias `LEO` model by Brave"
+
+__all__ = ["LEO", "session"]

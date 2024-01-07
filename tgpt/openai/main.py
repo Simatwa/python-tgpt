@@ -8,16 +8,17 @@ from tgpt.base import Provider
 session = requests.Session()
 
 
-class LEO(Provider):
+class OPENAI(Provider):
     def __init__(
         self,
+        api_key: str,
         is_conversation: bool = True,
         max_tokens: int = 600,
-        temperature: float = 0.2,
-        top_k: int = -1,
-        top_p: float = 0.999,
-        model: str = "llama-2-13b-chat",
-        brave_key: str = "qztbjzBqJueQZLFkwTTJrieu8Vw3789u",
+        temperature: float = 1,
+        presence_penalty: int = 0,
+        frequency_penalty: int = 0,
+        top_p: float = 1,
+        model: str = "gpt-3.5-turbo",
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -26,42 +27,42 @@ class LEO(Provider):
         history_offset: int = 10250,
         act: str = None,
     ):
-        """Instantiate TGPT
+        """Instantiates OPENAI
 
         Args:
-            is_conversation (str, optional): Flag for chatting conversationally. Defaults to True.
-            brave_key (str, optional): Brave API access key. Defaults to "qztbjzBqJueQZLFkwTTJrieu8Vw3789u".
-            model (str, optional): Text generation model name. Defaults to "llama-2-13b-chat".
+            api_key (key): OpenAI's API key.
+            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
-            temperature (float, optional): Charge of the generated text's randomness. Defaults to 0.2.
-            top_k (int, optional): Chance of topic being repeated. Defaults to -1.
+            temperature (float, optional): Charge of the generated text's randomness. Defaults to 1.
+            presence_penalty (int, optional): Chances of topic being repeated. Defaults to 0.
+            frequency_penalty (int, optional): Chances of word being repeated. Defaults to 0.
             top_p (float, optional): Sampling threshold during inference time. Defaults to 0.999.
-            timeput (int, optional): Http requesting timeout. Defaults to 30
-            intro (str, optional): Conversation introductory prompt. Defaults to `Conversation.intro`.
+            model (str, optional): LLM model name. Defaults to "gpt-3.5-turbo".
+            timeout (int, optional): Http request timeout. Defaults to 30.
+            intro (str, optional): Conversation introductory prompt. Defaults to None.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
-            proxies (dict, optional) : Http reqiuest proxies (socks). Defaults to {}.
+            proxies (dict, optional): Http request proxies. Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
         self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
+        self.api_key = api_key
         self.model = model
-        self.stop_sequences = ["</response>", "</s>"]
         self.temperature = temperature
-        self.top_k = top_k
+        self.presence_penalty = presence_penalty
+        self.frequency_penalty = frequency_penalty
         self.top_p = top_p
-        self.chat_endpoint = "https://ai-chat.bsg.brave.com/v1/complete"
+        self.chat_endpoint = "https://api.openai.com/v1/chat/completions"
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
         self.headers = {
             "Content-Type": "application/json",
-            "accept": "text/event-stream",
-            "x-brave-key": brave_key,
-            "accept-language": "en-US,en;q=0.9",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
+            "Authorization": f"Bearer {self.api_key}",
         }
+
         self.__available_optimizers = (
             method
             for method in dir(Optimizers)
@@ -80,14 +81,6 @@ class LEO(Provider):
         )
         self.conversation.history_offset = history_offset
         session.proxies = proxies
-        self.system_prompt = (
-            "\n\nYour name is Leo, a helpful"
-            "respectful and honest AI assistant created by the company Brave. You will be replying to a user of the Brave browser. "
-            "Always respond in a neutral tone. Be polite and courteous. Answer concisely in no more than 50-80 words."
-            "\n\nPlease ensure that your responses are socially unbiased and positive in nature."
-            "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. "
-            "If you don't know the answer to a question, please don't share false information.\n"
-        )
 
     def ask(
         self,
@@ -109,13 +102,25 @@ class LEO(Provider):
            dict : {}
         ```json
         {
-            "completion": "\nNext: domestic cat breeds with short hair >>",
-            "stop_reason": null,
-            "truncated": false,
-            "stop": null,
-            "model": "llama-2-13b-chat",
-            "log_id": "cmpl-3kYiYxSNDvgMShSzFooz6t",
-            "exception": null
+            "id": "chatcmpl-TaREJpBZsRVQFRFic1wIA7Q7XfnaD",
+            "object": "chat.completion",
+            "created": 1704623244,
+            "model": "gpt-3.5-turbo",
+            "usage": {
+                "prompt_tokens": 0,
+                "completion_tokens": 0,
+                "total_tokens": 0
+                },
+            "choices": [
+                {
+                    "message": {
+                        "role": "assistant",
+                        "content": "Hello! How can I assist you today?"
+                },
+                "finish_reason": "stop",
+                "index": 0
+                }
+            ]
         }
         ```
         """
@@ -129,15 +134,14 @@ class LEO(Provider):
                 raise Exception(
                     f"Optimizer is not one of {self.__available_optimizers}"
                 )
-
         session.headers.update(self.headers)
         payload = {
-            "max_tokens_to_sample": self.max_tokens_to_sample,
+            "frequency_penalty": self.frequency_penalty,
+            "messages": [{"content": conversation_prompt, "role": "user"}],
             "model": self.model,
-            "prompt": f"<s>[INST] <<SYS>>{self.system_prompt}<</SYS>>{conversation_prompt} [/INST]",
-            "self.stop_sequence": self.stop_sequences,
+            "presence_penalty": self.presence_penalty,
             "stream": stream,
-            "top_k": self.top_k,
+            "temperature": self.temperature,
             "top_p": self.top_p,
         }
 
@@ -154,6 +158,7 @@ class LEO(Provider):
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
 
+            message_load = ""
             for value in response.iter_lines(
                 decode_unicode=True,
                 delimiter="" if raw else "data:",
@@ -161,6 +166,10 @@ class LEO(Provider):
             ):
                 try:
                     resp = json.loads(value)
+                    incomplete_message = self.get_message(resp)
+                    if incomplete_message:
+                        message_load += incomplete_message
+                        resp["choices"][0]["delta"]["content"] = message_load
                     self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
@@ -234,4 +243,9 @@ class LEO(Provider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response.get("completion")
+        try:
+            if response["choices"][0].get("delta"):
+                return response["choices"][0]["delta"]["content"]
+            return response["choices"][0]["message"]["content"]
+        except KeyError:
+            return ""
