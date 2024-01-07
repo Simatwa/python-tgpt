@@ -1,3 +1,3 @@
-from .console import main
+from tgpt.console import main
 
 main()

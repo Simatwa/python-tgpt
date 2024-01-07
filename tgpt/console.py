@@ -197,7 +197,7 @@ class Main(cmd.Cmd):
         else:
             proxies = {}
         try:
-            self.bot = tgpt.TGPT(
+            self.bot = tgpt.LEO(
                 disable_conversation,
                 max_tokens,
                 temperature,

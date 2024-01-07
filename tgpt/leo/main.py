@@ -1,13 +1,14 @@
 import requests
 import json
-from .utils import Optimizers
-from .utils import Conversation
-from .utils import AwesomePrompts
+from tgpt.utils import Optimizers
+from tgpt.utils import Conversation
+from tgpt.utils import AwesomePrompts
+from tgpt.base import Provider
 
 session = requests.Session()
 
 
-class TGPT:
+class LEO(Provider):
     def __init__(
         self,
         is_conversation: bool = True,
@@ -233,11 +234,3 @@ class TGPT:
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
         return response.get("completion")
-
-
-if __name__ == "__main__":
-    bot = TGPT()
-    while True:
-        print(bot.ask(input(">>")))
-        # for entry in bot.chat(input('>>'),True):
-        #   print(entry)
