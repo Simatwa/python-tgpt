@@ -11,6 +11,7 @@ import getpass
 import json
 import re
 import platform
+import sys
 from time import sleep
 from threading import Thread as thr
 from functools import wraps
@@ -23,7 +24,6 @@ from rich.prompt import Prompt
 from typing import Iterator
 from tgpt.utils import Optimizers
 from tgpt.utils import default_path
-import tgpt.leo as leo
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -87,6 +87,15 @@ def stream_output(
                     style=style,
                 )
             )
+
+
+def clear_history_file(file_path, is_true):
+    """When --new flag is True"""
+    if is_true and os.path.isfile(file_path):
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            logging.error(f"Failed to clear previous chat history - {getExc(e)}")
 
 
 class busy_bar:
@@ -178,7 +187,7 @@ class Main(cmd.Cmd):
         top_k,
         top_p,
         model,
-        brave_key,
+        auth,
         timeout,
         disable_conversation,
         filepath,
@@ -187,6 +196,7 @@ class Main(cmd.Cmd):
         history_offset,
         awesome_prompt,
         proxy_path,
+        provider,
         quiet=False,
         *args,
         **kwargs,
@@ -197,23 +207,88 @@ class Main(cmd.Cmd):
                 proxies = json.load(fh)
         else:
             proxies = {}
+
         try:
-            self.bot = leo.LEO(
-                disable_conversation,
-                max_tokens,
-                temperature,
-                top_k,
-                top_p,
-                model,
-                brave_key,
-                timeout,
-                intro,
-                filepath,
-                update_file,
-                proxies,
-                history_offset,
-                awesome_prompt,
-            )
+            if provider == "leo":
+                from tgpt.leo import main
+
+                self.bot = main.LEO(
+                    disable_conversation,
+                    max_tokens,
+                    temperature,
+                    top_k,
+                    top_p,
+                    model or main.model,
+                    auth or main.key,
+                    intro,
+                    filepath,
+                    update_file,
+                    proxies,
+                    history_offset,
+                    awesome_prompt,
+                )
+
+            elif provider == "fakeopen":
+                from tgpt.fakeopen import main
+
+                self.bot = main.FAKEOPEN(
+                    disable_conversation,
+                    max_tokens,
+                    temperature,
+                    top_p,
+                    top_k,
+                    top_p,
+                    model or main.model,
+                    auth or main.auth,
+                    timeout,
+                    intro,
+                    filepath,
+                    update_file,
+                    proxies,
+                    history_offset,
+                    awesome_prompt,
+                )
+
+            elif provider == "openai":
+                assert auth, "OpenAI API key is required"
+                from tgpt.openai import main
+
+                self.bot = main.OPENAI(
+                    auth,
+                    disable_conversation,
+                    max_tokens,
+                    temperature,
+                    top_p,
+                    top_k,
+                    top_p,
+                    model or main.model,
+                    timeout,
+                    intro,
+                    filepath,
+                    update_file,
+                    proxies,
+                    history_offset,
+                    awesome_prompt,
+                )
+
+            elif provider == "opengpt":
+                from tgpt.opengpt import OPENGPT
+
+                self.bot = OPENGPT(
+                    disable_conversation,
+                    timeout,
+                    intro,
+                    filepath,
+                    update_file,
+                    proxies,
+                    history_offset,
+                    awesome_prompt,
+                )
+            else:
+                raise NotImplementedError(
+                    f"The provider `{provider}` is not yet implemented."
+                )
+
         except Exception as e:
             logging.error(getExc(e))
             click.secho("Quitting", fg="red")
@@ -509,7 +584,9 @@ def tgpt2_():
 
 @tgpt2_.command()
 @click.option(
-    "-m", "--model", help="Model name for text-generation", default="llama-2-13b-chat"
+    "-m",
+    "--model",
+    help="Model name for text-generation",  # default="llama-2-13b-chat"
 )
 @click.option(
     "-t",
@@ -540,11 +617,10 @@ def tgpt2_():
     default=-1,
 )
 @click.option(
-    "-bk",
-    "--brave-key",
-    envvar="brave_key",
-    help="Brave API access key",
-    default="qztbjzBqJueQZLFkwTTJrieu8Vw3789u",
+    "-k",
+    "--key",
+    envvar="auth_key",
+    help="LLM API access key or auth value",
 )
 @click.option(
     "-ct",
@@ -615,11 +691,25 @@ def tgpt2_():
     help="Path to .json file containing proxies",
 )
 @click.option(
+    "-p",
+    "--provider",
+    type=click.Choice(["leo", "openai", "fakeopen", "opengpt"]),
+    default="leo",
+    help="Name of LLM provider.",
+    envvar="llm_provider",
+)
+@click.option(
     "-q",
     "--quiet",
     is_flag=True,
     help="Flag for controlling response-framing",
     default=False,
+)
+@click.option(
+    "-n",
+    "--new",
+    help="Override the filepath contents",
+    is_flag=True,
 )
 def interactive(
     model,
@@ -627,7 +717,7 @@ def interactive(
     max_tokens,
     top_p,
     top_k,
-    brave_key,
+    key,
     code_theme,
     busy_bar_index,
     font_color,
@@ -641,9 +731,12 @@ def interactive(
     history_offset,
     awesome_prompt,
     proxy_path,
+    provider,
     quiet,
+    new,
 ):
     """Chat with AI interactively"""
+    """
     if not 1:  # I tried this but it failed; just continuously raising EOFError.
         # Consider giving it a fix if possible
         # Let's try to read piped input
@@ -665,13 +758,16 @@ def interactive(
         finally:
             signal.alarm(0)  # Reset the alarm if input is read successfully
             # Just incase the previous timeout was not 0
+    """
+    clear_history_file(filepath, new)
+    stdin = sys.stdin
     bot = Main(
         max_tokens,
         temperature,
         top_k,
         top_p,
         model,
-        brave_key,
+        key,
         timeout,
         disable_conversation,
         filepath,
@@ -680,6 +776,7 @@ def interactive(
         history_offset,
         awesome_prompt,
         proxy_path,
+        provider,
         quiet,
     )
     busy_bar.spin_index = busy_bar_index
@@ -693,7 +790,9 @@ def interactive(
 
 @tgpt2_.command()
 @click.option(
-    "-m", "--model", help="Model name for text-generation", default="llama-2-13b-chat"
+    "-m",
+    "--model",
+    help="Model name for text-generation",
 )
 @click.option(
     "-t",
@@ -724,11 +823,10 @@ def interactive(
     default=-1,
 )
 @click.option(
-    "-bk",
-    "--brave-key",
-    envvar="brave_key",
-    help="Brave API access key",
-    default="qztbjzBqJueQZLFkwTTJrieu8Vw3789u",
+    "-k",
+    "--key",
+    envvar="auth_key",
+    help="LLM API access key or auth value",
 )
 @click.option(
     "-ct",
@@ -824,11 +922,25 @@ def interactive(
     help="Path to .json file containing proxies",
 )
 @click.option(
+    "-p",
+    "--provider",
+    type=click.Choice(["leo", "openai", "fakeopen", "opengpt"]),
+    default="leo",
+    help="Name of LLM provider.",
+    envvar="llm_provider",
+)
+@click.option(
     "-q",
     "--quiet",
     is_flag=True,
     help="Flag for controlling response-framing",
     default=False,
+)
+@click.option(
+    "-n",
+    "--new",
+    help="Override the filepath contents",
+    is_flag=True,
 )
 def generate(
     model,
@@ -836,7 +948,7 @@ def generate(
     max_tokens,
     top_p,
     top_k,
-    brave_key,
+    key,
     code_theme,
     busy_bar_index,
     font_color,
@@ -853,7 +965,9 @@ def generate(
     history_offset,
     awesome_prompt,
     proxy_path,
+    provider,
     quiet,
+    new,
 ):
     """Generate a quick response with AI (Default)"""
     bot = Main(
@@ -862,7 +976,7 @@ def generate(
         top_k,
         top_p,
         model,
-        brave_key,
+        key,
         timeout,
         disable_conversation,
         filepath,
@@ -871,6 +985,7 @@ def generate(
         history_offset,
         awesome_prompt,
         proxy_path,
+        provider,
         quiet,
     )
     if not prompt:
@@ -900,6 +1015,7 @@ def generate(
             signal.alarm(0)  # Reset the alarm if input is read successfully
             # Just incase the previous timeout was not 0
 
+    clear_history_file(filepath, new)
     prompt = Optimizers.code(prompt) if code else prompt
     prompt = Optimizers.shell_command(prompt) if shell else prompt
     busy_bar.spin_index = busy_bar_index

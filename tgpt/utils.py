@@ -98,16 +98,17 @@ class Conversation:
         self.chat_history = self.intro
         self.history_format = "\nUser : %(user)s\nLLM :%(llm)s"
         if filepath:
+            # suspend history handling
             if not os.path.isfile(filepath):
-                with open(filepath, "a") as fh:  # Try creating new file
+                with open(filepath, "w") as fh:  # Try creating new file
                     # lets add intro here
                     fh.write(self.intro)
             else:
-                with open(filepath, encoding="utf-8") as fh:
+                with open(filepath) as fh:
                     file_contents = fh.read()
-                    if bool(file_contents.strip()):
-                        # Presume intro prompt is part of the file content
-                        self.chat_history = file_contents
+                if bool(file_contents.strip()):
+                    # Presume intro prompt is part of the file content
+                    self.chat_history = file_contents
 
         self.file = filepath
         self.update_file = update_file

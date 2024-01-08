@@ -7,6 +7,10 @@ from tgpt.base import Provider
 
 session = requests.Session()
 
+model = "llama-2-13b-chat"
+
+key = "qztbjzBqJueQZLFkwTTJrieu8Vw3789u"
+
 
 class LEO(Provider):
     def __init__(
@@ -16,8 +20,8 @@ class LEO(Provider):
         temperature: float = 0.2,
         top_k: int = -1,
         top_p: float = 0.999,
-        model: str = "llama-2-13b-chat",
-        brave_key: str = "qztbjzBqJueQZLFkwTTJrieu8Vw3789u",
+        model: str = model,
+        brave_key: str = key,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,

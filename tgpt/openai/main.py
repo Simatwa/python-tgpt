@@ -7,6 +7,8 @@ from tgpt.base import Provider
 
 session = requests.Session()
 
+model = "gpt-3.5-turbo"
+
 
 class OPENAI(Provider):
     def __init__(
@@ -18,7 +20,7 @@ class OPENAI(Provider):
         presence_penalty: int = 0,
         frequency_penalty: int = 0,
         top_p: float = 1,
-        model: str = "gpt-3.5-turbo",
+        model: str = model,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -149,11 +151,7 @@ class OPENAI(Provider):
             response = session.post(
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
-            if (
-                not response.ok
-                or not response.headers.get("Content-Type")
-                == "text/event-stream; charset=utf-8"
-            ):
+            if not response.ok:
                 raise Exception(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
@@ -170,7 +168,7 @@ class OPENAI(Provider):
                     if incomplete_message:
                         message_load += incomplete_message
                         resp["choices"][0]["delta"]["content"] = message_load
-                    self.last_response.update(resp)
+                        self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
                     pass

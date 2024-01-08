@@ -7,6 +7,9 @@ from tgpt.base import Provider
 
 session = requests.Session()
 
+model = "gpt-3.5-turbo"
+auth = "pk-this-is-a-real-free-pool-token-for-everyone"
+
 
 class FAKEOPEN(Provider):
     def __init__(
@@ -17,8 +20,8 @@ class FAKEOPEN(Provider):
         presence_penalty: int = 0,
         frequency_penalty: int = 0,
         top_p: float = 0.999,
-        model: str = "gpt-3.5-turbo",
-        auth: str = "pk-this-is-a-real-free-pool-token-for-everyone",
+        model: str = model,
+        auth: str = auth,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -171,7 +174,7 @@ class FAKEOPEN(Provider):
                     if incomplete_message:
                         message_load += incomplete_message
                         resp["choices"][0]["delta"]["content"] = message_load
-                    self.last_response.update(resp)
+                        self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
                     pass
