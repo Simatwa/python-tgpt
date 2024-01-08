@@ -1,17 +1,19 @@
-import json
 import requests
-from uuid import uuid4
+import json
 from tgpt.utils import Optimizers
 from tgpt.utils import Conversation
 from tgpt.utils import AwesomePrompts
+from tgpt.base import Provider
 
 session = requests.Session()
 
-
-class OPENGPT:
+class KOBOLDAI(Provider):
     def __init__(
         self,
         is_conversation: bool = True,
+        max_tokens: int = 600,
+        temperature: float = 1,
+        top_p: float = 1,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -20,44 +22,34 @@ class OPENGPT:
         history_offset: int = 10250,
         act: str = None,
     ):
-        """Instantiates OPENGPT
+        """Instantiate TGPT
 
         Args:
-            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True
-            timeout (int, optional): Http request timeout. Defaults to 30.
-            intro (str, optional): Conversation introductory prompt. Defaults to None.
+            is_conversation (str, optional): Flag for chatting conversationally. Defaults to True.
+            max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
+            temperature (float, optional): Charge of the generated text's randomness. Defaults to 0.2.
+            top_p (float, optional): Sampling threshold during inference time. Defaults to 0.999.
+            timeout (int, optional): Http requesting timeout. Defaults to 30
+            intro (str, optional): Conversation introductory prompt. Defaults to `Conversation.intro`.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
-            proxies (dict, optional): Http request proxies. Defaults to {}.
+            proxies (dict, optional) : Http reqiuest proxies (socks). Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
-        self.max_tokens_to_sample = 600
         self.is_conversation = is_conversation
+        self.max_tokens_to_sample = max_tokens
+        self.temperature = temperature
+        self.top_p = top_p
         self.chat_endpoint = (
-            "https://opengpts-example-vz4y4ooboq-uc.a.run.app/runs/stream"
+            "https://koboldai-koboldcpp-tiefighter.hf.space/api/extra/generate/stream"
         )
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
-        self.assistant_id = "d50a5d6c-2598-437b-940e-e6918d19810c"
-        self.authority = "opengpts-example-vz4y4ooboq-uc.a.run.app"
-
-        self.uuid = uuid4().__str__()
-
         self.headers = {
-            "authority": self.authority,
-            "accept": "text/event-stream",
-            "accept-language": "en-US,en;q=0.7",
-            "cache-control": "no-cache",
-            "content-type": "application/json",
-            "cookie": f"opengpts_user_id={self.uuid}",
-            "origin": "https://opengpts-example-vz4y4ooboq-uc.a.run.app",
-            "pragma": "no-cache",
-            "referer": "https://opengpts-example-vz4y4ooboq-uc.a.run.app/",
-            "sec-fetch-site": "same-origin",
-            "sec-gpc": "1",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Content-Type": "application/json",
+            "Accept": "application/json",
         }
 
         self.__available_optimizers = (
@@ -112,7 +104,7 @@ class OPENGPT:
         conversation_prompt = self.conversation.gen_complete_prompt(prompt)
         if optimizer:
             if optimizer in self.__available_optimizers:
-                prompt = getattr(Optimizers, optimizer)(
+                conversation_prompt = getattr(Optimizers, optimizer)(
                     conversation_prompt if conversationally else prompt
                 )
             else:
@@ -122,41 +114,30 @@ class OPENGPT:
 
         session.headers.update(self.headers)
         payload = {
-            "input": {
-                "messages": [
-                    self.conversation.chat_history if conversationally else "",
-                    {
-                        "content": prompt,
-                        "additional_kwargs": {},
-                        "type": "human",
-                        "example": False,
-                    },
-                ]
-            },
-            "assistant_id": self.assistant_id,
-            "thread_id": "",
+            "prompt": conversation_prompt,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
         }
 
         def for_stream():
             response = session.post(
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
-            if (
-                not response.ok
-                or not response.headers.get("Content-Type")
-                == "text/event-stream; charset=utf-8"
-            ):
+            if not response.ok:
                 raise Exception(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
 
+            message_load = ""
             for value in response.iter_lines(
                 decode_unicode=True,
-                delimiter="" if raw else "data:",
+                delimiter="" if raw else "event: message\ndata:",
                 chunk_size=self.stream_chunk_size,
             ):
                 try:
                     resp = json.loads(value)
+                    message_load += self.get_message(resp)
+                    resp["token"] = message_load
                     self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
@@ -218,4 +199,4 @@ class OPENGPT:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response.get("completion")
+        return response.get("token")

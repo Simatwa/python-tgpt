@@ -284,6 +284,24 @@ class Main(cmd.Cmd):
                     history_offset,
                     awesome_prompt,
                 )
+
+            elif provider == "koboldai":
+                from tgpt.koboldai import KOBOLDAI
+
+                self.bot = KOBOLDAI(
+                    disable_conversation,
+                    max_tokens,
+                    temperature,
+                    top_p,
+                    timeout,
+                    intro,
+                    filepath,
+                    update_file,
+                    proxies,
+                    history_offset,
+                    awesome_prompt,
+                )
+
             else:
                 raise NotImplementedError(
                     f"The provider `{provider}` is not yet implemented."
@@ -693,7 +711,7 @@ def tgpt2_():
 @click.option(
     "-p",
     "--provider",
-    type=click.Choice(["leo", "openai", "fakeopen", "opengpt"]),
+    type=click.Choice(tgpt.available_providers),
     default="leo",
     help="Name of LLM provider.",
     envvar="llm_provider",
@@ -760,7 +778,6 @@ def interactive(
             # Just incase the previous timeout was not 0
     """
     clear_history_file(filepath, new)
-    stdin = sys.stdin
     bot = Main(
         max_tokens,
         temperature,
