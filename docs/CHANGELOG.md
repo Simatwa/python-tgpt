@@ -79,6 +79,9 @@
 - Invalid response - **fixed**
 
 ## v0.1.4
-
 **What's new?**
 - Incomplete response - **fixed**
+
+## v0.2.0
+**What's new?**
+- Multiple LLM providers

@@ -8,7 +8,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=v0.1.4&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.0&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
@@ -33,16 +33,16 @@ python-tgpt
 
 
 ```python
->>> import tgpt
->>> bot = tgpt.TGPT()
+>>> from tgpt.leo import LEO
+>>> bot = LEO()
 >>> bot.chat('Hello there')
 "  Hello! It's nice to meet you. Is there something I can help you with or would you like to chat?"
 >>> 
 ```
 
-This project enables seamless interaction with [LLaMA](https://ai.meta.com/llama/) AI without requiring an API Key.
+This project enables seamless interaction with free LLMs without requiring an API Key.
 
-The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with LLaMA's capabilities *(alias **LEO** by Brave)*, fostering a smoother AI interaction experience.
+The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's ChatGPT models, fostering a smoother AI interaction experience.
 
 ### Features
 
@@ -55,6 +55,17 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🚀 Ready to use (No API key required)
 - ⛓️ Chained requests via proxy
 - 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
+- 🧠 Multiple LLM providers
+
+## Providers
+
+These are simply the hosts of the LLMs, which include:
+
+1. Leo *(By Brave)*
+2. Fakeopen
+3. Koboldai
+4. Opengpt
+5. OpenAI *(API key required)*
 
 ## Prerequisites
 
@@ -94,6 +105,8 @@ Choose one of the following methods to get started.
 
 This package offers a convenient command-line interface.
 
+> **Note** : `leo` is the default *provider*.
+
 - For a quick response:
   ```bash
   python -m tgpt generate "<Your prompt>"
@@ -103,6 +116,8 @@ This package offers a convenient command-line interface.
   ```bash
   python -m tgpt interactive "<Kickoff prompt (though not mandatory)>"
   ```
+
+Make use of flag `--provider` postfixed with the provider name of your choice. e.g `--provider koboldai`
 
 You can also simply use `tgpt` instead of `python -m tgpt`.
 
@@ -119,8 +134,8 @@ Starting from version 0.1.2, `generate` is the default command if you issue a pr
 1. Generate a quick response
 
 ```python
-from tgpt import TGPT
-bot = TGPT()
+from tgpt.leo import LEO
+bot = LEO()
 resp = bot.chat('<Your prompt>')
 print(resp)
 # Output : How may I help you.
@@ -129,8 +144,8 @@ print(resp)
 2. Get back whole response
 
 ```python
-from tgpt import TGPT
-bot = TGPT()
+from tgpt.leo import LEO
+bot = LEO()
 resp = bot.ask('<Your Prompt')
 print(resp)
 # Output
@@ -146,8 +161,8 @@ Just add parameter `stream` with value  `true`.
 1. Text Generated only 
 
 ```python
-from tgpt import TGPT
-bot = TGPT()
+from tgpt.leo import LEO
+bot = LEO()
 resp = bot.chat('<Your prompt>', stream=True)
 for value in resp:
     print(value)
@@ -163,8 +178,8 @@ How may I help you today?
 2. Whole Response
 
 ```python
-from tgpt import TGPT
-bot = TGPT()
+from tgpt.leo import LEO
+bot = LEO()
 resp = bot.ask('<Your Prompt>', stream=True)
 for value in resp:
     print(value)
@@ -180,6 +195,75 @@ for value in resp:
 """
 ```
 
+> **Note** : All providers have got a common class methods.
+
+<details>
+
+<summary>
+
+ Openai
+
+</summary>
+
+```python
+import tgpt.openai as openai
+bot = openai.OPENAI("<OPENAI-API-KEY>")
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+
+<details>
+
+<summary>
+
+ Koboldai
+
+</summary>
+
+```python
+import tgpt.koboldai as koboldai
+bot = koboldai.KOBOLDAI()
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+
+<details>
+
+<summary>
+
+Fakeopen
+
+</summary>
+
+```python
+import tgpt.fakeopen as fakeopen
+bot = fakeopen.FAKEOPEN()
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+<details>
+
+<summary>
+
+Opengpt
+
+</summary>
+
+```python
+import tgpt.opengpt as opengpt
+bot = opengpt.OPENGPT()
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+
 
 </details>
 
@@ -192,8 +276,8 @@ To obtain more tailored responses, consider utilizing [optimizers](tgpt/utils.py
 </summary>
 
 ```python
-from tgpt import TGPT
-bot = TGPT()
+from tgpt.leo import LEO
+bot = LEO()
 resp = bot.ask('<Your Prompt>', optimizer='code')
 print(resp)
 ```
@@ -205,7 +289,7 @@ print(resp)
 You can still disable the mode:
 
 ```python
-bot = tgpt.TGPT(is_conversation=False)
+bot = koboldai.KOBOLDAI(is_conversation=False)
 ```
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
