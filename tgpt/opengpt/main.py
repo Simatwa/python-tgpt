@@ -141,7 +141,7 @@ class OPENGPT:
                 "messages": [
                     # self.conversation.chat_history if conversationally else "",
                     {
-                        "content": prompt,
+                        "content": conversation_prompt,
                         "additional_kwargs": {},
                         "type": "human",
                         "example": False,

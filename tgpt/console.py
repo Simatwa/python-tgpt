@@ -1043,7 +1043,10 @@ def generate(
     bot.default(prompt, True)
 
 
-def main():
+def main(*args):
+    """Fireup console programmically
+    """
+    sys.argv += list(args)
     args = sys.argv
     if "--version" in args:
         # Lets show version here and exit
