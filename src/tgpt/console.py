@@ -29,7 +29,7 @@ getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
 rich_code_themes = ["monokai", "paraiso-dark", "igor", "vs", "fruity", "xcode"]
 
-default_provider = "koboldai"
+default_provider = "leo"
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s : %(message)s ",  # [%(module)s,%(lineno)s]", # for debug purposes
@@ -213,22 +213,23 @@ class Main(cmd.Cmd):
         try:
             getOr = lambda option, default: option if option else default
             if provider == "leo":
-                from tgpt.leo import LEO, default_key, default_model
+                import tgpt.leo as leo
 
-                self.bot = LEO(
-                    disable_conversation,
-                    max_tokens,
-                    temperature,
-                    top_k,
-                    top_p,
-                    getOr(model, default_model),
-                    getOr(auth, default_key),
-                    intro,
-                    filepath,
-                    update_file,
-                    proxies,
-                    history_offset,
-                    awesome_prompt,
+                self.bot = leo.LEO(
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    top_k=top_k,
+                    top_p=top_p,
+                    model=getOr(model, leo.main.model),
+                    brave_key=getOr(auth, leo.main.key),
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
                 )
 
             elif provider == "fakeopen":
@@ -257,52 +258,52 @@ class Main(cmd.Cmd):
                 from tgpt.openai import main
 
                 self.bot = main.OPENAI(
-                    auth,
-                    disable_conversation,
-                    max_tokens,
-                    temperature,
-                    top_p,
-                    top_k,
-                    top_p,
-                    getOr(model, main.model),
-                    timeout,
-                    intro,
-                    filepath,
-                    update_file,
-                    proxies,
-                    history_offset,
-                    awesome_prompt,
+                    api_key=auth,
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    presence_penalty=top_p,
+                    frequency_penalty=top_k,
+                    top_p=top_p,
+                    model=getOr(model, main.model),
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
                 )
 
             elif provider == "opengpt":
                 from tgpt.opengpt import OPENGPT
 
                 self.bot = OPENGPT(
-                    disable_conversation,
-                    timeout,
-                    intro,
-                    filepath,
-                    update_file,
-                    proxies,
-                    history_offset,
-                    awesome_prompt,
+                    is_conversation=disable_conversation,
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
                 )
 
             elif provider == "koboldai":
                 from tgpt.koboldai import KOBOLDAI
 
                 self.bot = KOBOLDAI(
-                    disable_conversation,
-                    max_tokens,
-                    temperature,
-                    top_p,
-                    timeout,
-                    intro,
-                    filepath,
-                    update_file,
-                    proxies,
-                    history_offset,
-                    awesome_prompt,
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    top_p=top_p,
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
                 )
 
             else:
@@ -757,29 +758,6 @@ def interactive(
     new,
 ):
     """Chat with AI interactively"""
-    """
-    if not 1:  # I tried this but it failed; just continuously raising EOFError.
-        # Consider giving it a fix if possible
-        # Let's try to read piped input
-        import signal
-
-        def timeout_handler(signum, frame):
-            raise TimeoutError("Timed out while waiting for input")
-
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(
-            1
-        )  # Not to wait for long. I was thinking of making it 2 but I found it awful, what's your take?
-        try:
-            piped_input = click.get_text_stream("stdin").read()
-        except (TimeoutError, EOFError) as e:
-            pass
-        else:
-            prompt = piped_input
-        finally:
-            signal.alarm(0)  # Reset the alarm if input is read successfully
-            # Just incase the previous timeout was not 0
-    """
     clear_history_file(filepath, new)
     bot = Main(
         max_tokens,

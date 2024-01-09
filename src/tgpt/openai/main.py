@@ -169,7 +169,9 @@ class OPENAI(Provider):
                         message_load += incomplete_message
                         resp["choices"][0]["delta"]["content"] = message_load
                         self.last_response.update(resp)
-                    yield value if raw else resp
+                        yield value if raw else resp
+                    if raw:
+                        yield value
                 except json.decoder.JSONDecodeError:
                     pass
             self.conversation.update_chat_history(

@@ -97,23 +97,37 @@ class Conversation:
         self.max_tokens_to_sample = max_tokens
         self.chat_history = self.intro
         self.history_format = "\nUser : %(user)s\nLLM :%(llm)s"
-        if filepath:
-            # suspend history handling
-            if not os.path.isfile(filepath):
-                with open(filepath, "w") as fh:  # Try creating new file
-                    # lets add intro here
-                    fh.write(self.intro)
-            else:
-                with open(filepath) as fh:
-                    file_contents = fh.read()
-                if bool(file_contents.strip()):
-                    # Presume intro prompt is part of the file content
-                    self.chat_history = file_contents
-
         self.file = filepath
         self.update_file = update_file
         self.history_offset = 10250
         self.prompt_allowance = 10
+        if filepath:
+            self.load_conversation(filepath, False)
+
+    def load_conversation(self, filepath: str, exists: bool = True) -> None:
+        """Load conversation into chat's history from .txt file
+
+        Args:
+            filepath (str): Path to .txt file
+            exists (bool, optional): Flag for file availability. Defaults to True.
+        """
+        assert isinstance(
+            filepath, str
+        ), f"Filepath needs to be of str datatype not {type(filepath)}"
+        assert (
+            os.path.isfile(filepath) if exists else True
+        ), f"File '{filepath}' does not exist"
+        if not os.path.isfile(filepath):
+            logging.debug(f"Creating new chat-history file - '{filepath}'")
+            with open(filepath, "w") as fh:  # Try creating new file
+                # lets add intro here
+                fh.write(self.intro)
+        else:
+            logging.debug(f"Loading conversation from '{filepath}'")
+            with open(filepath) as fh:
+                file_contents = fh.read()
+                # Presume intro prompt is part of the file content
+                self.chat_history = file_contents
 
     def __trim_chat_history(self, chat_history: str) -> str:
         """Ensures the len(prompt) and max_tokens_to_sample is not > 4096"""
