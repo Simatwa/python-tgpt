@@ -1,5 +1,4 @@
 import unittest
-import types
 import tests.base as base
 from os import getenv
 from tgpt.openai import OPENAI
