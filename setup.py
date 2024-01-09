@@ -2,6 +2,8 @@ from pathlib import Path
 
 from setuptools import setup
 
+from setuptools import find_packages
+
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"
 PATH = Path("README.md")
@@ -18,7 +20,8 @@ setup(
     maintainer="Smartwa",
     author_email="simatwacaleb@proton.me",
     description="Interact with AI without API key",
-    packages=["tgpt"],
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     url="https://github.com/Simatwa/python-tgpt",
     project_urls={
         "Bug Report": "https://github.com/Simatwa/python-tgpt/issues/new",
