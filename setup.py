@@ -20,8 +20,8 @@ setup(
     maintainer="Smartwa",
     author_email="simatwacaleb@proton.me",
     description="Interact with AI without API key",
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     url="https://github.com/Simatwa/python-tgpt",
     project_urls={
         "Bug Report": "https://github.com/Simatwa/python-tgpt/issues/new",

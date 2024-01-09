@@ -29,6 +29,8 @@ getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
 rich_code_themes = ["monokai", "paraiso-dark", "igor", "vs", "fruity", "xcode"]
 
+default_provider = "koboldai"
+
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s : %(message)s ",  # [%(module)s,%(lineno)s]", # for debug purposes
     datefmt="%H:%M:%S",
@@ -713,7 +715,7 @@ def tgpt2_():
     "-p",
     "--provider",
     type=click.Choice(tgpt.available_providers),
-    default="leo",
+    default=default_provider,
     help="Name of LLM provider.",
     envvar="llm_provider",
 )
@@ -942,8 +944,8 @@ def interactive(
 @click.option(
     "-p",
     "--provider",
-    type=click.Choice(["leo", "openai", "fakeopen", "opengpt"]),
-    default="leo",
+    type=click.Choice(tgpt.available_providers),
+    default=default_provider,
     help="Name of LLM provider.",
     envvar="llm_provider",
 )
@@ -1044,8 +1046,7 @@ def generate(
 
 
 def main(*args):
-    """Fireup console programmically
-    """
+    """Fireup console programmically"""
     sys.argv += list(args)
     args = sys.argv
     if "--version" in args:

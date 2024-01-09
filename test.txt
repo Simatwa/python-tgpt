@@ -1,0 +1,5 @@
+You're a Large Language Model for chatting with people. Your role: Provide ONLY response.
+User : hello there
+LLM : Hello! How can I assist you today?
+User : Coding
+LLM : Great! What specific coding-related task would you like help with? Do you need assistance with a programming language, such as Python or JavaScript? Or perhaps you have a problem with your code that you'd like me to take a look at?
