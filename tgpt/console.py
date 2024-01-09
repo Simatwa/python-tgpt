@@ -209,17 +209,18 @@ class Main(cmd.Cmd):
             proxies = {}
 
         try:
+            getOr = lambda option, default: option if option else default
             if provider == "leo":
-                from tgpt.leo import main
+                from tgpt.leo import LEO, default_key, default_model
 
-                self.bot = main.LEO(
+                self.bot = LEO(
                     disable_conversation,
                     max_tokens,
                     temperature,
                     top_k,
                     top_p,
-                    model or main.model,
-                    auth or main.key,
+                    getOr(model, default_model),
+                    getOr(auth, default_key),
                     intro,
                     filepath,
                     update_file,
@@ -238,8 +239,8 @@ class Main(cmd.Cmd):
                     top_p,
                     top_k,
                     top_p,
-                    model or main.model,
-                    auth or main.auth,
+                    getOr(model, main.model),
+                    getOr(auth, main.auth),
                     timeout,
                     intro,
                     filepath,
@@ -261,7 +262,7 @@ class Main(cmd.Cmd):
                     top_p,
                     top_k,
                     top_p,
-                    model or main.model,
+                    getOr(model, main.model),
                     timeout,
                     intro,
                     filepath,

@@ -7,6 +7,7 @@ from tgpt.base import Provider
 
 session = requests.Session()
 
+
 class KOBOLDAI(Provider):
     def __init__(
         self,
@@ -91,13 +92,7 @@ class KOBOLDAI(Provider):
            dict : {}
         ```json
         {
-            "completion": "\nNext: domestic cat breeds with short hair >>",
-            "stop_reason": null,
-            "truncated": false,
-            "stop": null,
-            "model": "llama-2-13b-chat",
-            "log_id": "cmpl-3kYiYxSNDvgMShSzFooz6t",
-            "exception": null
+           "token" : "How may I assist you today?"
         }
         ```
         """

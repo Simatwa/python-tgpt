@@ -177,10 +177,22 @@ class OPENAI(Provider):
             )
 
         def for_non_stream():
-            # let's make use of stream
-            for _ in for_stream():
-                pass
-            return self.last_response
+            response = session.post(
+                self.chat_endpoint, json=payload, stream=False, timeout=self.timeout
+            )
+            if (
+                not response.ok
+                or not response.headers.get("Content-Type", "") == "application/json"
+            ):
+                raise Exception(
+                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                )
+            resp = response.json()
+            self.last_response.update(resp)
+            self.conversation.update_chat_history(
+                prompt, self.get_message(self.last_response)
+            )
+            return resp
 
         return for_stream() if stream else for_non_stream()
 

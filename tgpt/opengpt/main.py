@@ -1,3 +1,4 @@
+import re
 import json
 import requests
 from uuid import uuid4
@@ -99,13 +100,27 @@ class OPENGPT:
            dict : {}
         ```json
         {
-            "completion": "\nNext: domestic cat breeds with short hair >>",
-            "stop_reason": null,
-            "truncated": false,
-            "stop": null,
-            "model": "llama-2-13b-chat",
-            "log_id": "cmpl-3kYiYxSNDvgMShSzFooz6t",
-            "exception": null
+            "messages": [
+                {
+                    "content": "Hello there",
+                    "additional_kwargs": {},
+                    "type": "human",
+                    "example": false
+                },
+                {
+                    "content": "Hello! How can I assist you today?",
+                    "additional_kwargs": {
+                    "agent": {
+                        "return_values": {
+                            "output": "Hello! How can I assist you today?"
+                            },
+                        "log": "Hello! How can I assist you today?",
+                        "type": "AgentFinish"
+                    }
+                },
+                "type": "ai",
+                "example": false
+                }]
         }
         ```
         """
@@ -124,7 +139,7 @@ class OPENGPT:
         payload = {
             "input": {
                 "messages": [
-                    self.conversation.chat_history if conversationally else "",
+                    # self.conversation.chat_history if conversationally else "",
                     {
                         "content": prompt,
                         "additional_kwargs": {},
@@ -152,11 +167,11 @@ class OPENGPT:
 
             for value in response.iter_lines(
                 decode_unicode=True,
-                delimiter="" if raw else "data:",
                 chunk_size=self.stream_chunk_size,
             ):
                 try:
-                    resp = json.loads(value)
+                    modified_value = re.sub("data:", "", value)
+                    resp = json.loads(modified_value)
                     self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
@@ -166,7 +181,6 @@ class OPENGPT:
             )
 
         def for_non_stream():
-            # let's make use of stream
             for _ in for_stream():
                 pass
             return self.last_response
@@ -218,4 +232,6 @@ class OPENGPT:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response.get("completion")
+        return (
+            response["messages"][1]["content"] if "messages" in response.keys() else ""
+        )
