@@ -1,12 +1,13 @@
 import unittest
 import types
 import tests.base as base
-from tgpt.leo import LEO
+from os import getenv
+from tgpt.openai import OPENAI
 
 
 class TestLeo(base.llmBase):
     def setUp(self):
-        self.bot = LEO()
+        self.bot = OPENAI(getenv("OPENAI_API_KEY"))
         self.prompt = base.prompt
 
 

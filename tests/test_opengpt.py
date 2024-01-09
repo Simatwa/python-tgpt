@@ -1,12 +1,12 @@
 import unittest
 import types
 import tests.base as base
-from tgpt.leo import LEO
+from tgpt.opengpt import OPENGPT
 
 
 class TestLeo(base.llmBase):
     def setUp(self):
-        self.bot = LEO()
+        self.bot = OPENGPT()
         self.prompt = base.prompt
 
 
