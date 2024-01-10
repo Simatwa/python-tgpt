@@ -170,7 +170,7 @@ class OPENAI(Provider):
                         resp["choices"][0]["delta"]["content"] = message_load
                         self.last_response.update(resp)
                         yield value if raw else resp
-                    if raw:
+                    elif raw:
                         yield value
                 except json.decoder.JSONDecodeError:
                     pass
