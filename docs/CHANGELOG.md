@@ -85,3 +85,8 @@
 ## v0.2.0
 **What's new?**
 - Multiple LLM providers
+
+
+## v0.2.1
+**What's new?**
+- Fakeopen rendering issue fixed - #7 
