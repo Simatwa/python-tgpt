@@ -297,6 +297,6 @@ Utilize the `--disable-conversation` flag in the console to achieve the same fun
 
 ## Acknowledgements
 
-1. [x] [pytgpt](https://github.com/aandrew-me/pytgpt)
+1. [x] [tgpt](https://github.com/aandrew-me/tgpt)
 2. [x] You
 
