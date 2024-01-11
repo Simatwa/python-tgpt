@@ -1,27 +1,20 @@
 import requests
 import json
-from tgpt.utils import Optimizers
-from tgpt.utils import Conversation
-from tgpt.utils import AwesomePrompts
-from tgpt.base import Provider
+from pytgpt.utils import Optimizers
+from pytgpt.utils import Conversation
+from pytgpt.utils import AwesomePrompts
+from pytgpt.base import Provider
 
 session = requests.Session()
 
-model = "llama-2-13b-chat"
 
-key = "qztbjzBqJueQZLFkwTTJrieu8Vw3789u"
-
-
-class LEO(Provider):
+class KOBOLDAI(Provider):
     def __init__(
         self,
         is_conversation: bool = True,
         max_tokens: int = 600,
-        temperature: float = 0.2,
-        top_k: int = -1,
-        top_p: float = 0.999,
-        model: str = model,
-        brave_key: str = key,
+        temperature: float = 1,
+        top_p: float = 1,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -34,13 +27,10 @@ class LEO(Provider):
 
         Args:
             is_conversation (str, optional): Flag for chatting conversationally. Defaults to True.
-            brave_key (str, optional): Brave API access key. Defaults to "qztbjzBqJueQZLFkwTTJrieu8Vw3789u".
-            model (str, optional): Text generation model name. Defaults to "llama-2-13b-chat".
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
             temperature (float, optional): Charge of the generated text's randomness. Defaults to 0.2.
-            top_k (int, optional): Chance of topic being repeated. Defaults to -1.
             top_p (float, optional): Sampling threshold during inference time. Defaults to 0.999.
-            timeput (int, optional): Http requesting timeout. Defaults to 30
+            timeout (int, optional): Http requesting timeout. Defaults to 30
             intro (str, optional): Conversation introductory prompt. Defaults to `Conversation.intro`.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
@@ -50,22 +40,19 @@ class LEO(Provider):
         """
         self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
-        self.model = model
-        self.stop_sequences = ["</response>", "</s>"]
         self.temperature = temperature
-        self.top_k = top_k
         self.top_p = top_p
-        self.chat_endpoint = "https://ai-chat.bsg.brave.com/v1/complete"
+        self.chat_endpoint = (
+            "https://koboldai-koboldcpp-tiefighter.hf.space/api/extra/generate/stream"
+        )
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
         self.headers = {
             "Content-Type": "application/json",
-            "accept": "text/event-stream",
-            "x-brave-key": brave_key,
-            "accept-language": "en-US,en;q=0.9",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
+            "Accept": "application/json",
         }
+
         self.__available_optimizers = (
             method
             for method in dir(Optimizers)
@@ -84,14 +71,6 @@ class LEO(Provider):
         )
         self.conversation.history_offset = history_offset
         session.proxies = proxies
-        self.system_prompt = (
-            "\n\nYour name is Leo, a helpful"
-            "respectful and honest AI assistant created by the company Brave. You will be replying to a user of the Brave browser. "
-            "Always respond in a neutral tone. Be polite and courteous. Answer concisely in no more than 50-80 words."
-            "\n\nPlease ensure that your responses are socially unbiased and positive in nature."
-            "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. "
-            "If you don't know the answer to a question, please don't share false information.\n"
-        )
 
     def ask(
         self,
@@ -104,22 +83,16 @@ class LEO(Provider):
         """Chat with AI
 
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            raw (bool, optional): Stream back raw response as received
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            raw (bool, optional): Stream back raw response as received. Defaults to False.
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
            dict : {}
         ```json
         {
-            "completion": "\nNext: domestic cat breeds with short hair >>",
-            "stop_reason": null,
-            "truncated": false,
-            "stop": null,
-            "model": "llama-2-13b-chat",
-            "log_id": "cmpl-3kYiYxSNDvgMShSzFooz6t",
-            "exception": null
+           "token" : "How may I assist you today?"
         }
         ```
         """
@@ -136,12 +109,8 @@ class LEO(Provider):
 
         session.headers.update(self.headers)
         payload = {
-            "max_tokens_to_sample": self.max_tokens_to_sample,
-            "model": self.model,
-            "prompt": f"<s>[INST] <<SYS>>{self.system_prompt}<</SYS>>{conversation_prompt} [/INST]",
-            "self.stop_sequence": self.stop_sequences,
-            "stream": stream,
-            "top_k": self.top_k,
+            "prompt": conversation_prompt,
+            "temperature": self.temperature,
             "top_p": self.top_p,
         }
 
@@ -149,22 +118,21 @@ class LEO(Provider):
             response = session.post(
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
-            if (
-                not response.ok
-                or not response.headers.get("Content-Type")
-                == "text/event-stream; charset=utf-8"
-            ):
+            if not response.ok:
                 raise Exception(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
 
+            message_load = ""
             for value in response.iter_lines(
                 decode_unicode=True,
-                delimiter="" if raw else "data:",
+                delimiter="" if raw else "event: message\ndata:",
                 chunk_size=self.stream_chunk_size,
             ):
                 try:
                     resp = json.loads(value)
+                    message_load += self.get_message(resp)
+                    resp["token"] = message_load
                     self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
@@ -174,22 +142,10 @@ class LEO(Provider):
             )
 
         def for_non_stream():
-            response = session.post(
-                self.chat_endpoint, json=payload, stream=False, timeout=self.timeout
-            )
-            if (
-                not response.ok
-                or not response.headers.get("Content-Type", "") == "application/json"
-            ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
-                )
-            resp = response.json()
-            self.last_response.update(resp)
-            self.conversation.update_chat_history(
-                prompt, self.get_message(self.last_response)
-            )
-            return resp
+            # let's make use of stream
+            for _ in for_stream():
+                pass
+            return self.last_response
 
         return for_stream() if stream else for_non_stream()
 
@@ -202,9 +158,9 @@ class LEO(Provider):
     ) -> str:
         """Generate response `str`
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
             str: Response generated
@@ -238,4 +194,4 @@ class LEO(Provider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response.get("completion")
+        return response.get("token")

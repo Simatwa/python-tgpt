@@ -1,18 +1,27 @@
-import re
-import json
 import requests
-from uuid import uuid4
-from tgpt.utils import Optimizers
-from tgpt.utils import Conversation
-from tgpt.utils import AwesomePrompts
+import json
+from pytgpt.utils import Optimizers
+from pytgpt.utils import Conversation
+from pytgpt.utils import AwesomePrompts
+from pytgpt.base import Provider
 
 session = requests.Session()
 
+model = "llama-2-13b-chat"
 
-class OPENGPT:
+key = "qztbjzBqJueQZLFkwTTJrieu8Vw3789u"
+
+
+class LEO(Provider):
     def __init__(
         self,
         is_conversation: bool = True,
+        max_tokens: int = 600,
+        temperature: float = 0.2,
+        top_k: int = -1,
+        top_p: float = 0.999,
+        model: str = model,
+        brave_key: str = key,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -21,46 +30,42 @@ class OPENGPT:
         history_offset: int = 10250,
         act: str = None,
     ):
-        """Instantiates OPENGPT
+        """Instantiate TGPT
 
         Args:
-            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True
-            timeout (int, optional): Http request timeout. Defaults to 30.
-            intro (str, optional): Conversation introductory prompt. Defaults to None.
+            is_conversation (str, optional): Flag for chatting conversationally. Defaults to True.
+            brave_key (str, optional): Brave API access key. Defaults to "qztbjzBqJueQZLFkwTTJrieu8Vw3789u".
+            model (str, optional): Text generation model name. Defaults to "llama-2-13b-chat".
+            max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
+            temperature (float, optional): Charge of the generated text's randomness. Defaults to 0.2.
+            top_k (int, optional): Chance of topic being repeated. Defaults to -1.
+            top_p (float, optional): Sampling threshold during inference time. Defaults to 0.999.
+            timeput (int, optional): Http requesting timeout. Defaults to 30
+            intro (str, optional): Conversation introductory prompt. Defaults to `Conversation.intro`.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
-            proxies (dict, optional): Http request proxies. Defaults to {}.
+            proxies (dict, optional) : Http reqiuest proxies (socks). Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
-        self.max_tokens_to_sample = 600
         self.is_conversation = is_conversation
-        self.chat_endpoint = (
-            "https://opengpts-example-vz4y4ooboq-uc.a.run.app/runs/stream"
-        )
+        self.max_tokens_to_sample = max_tokens
+        self.model = model
+        self.stop_sequences = ["</response>", "</s>"]
+        self.temperature = temperature
+        self.top_k = top_k
+        self.top_p = top_p
+        self.chat_endpoint = "https://ai-chat.bsg.brave.com/v1/complete"
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
-        self.assistant_id = "d50a5d6c-2598-437b-940e-e6918d19810c"
-        self.authority = "opengpts-example-vz4y4ooboq-uc.a.run.app"
-
-        self.uuid = uuid4().__str__()
-
         self.headers = {
-            "authority": self.authority,
+            "Content-Type": "application/json",
             "accept": "text/event-stream",
-            "accept-language": "en-US,en;q=0.7",
-            "cache-control": "no-cache",
-            "content-type": "application/json",
-            "cookie": f"opengpts_user_id={self.uuid}",
-            "origin": "https://opengpts-example-vz4y4ooboq-uc.a.run.app",
-            "pragma": "no-cache",
-            "referer": "https://opengpts-example-vz4y4ooboq-uc.a.run.app/",
-            "sec-fetch-site": "same-origin",
-            "sec-gpc": "1",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "x-brave-key": brave_key,
+            "accept-language": "en-US,en;q=0.9",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/110.0",
         }
-
         self.__available_optimizers = (
             method
             for method in dir(Optimizers)
@@ -79,6 +84,14 @@ class OPENGPT:
         )
         self.conversation.history_offset = history_offset
         session.proxies = proxies
+        self.system_prompt = (
+            "\n\nYour name is Leo, a helpful"
+            "respectful and honest AI assistant created by the company Brave. You will be replying to a user of the Brave browser. "
+            "Always respond in a neutral tone. Be polite and courteous. Answer concisely in no more than 50-80 words."
+            "\n\nPlease ensure that your responses are socially unbiased and positive in nature."
+            "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. "
+            "If you don't know the answer to a question, please don't share false information.\n"
+        )
 
     def ask(
         self,
@@ -91,43 +104,29 @@ class OPENGPT:
         """Chat with AI
 
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            raw (bool, optional): Stream back raw response as received
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            raw (bool, optional): Stream back raw response as received. Defaults to False.
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
            dict : {}
         ```json
         {
-            "messages": [
-                {
-                    "content": "Hello there",
-                    "additional_kwargs": {},
-                    "type": "human",
-                    "example": false
-                },
-                {
-                    "content": "Hello! How can I assist you today?",
-                    "additional_kwargs": {
-                    "agent": {
-                        "return_values": {
-                            "output": "Hello! How can I assist you today?"
-                            },
-                        "log": "Hello! How can I assist you today?",
-                        "type": "AgentFinish"
-                    }
-                },
-                "type": "ai",
-                "example": false
-                }]
+            "completion": "\nNext: domestic cat breeds with short hair >>",
+            "stop_reason": null,
+            "truncated": false,
+            "stop": null,
+            "model": "llama-2-13b-chat",
+            "log_id": "cmpl-3kYiYxSNDvgMShSzFooz6t",
+            "exception": null
         }
         ```
         """
         conversation_prompt = self.conversation.gen_complete_prompt(prompt)
         if optimizer:
             if optimizer in self.__available_optimizers:
-                prompt = getattr(Optimizers, optimizer)(
+                conversation_prompt = getattr(Optimizers, optimizer)(
                     conversation_prompt if conversationally else prompt
                 )
             else:
@@ -137,19 +136,13 @@ class OPENGPT:
 
         session.headers.update(self.headers)
         payload = {
-            "input": {
-                "messages": [
-                    # self.conversation.chat_history if conversationally else "",
-                    {
-                        "content": conversation_prompt,
-                        "additional_kwargs": {},
-                        "type": "human",
-                        "example": False,
-                    },
-                ]
-            },
-            "assistant_id": self.assistant_id,
-            "thread_id": "",
+            "max_tokens_to_sample": self.max_tokens_to_sample,
+            "model": self.model,
+            "prompt": f"<s>[INST] <<SYS>>{self.system_prompt}<</SYS>>{conversation_prompt} [/INST]",
+            "self.stop_sequence": self.stop_sequences,
+            "stream": stream,
+            "top_k": self.top_k,
+            "top_p": self.top_p,
         }
 
         def for_stream():
@@ -167,11 +160,11 @@ class OPENGPT:
 
             for value in response.iter_lines(
                 decode_unicode=True,
+                delimiter="" if raw else "data:",
                 chunk_size=self.stream_chunk_size,
             ):
                 try:
-                    modified_value = re.sub("data:", "", value)
-                    resp = json.loads(modified_value)
+                    resp = json.loads(value)
                     self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
@@ -181,9 +174,22 @@ class OPENGPT:
             )
 
         def for_non_stream():
-            for _ in for_stream():
-                pass
-            return self.last_response
+            response = session.post(
+                self.chat_endpoint, json=payload, stream=False, timeout=self.timeout
+            )
+            if (
+                not response.ok
+                or not response.headers.get("Content-Type", "") == "application/json"
+            ):
+                raise Exception(
+                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                )
+            resp = response.json()
+            self.last_response.update(resp)
+            self.conversation.update_chat_history(
+                prompt, self.get_message(self.last_response)
+            )
+            return resp
 
         return for_stream() if stream else for_non_stream()
 
@@ -196,9 +202,9 @@ class OPENGPT:
     ) -> str:
         """Generate response `str`
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
             str: Response generated
@@ -232,6 +238,4 @@ class OPENGPT:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return (
-            response["messages"][1]["content"] if "messages" in response.keys() else ""
-        )
+        return response.get("completion")

@@ -1,6 +1,6 @@
 import unittest
 import tests.base as base
-from tgpt.fakeopen import FAKEOPEN
+from pytgpt.fakeopen import FAKEOPEN
 
 
 class TestLeo(base.llmBase):

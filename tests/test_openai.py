@@ -1,7 +1,7 @@
 import unittest
 import tests.base as base
 from os import getenv
-from tgpt.openai import OPENAI
+from pytgpt.openai import OPENAI
 
 
 class TestLeo(base.llmBase):

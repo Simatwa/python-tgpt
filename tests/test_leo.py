@@ -1,6 +1,6 @@
 import unittest
 import tests.base as base
-from tgpt.leo import LEO
+from pytgpt.leo import LEO
 
 
 class TestLeo(base.llmBase):

@@ -1,8 +1,8 @@
 import unittest
 import os
-from tgpt.utils import Optimizers
-from tgpt.utils import Conversation
-from tgpt.utils import AwesomePrompts
+from pytgpt.utils import Optimizers
+from pytgpt.utils import Conversation
+from pytgpt.utils import AwesomePrompts
 
 
 class TestOptimizers(unittest.TestCase):

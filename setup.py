@@ -33,7 +33,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "tgpt = tgpt.console:main",
+            "pytgpt = pytgpt.console:main",
         ],
     },
     install_requires=[
@@ -48,10 +48,17 @@ setup(
     keywords=[
         "chatgpt",
         "gpt",
-        "tgpt" "chatgpt-cli",
+        "tgpt",
+        "pytgpt",
+        "chatgpt-cli",
         "chatgpt-sdk",
         "chatgpt-api",
         "llama-api",
+        "leo",
+        "openfake",
+        "opengpt",
+        "koboldai",
+        "openai",
     ],
     long_description=Path.open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

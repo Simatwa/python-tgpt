@@ -1,9 +1,9 @@
 import requests
 import json
-from tgpt.utils import Optimizers
-from tgpt.utils import Conversation
-from tgpt.utils import AwesomePrompts
-from tgpt.base import Provider
+from pytgpt.utils import Optimizers
+from pytgpt.utils import Conversation
+from pytgpt.utils import AwesomePrompts
+from pytgpt.base import Provider
 
 session = requests.Session()
 
@@ -95,10 +95,10 @@ class OPENAI(Provider):
         """Chat with AI
 
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            raw (bool, optional): Stream back raw response as received
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            raw (bool, optional): Stream back raw response as received. Defaults to False.
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
            dict : {}
@@ -207,9 +207,9 @@ class OPENAI(Provider):
     ) -> str:
         """Generate response `str`
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
             str: Response generated

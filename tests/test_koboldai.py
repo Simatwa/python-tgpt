@@ -1,6 +1,6 @@
 import unittest
 import tests.base as base
-from tgpt.koboldai import KOBOLDAI
+from pytgpt.koboldai import KOBOLDAI
 
 
 class TestLeo(base.llmBase):

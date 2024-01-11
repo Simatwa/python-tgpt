@@ -1,4 +1,4 @@
-import tgpt
+import pytgpt
 import click
 import cmd
 import logging
@@ -10,7 +10,6 @@ import rich
 import getpass
 import json
 import re
-import platform
 import sys
 from time import sleep
 from threading import Thread as thr
@@ -22,8 +21,8 @@ from rich.console import Console
 from rich.live import Live
 from rich.prompt import Prompt
 from typing import Iterator
-from tgpt.utils import Optimizers
-from tgpt.utils import default_path
+from pytgpt.utils import Optimizers
+from pytgpt.utils import default_path
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -179,8 +178,8 @@ class busy_bar:
 
 
 class Main(cmd.Cmd):
-    intro = f"Welcome to AI Chat in terminal. Type 'help' or '?' for usage info \n Submit any bug at {tgpt.__repo__}/issues/new"
-    prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT](v{tgpt.__version__})\n╰─>"
+    intro = f"Welcome to AI Chat in terminal. Type 'help' or '?' for usage info \n Submit any bug at {pytgpt.__repo__}/issues/new"
+    prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT](v{pytgpt.__version__})\n╰─>"
 
     def __init__(
         self,
@@ -213,7 +212,7 @@ class Main(cmd.Cmd):
         try:
             getOr = lambda option, default: option if option else default
             if provider == "leo":
-                import tgpt.leo as leo
+                import pytgpt.leo as leo
 
                 self.bot = leo.LEO(
                     is_conversation=disable_conversation,
@@ -233,7 +232,7 @@ class Main(cmd.Cmd):
                 )
 
             elif provider == "fakeopen":
-                from tgpt.fakeopen import main
+                from pytgpt.fakeopen import main
 
                 self.bot = main.FAKEOPEN(
                     disable_conversation,
@@ -255,7 +254,7 @@ class Main(cmd.Cmd):
 
             elif provider == "openai":
                 assert auth, "OpenAI API key is required"
-                from tgpt.openai import main
+                from pytgpt.openai import main
 
                 self.bot = main.OPENAI(
                     api_key=auth,
@@ -276,7 +275,7 @@ class Main(cmd.Cmd):
                 )
 
             elif provider == "opengpt":
-                from tgpt.opengpt import OPENGPT
+                from pytgpt.opengpt import OPENGPT
 
                 self.bot = OPENGPT(
                     is_conversation=disable_conversation,
@@ -290,7 +289,7 @@ class Main(cmd.Cmd):
                 )
 
             elif provider == "koboldai":
-                from tgpt.koboldai import KOBOLDAI
+                from pytgpt.koboldai import KOBOLDAI
 
                 self.bot = KOBOLDAI(
                     is_conversation=disable_conversation,
@@ -715,7 +714,7 @@ def tgpt2_():
 @click.option(
     "-p",
     "--provider",
-    type=click.Choice(tgpt.available_providers),
+    type=click.Choice(pytgpt.available_providers),
     default=default_provider,
     help="Name of LLM provider.",
     envvar="llm_provider",
@@ -922,7 +921,7 @@ def interactive(
 @click.option(
     "-p",
     "--provider",
-    type=click.Choice(tgpt.available_providers),
+    type=click.Choice(pytgpt.available_providers),
     default=default_provider,
     help="Name of LLM provider.",
     envvar="llm_provider",
@@ -1029,7 +1028,7 @@ def main(*args):
     args = sys.argv
     if "--version" in args:
         # Lets show version here and exit
-        click.secho(f"tgpt v{tgpt.__version__}")
+        click.secho(f"tgpt v{pytgpt.__version__}")
         sys.exit(0)
     if (
         len(args) > 1

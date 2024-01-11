@@ -1,20 +1,18 @@
-import requests
+import re
 import json
-from tgpt.utils import Optimizers
-from tgpt.utils import Conversation
-from tgpt.utils import AwesomePrompts
-from tgpt.base import Provider
+import requests
+from uuid import uuid4
+from pytgpt.utils import Optimizers
+from pytgpt.utils import Conversation
+from pytgpt.utils import AwesomePrompts
 
 session = requests.Session()
 
 
-class KOBOLDAI(Provider):
+class OPENGPT:
     def __init__(
         self,
         is_conversation: bool = True,
-        max_tokens: int = 600,
-        temperature: float = 1,
-        top_p: float = 1,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -23,34 +21,44 @@ class KOBOLDAI(Provider):
         history_offset: int = 10250,
         act: str = None,
     ):
-        """Instantiate TGPT
+        """Instantiates OPENGPT
 
         Args:
-            is_conversation (str, optional): Flag for chatting conversationally. Defaults to True.
-            max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
-            temperature (float, optional): Charge of the generated text's randomness. Defaults to 0.2.
-            top_p (float, optional): Sampling threshold during inference time. Defaults to 0.999.
-            timeout (int, optional): Http requesting timeout. Defaults to 30
-            intro (str, optional): Conversation introductory prompt. Defaults to `Conversation.intro`.
+            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True
+            timeout (int, optional): Http request timeout. Defaults to 30.
+            intro (str, optional): Conversation introductory prompt. Defaults to None.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
-            proxies (dict, optional) : Http reqiuest proxies (socks). Defaults to {}.
+            proxies (dict, optional): Http request proxies. Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
+        self.max_tokens_to_sample = 600
         self.is_conversation = is_conversation
-        self.max_tokens_to_sample = max_tokens
-        self.temperature = temperature
-        self.top_p = top_p
         self.chat_endpoint = (
-            "https://koboldai-koboldcpp-tiefighter.hf.space/api/extra/generate/stream"
+            "https://opengpts-example-vz4y4ooboq-uc.a.run.app/runs/stream"
         )
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
+        self.assistant_id = "d50a5d6c-2598-437b-940e-e6918d19810c"
+        self.authority = "opengpts-example-vz4y4ooboq-uc.a.run.app"
+
+        self.uuid = uuid4().__str__()
+
         self.headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
+            "authority": self.authority,
+            "accept": "text/event-stream",
+            "accept-language": "en-US,en;q=0.7",
+            "cache-control": "no-cache",
+            "content-type": "application/json",
+            "cookie": f"opengpts_user_id={self.uuid}",
+            "origin": "https://opengpts-example-vz4y4ooboq-uc.a.run.app",
+            "pragma": "no-cache",
+            "referer": "https://opengpts-example-vz4y4ooboq-uc.a.run.app/",
+            "sec-fetch-site": "same-origin",
+            "sec-gpc": "1",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         }
 
         self.__available_optimizers = (
@@ -83,23 +91,43 @@ class KOBOLDAI(Provider):
         """Chat with AI
 
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            raw (bool, optional): Stream back raw response as received
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            raw (bool, optional): Stream back raw response as received. Defaults to False.
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
            dict : {}
         ```json
         {
-           "token" : "How may I assist you today?"
+            "messages": [
+                {
+                    "content": "Hello there",
+                    "additional_kwargs": {},
+                    "type": "human",
+                    "example": false
+                },
+                {
+                    "content": "Hello! How can I assist you today?",
+                    "additional_kwargs": {
+                    "agent": {
+                        "return_values": {
+                            "output": "Hello! How can I assist you today?"
+                            },
+                        "log": "Hello! How can I assist you today?",
+                        "type": "AgentFinish"
+                    }
+                },
+                "type": "ai",
+                "example": false
+                }]
         }
         ```
         """
         conversation_prompt = self.conversation.gen_complete_prompt(prompt)
         if optimizer:
             if optimizer in self.__available_optimizers:
-                conversation_prompt = getattr(Optimizers, optimizer)(
+                prompt = getattr(Optimizers, optimizer)(
                     conversation_prompt if conversationally else prompt
                 )
             else:
@@ -109,30 +137,41 @@ class KOBOLDAI(Provider):
 
         session.headers.update(self.headers)
         payload = {
-            "prompt": conversation_prompt,
-            "temperature": self.temperature,
-            "top_p": self.top_p,
+            "input": {
+                "messages": [
+                    # self.conversation.chat_history if conversationally else "",
+                    {
+                        "content": conversation_prompt,
+                        "additional_kwargs": {},
+                        "type": "human",
+                        "example": False,
+                    },
+                ]
+            },
+            "assistant_id": self.assistant_id,
+            "thread_id": "",
         }
 
         def for_stream():
             response = session.post(
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
-            if not response.ok:
+            if (
+                not response.ok
+                or not response.headers.get("Content-Type")
+                == "text/event-stream; charset=utf-8"
+            ):
                 raise Exception(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
 
-            message_load = ""
             for value in response.iter_lines(
                 decode_unicode=True,
-                delimiter="" if raw else "event: message\ndata:",
                 chunk_size=self.stream_chunk_size,
             ):
                 try:
-                    resp = json.loads(value)
-                    message_load += self.get_message(resp)
-                    resp["token"] = message_load
+                    modified_value = re.sub("data:", "", value)
+                    resp = json.loads(modified_value)
                     self.last_response.update(resp)
                     yield value if raw else resp
                 except json.decoder.JSONDecodeError:
@@ -142,7 +181,6 @@ class KOBOLDAI(Provider):
             )
 
         def for_non_stream():
-            # let's make use of stream
             for _ in for_stream():
                 pass
             return self.last_response
@@ -158,9 +196,9 @@ class KOBOLDAI(Provider):
     ) -> str:
         """Generate response `str`
         Args:
-            prompt (str): Prompt to be sent
+            prompt (str): Prompt to be send.
             stream (bool, optional): Flag for streaming response. Defaults to False.
-            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`
+            optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
             str: Response generated
@@ -194,4 +232,6 @@ class KOBOLDAI(Provider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response.get("token")
+        return (
+            response["messages"][1]["content"] if "messages" in response.keys() else ""
+        )

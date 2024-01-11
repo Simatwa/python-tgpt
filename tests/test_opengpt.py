@@ -1,6 +1,6 @@
 import unittest
 import tests.base as base
-from tgpt.opengpt import OPENGPT
+from pytgpt.opengpt import OPENGPT
 
 
 class TestLeo(base.llmBase):
