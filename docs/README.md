@@ -42,7 +42,7 @@ python-tgpt
 
 This project enables seamless interaction with free LLMs without requiring an API Key.
 
-The name *python-tgpt* draws inspiration from its parent project [pytgpt](https://github.com/aandrew-me/pytgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's Chapytgpt models, fostering a smoother AI interaction experience.
+The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/pytgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's Chapytgpt models, fostering a smoother AI interaction experience.
 
 ### Features
 
