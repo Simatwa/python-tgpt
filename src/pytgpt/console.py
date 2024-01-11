@@ -69,7 +69,12 @@ def stream_output(
         code_theme (str, optional): Theme for styling codes. Defaults to `monokai`
     """
     render_this = ""
-    with Live(render_this, transient=transient, refresh_per_second=8) as live:
+    with Live(
+        render_this,
+        transient=transient,
+        refresh_per_second=8,
+        vertical_overflow="visible",
+    ) as live:
         for entry in iterable:
             render_this += entry
             live.update(
@@ -549,7 +554,11 @@ class Main(cmd.Cmd):
                     generated_response = self.bot.chat(line, stream=True)
                     busy_bar.stop_spinning()
                     console_ = Console()
-                    with Live(console=console_, refresh_per_second=16) as live:
+                    with Live(
+                        console=console_,
+                        refresh_per_second=16,
+                        vertical_overflow="visible",
+                    ) as live:
                         for response in generated_response:
                             live.update(
                                 Markdown(response, code_theme=self.code_theme)
