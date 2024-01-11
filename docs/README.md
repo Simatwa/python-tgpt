@@ -1,34 +1,34 @@
 <p align="center">
-<img src="https://github.com/Simatwa/python-pytgpt/blob/main/assets/py-pytgpt.png?raw=true" width='40%'>
+<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/py-tgpt.png?raw=true" width='40%'>
 </p>
 
-<!-- <h1 align="center"> python-pytgpt </h1> -->
+<!-- <h1 align="center"> python-tgpt </h1> -->
 <p align="center">
 <!--
-<a href="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
+<a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
-<a href="https://github.com/Simatwa/python-pytgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-pytgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.2&color=green"/></a>
+<a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.2&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
-<a href="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-package.yml/badge.svg"/></a>
+<a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
 <a href="#"><img alt="coverage" src="https://img.shields.io/static/v1?logo=Coverage&label=Coverage&message=90%&color=yellowgreen"/></a>
 <a href="#" alt="progress"><img alt="Progress" src="https://img.shields.io/static/v1?logo=Progress&label=Progress&message=95%&color=green"/></a>
-<a href="https://pepy.tech/project/pytgpt2"><img src="https://static.pepy.tech/personalized-badge/pytgpt2?period=total&units=international_system&left_color=grey&right_color=green&left_text=Downloads" alt="Downloads"></a>
-<a href="https://pepy.tech/project/python-pytgpt"><img src="https://static.pepy.tech/personalized-badge/python-pytgpt?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Downloads"></a>
-<!--<a href="https://github.com/Simatwa/python-pytgpt/releases"><img src="https://img.shields.io/github/downloads/Simatwa/python-pytgpt/total?label=Downloads&color=success" alt="Downloads"></img></a> -->
-<a href="https://github.com/Simatwa/python-pytgpt/releases"><img src="https://img.shields.io/github/v/release/Simatwa/python-pytgpt?color=success&label=Release&logo=github" alt="Latest release"></img></a>
-<a href="https://github.com/Simatwa/python-pytgpt/releases"><img src="https://img.shields.io/github/release-date/Simatwa/python-pytgpt?label=Release date&logo=github" alt="release date"></img></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/python-pytgpt"/></a>      
-<a href="https://wakatime.com/badge/github/Simatwa/pytgpt2"><img src="https://wakatime.com/badge/github/Simatwa/pytgpt2.svg" alt="wakatime"></a>
+<a href="https://pepy.tech/project/tgpt2"><img src="https://static.pepy.tech/personalized-badge/tgpt2?period=total&units=international_system&left_color=grey&right_color=green&left_text=Downloads" alt="Downloads"></a>
+<a href="https://pepy.tech/project/python-tgpt"><img src="https://static.pepy.tech/personalized-badge/python-tgpt?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Downloads"></a>
+<!--<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/downloads/Simatwa/python-tgpt/total?label=Downloads&color=success" alt="Downloads"></img></a> -->
+<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/v/release/Simatwa/python-tgpt?color=success&label=Release&logo=github" alt="Latest release"></img></a>
+<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/release-date/Simatwa/python-tgpt?label=Release date&logo=github" alt="release date"></img></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/python-tgpt"/></a>      
+<a href="https://wakatime.com/badge/github/Simatwa/tgpt2"><img src="https://wakatime.com/badge/github/Simatwa/tgpt2.svg" alt="wakatime"></a>
 </p>
 
 <h3 align="center">
-python-pytgpt
+python-tgpt
 </h3> 
 
 <p align="center">
-<img src="https://github.com/Simatwa/python-pytgpt/blob/main/assets/console-demo.gif?raw=True" width='100%'/>
+<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/console-demo.gif?raw=True" width='100%'/>
 </p>
 
 
@@ -42,7 +42,7 @@ python-pytgpt
 
 This project enables seamless interaction with free LLMs without requiring an API Key.
 
-The name *python-pytgpt* draws inspiration from its parent project [pytgpt](https://github.com/aandrew-me/pytgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's Chapytgpt models, fostering a smoother AI interaction experience.
+The name *python-tgpt* draws inspiration from its parent project [pytgpt](https://github.com/aandrew-me/pytgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's Chapytgpt models, fostering a smoother AI interaction experience.
 
 ### Features
 
@@ -75,7 +75,7 @@ These are simply the hosts of the LLMs, which include:
 
 ### Installation
 
-Download binaries for your system from [here.](https://github.com/Simatwa/python-pytgpt/releases/latest/)
+Download binaries for your system from [here.](https://github.com/Simatwa/python-tgpt/releases/latest/)
 
 Alternatively, you can install non-binaries. *(Recommended)*
 
@@ -84,20 +84,20 @@ Choose one of the following methods to get started.
 1. From PyPI:
 
    ```bash
-   pip install --upgrade python-pytgpt
+   pip install --upgrade python-tgpt
    ```
 
 2. Directly from the source:
 
    ```bash
-   pip install git+https://github.com/Simatwa/python-pytgpt.git
+   pip install git+https://github.com/Simatwa/python-tgpt.git
    ```
 
 3. Clone and Install:
 
    ```bash
-   git clone https://github.com/Simatwa/python-pytgpt.git
-   cd python-pytgpt
+   git clone https://github.com/Simatwa/python-tgpt.git
+   cd python-tgpt
    pip install .
    ```
 
@@ -284,7 +284,7 @@ print(resp)
 
 </details>
 
-**Note**: Commencing from [v0.1.0](https://github.com/Simatwa/python-pytgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
+**Note**: Commencing from [v0.1.0](https://github.com/Simatwa/python-tgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
 
 You can still disable the mode:
 
