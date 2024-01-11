@@ -90,3 +90,7 @@
 ## v0.2.1
 **What's new?**
 - Fakeopen rendering issue fixed - #7 
+
+## v0.2.2
+**What's new?**
+- Package renamed to **pytgpt** - #7

@@ -1,39 +1,39 @@
 <p align="center">
-<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/py-tgpt.png?raw=true" width='40%'>
+<img src="https://github.com/Simatwa/python-pytgpt/blob/main/assets/py-pytgpt.png?raw=true" width='40%'>
 </p>
 
-<!-- <h1 align="center"> python-tgpt </h1> -->
+<!-- <h1 align="center"> python-pytgpt </h1> -->
 <p align="center">
 <!--
-<a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
+<a href="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
-<a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.1&color=green"/></a>
+<a href="https://github.com/Simatwa/python-pytgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
+<a href="https://pypi.org/project/python-pytgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.2&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
-<a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
+<a href="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-pytgpt/actions/workflows/python-package.yml/badge.svg"/></a>
 <a href="#"><img alt="coverage" src="https://img.shields.io/static/v1?logo=Coverage&label=Coverage&message=90%&color=yellowgreen"/></a>
 <a href="#" alt="progress"><img alt="Progress" src="https://img.shields.io/static/v1?logo=Progress&label=Progress&message=95%&color=green"/></a>
-<a href="https://pepy.tech/project/tgpt2"><img src="https://static.pepy.tech/personalized-badge/tgpt2?period=total&units=international_system&left_color=grey&right_color=green&left_text=Downloads" alt="Downloads"></a>
-<a href="https://pepy.tech/project/python-tgpt"><img src="https://static.pepy.tech/personalized-badge/python-tgpt?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Downloads"></a>
-<!--<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/downloads/Simatwa/python-tgpt/total?label=Downloads&color=success" alt="Downloads"></img></a> -->
-<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/v/release/Simatwa/python-tgpt?color=success&label=Release&logo=github" alt="Latest release"></img></a>
-<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/release-date/Simatwa/python-tgpt?label=Release date&logo=github" alt="release date"></img></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/python-tgpt"/></a>      
-<a href="https://wakatime.com/badge/github/Simatwa/tgpt2"><img src="https://wakatime.com/badge/github/Simatwa/tgpt2.svg" alt="wakatime"></a>
+<a href="https://pepy.tech/project/pytgpt2"><img src="https://static.pepy.tech/personalized-badge/pytgpt2?period=total&units=international_system&left_color=grey&right_color=green&left_text=Downloads" alt="Downloads"></a>
+<a href="https://pepy.tech/project/python-pytgpt"><img src="https://static.pepy.tech/personalized-badge/python-pytgpt?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Downloads"></a>
+<!--<a href="https://github.com/Simatwa/python-pytgpt/releases"><img src="https://img.shields.io/github/downloads/Simatwa/python-pytgpt/total?label=Downloads&color=success" alt="Downloads"></img></a> -->
+<a href="https://github.com/Simatwa/python-pytgpt/releases"><img src="https://img.shields.io/github/v/release/Simatwa/python-pytgpt?color=success&label=Release&logo=github" alt="Latest release"></img></a>
+<a href="https://github.com/Simatwa/python-pytgpt/releases"><img src="https://img.shields.io/github/release-date/Simatwa/python-pytgpt?label=Release date&logo=github" alt="release date"></img></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/python-pytgpt"/></a>      
+<a href="https://wakatime.com/badge/github/Simatwa/pytgpt2"><img src="https://wakatime.com/badge/github/Simatwa/pytgpt2.svg" alt="wakatime"></a>
 </p>
 
 <h3 align="center">
-python-tgpt
+python-pytgpt
 </h3> 
 
 <p align="center">
-<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/console-demo.gif?raw=True" width='100%'/>
+<img src="https://github.com/Simatwa/python-pytgpt/blob/main/assets/console-demo.gif?raw=True" width='100%'/>
 </p>
 
 
 ```python
->>> from tgpt.leo import LEO
+>>> from pytgpt.leo import LEO
 >>> bot = LEO()
 >>> bot.chat('Hello there')
 "  Hello! It's nice to meet you. Is there something I can help you with or would you like to chat?"
@@ -42,7 +42,7 @@ python-tgpt
 
 This project enables seamless interaction with free LLMs without requiring an API Key.
 
-The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's ChatGPT models, fostering a smoother AI interaction experience.
+The name *python-pytgpt* draws inspiration from its parent project [pytgpt](https://github.com/aandrew-me/pytgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's Chapytgpt models, fostering a smoother AI interaction experience.
 
 ### Features
 
@@ -54,7 +54,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🌊 Stream and non-stream response
 - 🚀 Ready to use (No API key required)
 - ⛓️ Chained requests via proxy
-- 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
+- 🤖 Pass [awesome-chapytgpt prompts](https://github.com/f/awesome-chapytgpt-prompts) easily
 - 🧠 Multiple LLM providers
 
 ## Providers
@@ -75,7 +75,7 @@ These are simply the hosts of the LLMs, which include:
 
 ### Installation
 
-Download binaries for your system from [here.](https://github.com/Simatwa/python-tgpt/releases/latest/)
+Download binaries for your system from [here.](https://github.com/Simatwa/python-pytgpt/releases/latest/)
 
 Alternatively, you can install non-binaries. *(Recommended)*
 
@@ -84,20 +84,20 @@ Choose one of the following methods to get started.
 1. From PyPI:
 
    ```bash
-   pip install --upgrade python-tgpt
+   pip install --upgrade python-pytgpt
    ```
 
 2. Directly from the source:
 
    ```bash
-   pip install git+https://github.com/Simatwa/python-tgpt.git
+   pip install git+https://github.com/Simatwa/python-pytgpt.git
    ```
 
 3. Clone and Install:
 
    ```bash
-   git clone https://github.com/Simatwa/python-tgpt.git
-   cd python-tgpt
+   git clone https://github.com/Simatwa/python-pytgpt.git
+   cd python-pytgpt
    pip install .
    ```
 
@@ -109,19 +109,19 @@ This package offers a convenient command-line interface.
 
 - For a quick response:
   ```bash
-  python -m tgpt generate "<Your prompt>"
+  python -m pytgpt generate "<Your prompt>"
   ```
 
 - For interactive mode:
   ```bash
-  python -m tgpt interactive "<Kickoff prompt (though not mandatory)>"
+  python -m pytgpt interactive "<Kickoff prompt (though not mandatory)>"
   ```
 
 Make use of flag `--provider` postfixed with the provider name of your choice. e.g `--provider koboldai`
 
-You can also simply use `tgpt` instead of `python -m tgpt`.
+You can also simply use `pytgpt` instead of `python -m pytgpt`.
 
-Starting from version 0.1.2, `generate` is the default command if you issue a prompt, and `interactive` takes action if you don't. Therefore, something like this will generate a response and exit `$ tgpt "<Your prompt>"` while `$ tgpt` will fire up an interactive prompt.
+Starting from version 0.1.2, `generate` is the default command if you issue a prompt, and `interactive` takes action if you don't. Therefore, something like this will generate a response and exit `$ pytgpt "<Your prompt>"` while `$ pytgpt` will fire up an interactive prompt.
 
 <details>
 
@@ -134,7 +134,7 @@ Starting from version 0.1.2, `generate` is the default command if you issue a pr
 1. Generate a quick response
 
 ```python
-from tgpt.leo import LEO
+from pytgpt.leo import LEO
 bot = LEO()
 resp = bot.chat('<Your prompt>')
 print(resp)
@@ -144,7 +144,7 @@ print(resp)
 2. Get back whole response
 
 ```python
-from tgpt.leo import LEO
+from pytgpt.leo import LEO
 bot = LEO()
 resp = bot.ask('<Your Prompt')
 print(resp)
@@ -161,7 +161,7 @@ Just add parameter `stream` with value  `true`.
 1. Text Generated only 
 
 ```python
-from tgpt.leo import LEO
+from pytgpt.leo import LEO
 bot = LEO()
 resp = bot.chat('<Your prompt>', stream=True)
 for value in resp:
@@ -178,7 +178,7 @@ How may I help you today?
 2. Whole Response
 
 ```python
-from tgpt.leo import LEO
+from pytgpt.leo import LEO
 bot = LEO()
 resp = bot.ask('<Your Prompt>', stream=True)
 for value in resp:
@@ -206,7 +206,7 @@ for value in resp:
 </summary>
 
 ```python
-import tgpt.openai as openai
+import pytgpt.openai as openai
 bot = openai.OPENAI("<OPENAI-API-KEY>")
 print(bot.chat("<Your-prompt>"))
 ```
@@ -223,7 +223,7 @@ print(bot.chat("<Your-prompt>"))
 </summary>
 
 ```python
-import tgpt.koboldai as koboldai
+import pytgpt.koboldai as koboldai
 bot = koboldai.KOBOLDAI()
 print(bot.chat("<Your-prompt>"))
 ```
@@ -240,7 +240,7 @@ Fakeopen
 </summary>
 
 ```python
-import tgpt.fakeopen as fakeopen
+import pytgpt.fakeopen as fakeopen
 bot = fakeopen.FAKEOPEN()
 print(bot.chat("<Your-prompt>"))
 ```
@@ -256,7 +256,7 @@ Opengpt
 </summary>
 
 ```python
-import tgpt.opengpt as opengpt
+import pytgpt.opengpt as opengpt
 bot = opengpt.OPENGPT()
 print(bot.chat("<Your-prompt>"))
 ```
@@ -271,12 +271,12 @@ print(bot.chat("<Your-prompt>"))
 
 <summary>
 
-To obtain more tailored responses, consider utilizing [optimizers](tgpt/utils.py) using the `optimizer` parameter. Its values can be set to either `code` or `system_command`.
+To obtain more tailored responses, consider utilizing [optimizers](pytgpt/utils.py) using the `optimizer` parameter. Its values can be set to either `code` or `system_command`.
 
 </summary>
 
 ```python
-from tgpt.leo import LEO
+from pytgpt.leo import LEO
 bot = LEO()
 resp = bot.ask('<Your Prompt>', optimizer='code')
 print(resp)
@@ -284,7 +284,7 @@ print(resp)
 
 </details>
 
-**Note**: Commencing from [v0.1.0](https://github.com/Simatwa/python-tgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
+**Note**: Commencing from [v0.1.0](https://github.com/Simatwa/python-pytgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
 
 You can still disable the mode:
 
@@ -297,6 +297,6 @@ Utilize the `--disable-conversation` flag in the console to achieve the same fun
 
 ## Acknowledgements
 
-1. [x] [tgpt](https://github.com/aandrew-me/tgpt)
+1. [x] [pytgpt](https://github.com/aandrew-me/pytgpt)
 2. [x] You
 
