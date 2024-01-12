@@ -55,6 +55,7 @@ def stream_output(
     title_generator: object = None,
     title_generator_params: dict = {},
     code_theme: str = "monokai",
+    vertical_overflow: str = "ellipsis",
 ) -> None:
     """Stdout streaming response
 
@@ -67,13 +68,14 @@ def stream_output(
         title_generator (object, optional): Function for generating title. Defaults to None.
         title_generator_params (dict, optional): Kwargs for `title_generator` function. Defaults to {}.
         code_theme (str, optional): Theme for styling codes. Defaults to `monokai`
+        vertical_overflow (str, optional): Vertical overflow behaviour on content display. Defaultss to ellipsis.
     """
     render_this = ""
     with Live(
         render_this,
         transient=transient,
         refresh_per_second=8,
-        vertical_overflow="visible",
+        vertical_overflow=vertical_overflow,
     ) as live:
         for entry in iterable:
             render_this += entry
@@ -323,6 +325,7 @@ class Main(cmd.Cmd):
         self.color = "cyan"
         self.code_theme = "monokai"
         self.quiet = quiet
+        self.vertical_overflow = "ellipsis"
 
     def output_bond(
         self,
@@ -557,7 +560,7 @@ class Main(cmd.Cmd):
                     with Live(
                         console=console_,
                         refresh_per_second=16,
-                        vertical_overflow="visible",
+                        vertical_overflow=self.vertical_overflow,
                     ) as live:
                         for response in generated_response:
                             live.update(
@@ -577,6 +580,7 @@ class Main(cmd.Cmd):
                             color=self.color,
                         ),
                         code_theme=self.code_theme,
+                        vertical_overflow=self.vertical_overflow,
                     )
             except (KeyboardInterrupt, EOFError):
                 busy_bar.stop_spinning()
@@ -729,6 +733,14 @@ def tgpt2_():
     envvar="llm_provider",
 )
 @click.option(
+    "-vo",
+    "--vertical-overflow",
+    envvar="vertical_overflow",
+    help="Vertical overflow behaviour on content display",
+    type=click.Choice(["visible", "crop", "ellipsis"]),
+    default="ellipsis",
+)
+@click.option(
     "-q",
     "--quiet",
     is_flag=True,
@@ -762,6 +774,7 @@ def interactive(
     awesome_prompt,
     proxy_path,
     provider,
+    vertical_overflow,
     quiet,
     new,
 ):
@@ -789,6 +802,7 @@ def interactive(
     bot.code_theme = code_theme
     bot.color = font_color
     bot.prettify = prettify
+    bot.vertical_overflow = vertical_overflow
     if prompt:
         bot.default(prompt)
     bot.cmdloop()
@@ -936,6 +950,14 @@ def interactive(
     envvar="llm_provider",
 )
 @click.option(
+    "-vo",
+    "--vertical-overflow",
+    envvar="vertical_overflow",
+    help="Vertical overflow behaviour on content display",
+    type=click.Choice(["visible", "crop", "ellipsis"]),
+    default="ellipsis",
+)
+@click.option(
     "-q",
     "--quiet",
     is_flag=True,
@@ -972,6 +994,7 @@ def generate(
     awesome_prompt,
     proxy_path,
     provider,
+    vertical_overflow,
     quiet,
     new,
 ):
@@ -1028,6 +1051,7 @@ def generate(
     bot.code_theme = code_theme
     bot.color = font_color
     bot.prettify = prettify
+    bot.vertical_overflow = vertical_overflow
     bot.default(prompt, True)
 
 
