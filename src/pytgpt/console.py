@@ -19,6 +19,7 @@ from rich.style import Style
 from rich.markdown import Markdown
 from rich.console import Console
 from rich.live import Live
+from rich.table import Table
 from rich.prompt import Prompt
 from typing import Iterator
 from pytgpt.utils import Optimizers
@@ -185,7 +186,7 @@ class busy_bar:
 
 
 class Main(cmd.Cmd):
-    intro = f"Welcome to AI Chat in terminal. Type 'help' or '?' for usage info \n Submit any bug at {pytgpt.__repo__}/issues/new"
+    intro = f"Welcome to AI Chat in terminal. Type 'help' or 'h' for usage info \n Submit any bug at {pytgpt.__repo__}/issues/new"
     prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT](v{pytgpt.__version__})\n╰─>"
 
     def __init__(
@@ -368,11 +369,52 @@ class Main(cmd.Cmd):
                 json.dump(text, fh, indent=4)
             click.secho(f"Successfuly saved to `{save_to}`", fg="green")
 
+    def do_h(self, line):
+        """Show help info in tabular form"""
+        table = Table(
+            title="Help info",
+            show_lines=True,
+        )
+        table.add_column("No.", style="white", justify="center")
+        table.add_column("Command", style="yellow", justify="left")
+        table.add_column("Function", style="cyan")
+        command_methods = [
+            getattr(self, method)
+            for method in dir(self)
+            if callable(getattr(self, method)) and method.startswith("do_")
+        ]
+        command_methods.append(self.default)
+        command_methods.reverse()
+        for no, method in enumerate(command_methods):
+            table.add_row(
+                str(no + 1),
+                method.__name__[3:] if not method == self.default else method.__name__,
+                method.__doc__,
+            )
+        Console().print(table)
+
     @busy_bar.run("Settings saved")
     def do_settings(self, line):
         """Configre settings"""
+        self.prettify = click.confirm(
+            "\nPrettify markdown response", default=self.prettify
+        )
+        busy_bar.spin_index = click.prompt(
+            "Spin bar index [0:/, 1:■█■■■, 2:⣻]",
+            default=busy_bar.spin_index,
+            type=click.IntRange(0, 2),
+        )
+        self.color = click.prompt("Response stdout font color", default=self.color)
+        self.code_theme = Prompt.ask(
+            "Enter code_theme", choices=rich_code_themes, default=self.code_theme
+        )
+        self.vertical_overflow = Prompt.ask(
+            "\nVertical overflow behaviour",
+            choices=["ellipsis", "visible", "crop"],
+            default=self.vertical_overflow,
+        )
         self.bot.max_tokens_to_sample = click.prompt(
-            "Maximum tokens to sample",
+            "\nMaximum tokens to sample",
             type=click.INT,
             default=self.bot.max_tokens_to_sample,
         )
@@ -392,18 +434,6 @@ class Main(cmd.Cmd):
         self.bot.model = click.prompt(
             "Model name", type=click.STRING, default=self.bot.model
         )
-        self.code_theme = Prompt.ask(
-            "Enter code_theme", choices=rich_code_themes, default=self.code_theme
-        )
-        self.prettify = click.confirm(
-            "\nPrettify markdown response", default=self.prettify
-        )
-        busy_bar.spin_index = click.prompt(
-            "Spin bar index [0:/, 1:■█■■■, 2:⣻]",
-            default=busy_bar.spin_index,
-            type=click.IntRange(0, 2),
-        )
-        self.color = click.prompt("Response stdout font color", default=self.color)
 
     @busy_bar.run(help="System error")
     def do_copy_this(self, line):
