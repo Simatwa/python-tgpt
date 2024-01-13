@@ -110,6 +110,7 @@ def clear_history_file(file_path, is_true):
 class busy_bar:
     querying = None
     __spinner = (
+        (),
         ("-", "\\", "|", "/"),
         (
             "█■■■■",
@@ -400,9 +401,9 @@ class Main(cmd.Cmd):
             "\nPrettify markdown response", default=self.prettify
         )
         busy_bar.spin_index = click.prompt(
-            "Spin bar index [0:/, 1:■█■■■, 2:⣻]",
+            "Spin bar index [0: None, 1:/, 2:■█■■■, 3:⣻]",
             default=busy_bar.spin_index,
-            type=click.IntRange(0, 2),
+            type=click.IntRange(0, 3),
         )
         self.color = click.prompt("Response stdout font color", default=self.color)
         self.code_theme = Prompt.ask(
@@ -583,6 +584,7 @@ class Main(cmd.Cmd):
             os.system(line[2:])
         else:
             try:
+                busy_bar.start_spinning()
                 if self.quiet:
                     generated_response = self.bot.chat(line, stream=True)
                     busy_bar.stop_spinning()
@@ -599,7 +601,6 @@ class Main(cmd.Cmd):
                                 else response
                             )
                 else:
-                    busy_bar.start_spinning()
                     generated_response = self.bot.chat(line, stream=True)
                     busy_bar.stop_spinning()
                     stream_output(
@@ -696,9 +697,9 @@ def tgpt2_():
 @click.option(
     "-bi",
     "--busy-bar-index",
-    help="Index of busy bar icon : [0:/, 1:■█■■■, 2:⣻]",
-    type=click.IntRange(0, 2),
-    default=2,
+    help="Index of busy bar icon : [0: None, 1:/, 2:■█■■■, 3:⣻]",
+    type=click.IntRange(0, 3),
+    default=3,
 )
 @click.option("-fc", "--font-color", help="Stdout font color")
 @click.option(
@@ -888,9 +889,9 @@ def interactive(
 @click.option(
     "-bi",
     "--busy-bar-index",
-    help="Index of busy bar icon : [0:/, 1:■█■■■, 2:⣻]",
-    type=click.IntRange(0, 2),
-    default=2,
+    help="Index of busy bar icon : [0: None, 1:/, 2:■█■■■, 3:⣻]",
+    type=click.IntRange(0, 3),
+    default=3,
 )
 @click.option(
     "-fc",
