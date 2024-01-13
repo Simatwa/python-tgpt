@@ -1091,7 +1091,7 @@ def main(*args):
     args = sys.argv
     if "--version" in args:
         # Lets show version here and exit
-        click.secho(f"tgpt v{pytgpt.__version__}")
+        click.secho(f"pytgpt v{pytgpt.__version__}")
         sys.exit(0)
     if (
         len(args) > 1
