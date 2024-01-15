@@ -121,3 +121,11 @@
 
 - Tabulated help info - `h`
 - Control response vertical overflow behaviour.
+
+## v0.2.4
+
+**What's new?**
+
+- [WebChatGPT](https://github.com/Simatwa/WebChatGPT/) added as provider
+- Awesome-prompts manipulation commands = **CRUD**
+- Other minor fixes.
