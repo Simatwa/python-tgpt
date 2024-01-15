@@ -328,6 +328,7 @@ class Main(cmd.Cmd):
         self.code_theme = "monokai"
         self.quiet = quiet
         self.vertical_overflow = "ellipsis"
+        self.disable_stream = False
 
     def output_bond(
         self,
@@ -584,9 +585,21 @@ class Main(cmd.Cmd):
             os.system(line[2:])
         else:
             try:
+
+                def generate_response():
+                    # Ensure response is yielded
+                    def for_stream():
+                        return self.bot.chat(line, stream=True)
+
+                    def for_non_stream():
+                        yield self.bot.chat(line, stream=False)
+
+                    return for_non_stream() if self.disable_stream else for_stream()
+
                 busy_bar.start_spinning()
+                generated_response = generate_response()
+
                 if self.quiet:
-                    generated_response = self.bot.chat(line, stream=True)
                     busy_bar.stop_spinning()
                     console_ = Console()
                     with Live(
@@ -601,7 +614,6 @@ class Main(cmd.Cmd):
                                 else response
                             )
                 else:
-                    generated_response = self.bot.chat(line, stream=True)
                     busy_bar.stop_spinning()
                     stream_output(
                         generated_response,
@@ -772,6 +784,13 @@ def tgpt2_():
     default="ellipsis",
 )
 @click.option(
+    "-w",
+    "--whole",
+    is_flag=True,
+    default=False,
+    help="Disable streaming response",
+)
+@click.option(
     "-q",
     "--quiet",
     is_flag=True,
@@ -806,6 +825,7 @@ def interactive(
     proxy_path,
     provider,
     vertical_overflow,
+    whole,
     quiet,
     new,
 ):
@@ -834,6 +854,7 @@ def interactive(
     bot.color = font_color
     bot.prettify = prettify
     bot.vertical_overflow = vertical_overflow
+    bot.disable_stream = whole
     if prompt:
         bot.default(prompt)
     bot.cmdloop()
@@ -909,8 +930,8 @@ def interactive(
     "-w",
     "--whole",
     is_flag=True,
-    default=True,
-    help="Give response back as a whole text (Default)",
+    default=False,
+    help="Disable streaming response",
 )
 @click.option(
     "-c",
@@ -1083,6 +1104,7 @@ def generate(
     bot.color = font_color
     bot.prettify = prettify
     bot.vertical_overflow = vertical_overflow
+    bot.disable_stream = whole
     bot.default(prompt, True)
 
 
