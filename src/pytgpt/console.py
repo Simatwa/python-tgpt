@@ -24,6 +24,7 @@ from rich.prompt import Prompt
 from typing import Iterator
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
+from pytgpt.utils import AwesomePrompts
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -105,6 +106,22 @@ def clear_history_file(file_path, is_true):
             os.remove(file_path)
         except Exception as e:
             logging.error(f"Failed to clear previous chat history - {getExc(e)}")
+
+
+def handle_exception(func):
+    """Safely handles cli-based exceptions and exit status-codes"""
+
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        try:
+            exit_status = func(*args, **kwargs)
+        except Exception as e:
+            exit_status = False
+            logging.error(getExc(e))
+        finally:
+            exit(0 if exit_status not in (False, "") else 1)
+
+    return decorator
 
 
 class busy_bar:
@@ -1108,6 +1125,106 @@ def generate(
     bot.default(prompt, True)
 
 
+@tgpt2_.command()
+@click.option(
+    "-r",
+    "--remote",
+    help="Remote source to update from",
+    default=AwesomePrompts.awesome_prompt_url,
+)
+@click.option(
+    "-o",
+    "--output",
+    help="Path to save the prompts",
+    default=AwesomePrompts.awesome_prompt_path,
+)
+@click.option("--new", is_flag=True, help="Override the existing contents in path")
+@handle_exception
+def update(remote, output, new):
+    """Update awesome-prompts from remote source."""
+    AwesomePrompts.awesome_prompt_url = remote
+    AwesomePrompts.awesome_prompt_path = output
+    AwesomePrompts().update_prompts_from_online(new)
+    click.secho(f"Prompts saved to - '{AwesomePrompts.awesome_prompt_path}'", fg="cyan")
+
+
+@tgpt2_.command()
+@click.option(
+    "-k", "--key", required=True, type=click.STRING, help="Search keyword or index"
+)
+@click.option("-d", "--default", help="Return this value if not found", default=None)
+@click.option(
+    "--case-sensitive",
+    default=True,
+    flag_value=False,
+    help="Perform case-sensitive search",
+)
+@click.option(
+    "-f",
+    "--file",
+    type=click.Path(exists=True),
+    help="Path to existing prompts",
+    default=AwesomePrompts.awesome_prompt_path,
+)
+@handle_exception
+def search(
+    key,
+    default,
+    case_sensitive,
+    file,
+):
+    """Search for a particular awesome-prompt by key or index"""
+    AwesomePrompts.awesome_prompt_path = file
+    resp = AwesomePrompts().get_act(
+        key,
+        default=default,
+        case_insensitive=case_sensitive,
+    )
+    if resp:
+        click.secho(resp)
+    return resp != default
+
+
+@tgpt2_.command()
+@click.option("-n", "--name", required=True, help="Prompt name")
+@click.option("-p", "--prompt", required=True, help="Prompt value")
+@click.option(
+    "-f",
+    "--file",
+    type=click.Path(exists=True),
+    help="Path to existing prompts",
+    default=AwesomePrompts.awesome_prompt_path,
+)
+@handle_exception
+def add(name, prompt, file):
+    """Add new prompt to awesome-prompt list"""
+    AwesomePrompts.awesome_prompt_path = file
+    return AwesomePrompts().add_prompt(name, prompt)
+
+
+@tgpt2_.command()
+@click.argument("name")
+@click.option(
+    "--case-sensitive",
+    is_flag=True,
+    flag_value=False,
+    default=True,
+    help="Perform name case-sensitive search",
+)
+@click.option(
+    "-f",
+    "--file",
+    type=click.Path(exists=True),
+    help="Path to existing prompts",
+    default=AwesomePrompts.awesome_prompt_path,
+)
+@handle_exception
+def delete(name, case_sensitive, file):
+    """Delete a specific awesome-prompt"""
+    AwesomePrompts.awesome_prompt_path = file
+    return AwesomePrompts().delete_prompt(name, case_sensitive)
+
+
 def main(*args):
     """Fireup console programmically"""
     sys.argv += list(args)
@@ -1116,11 +1233,7 @@ def main(*args):
         # Lets show version here and exit
         click.secho(f"pytgpt v{pytgpt.__version__}")
         sys.exit(0)
-    if (
-        len(args) > 1
-        and args[1] not in ["interactive", "generate"]
-        and not "--help" in args
-    ):
+    if len(args) > 1 and args[1] not in tgpt2_.commands.keys() and not "--help" in args:
         sys.argv.insert(1, "generate")  # Just a hack to make default command
     elif (
         len(args) == 1

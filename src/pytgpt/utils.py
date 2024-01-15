@@ -1,4 +1,5 @@
 import os
+import json
 import platform
 import subprocess
 import logging
@@ -183,37 +184,68 @@ class AwesomePrompts:
     )
     awesome_prompt_path = os.path.join(default_path, "all-acts.json")
 
+    __is_prompt_updated = False
+
     def __init__(self):
-        pass
+        self.acts = self.all_acts
+
+    def __search_key(self, key: str, raise_not_found: bool = False) -> str:
+        """Perform insentive awesome-prompt key search
+
+        Args:
+            key (str): key
+            raise_not_found (bool, optional): Control KeyError exception. Defaults to False.
+
+        Returns:
+            str|None: Exact key name
+        """
+        for key_, value in self.all_acts.items():
+            if str(key).lower() in str(key_).lower():
+                return key_
+        if raise_not_found:
+            raise KeyError(f"Zero awesome prompt found with key - `{key}`")
+
+    def __get_acts(self):
+        """Retrieves all awesome-prompts"""
+        with open(self.awesome_prompt_path) as fh:
+            prompt_dict = json.load(fh)
+        return prompt_dict
+
+    def update_prompts_from_online(self, override: bool = False):
+        """Download awesome-prompts and update existing ones if available
+        args:
+           override (bool, optional): Override existing contents in path
+        """
+        resp = {}
+        if not self.__is_prompt_updated:
+            import requests
+
+            logging.info("Downloading & updating awesome prompts")
+            response = requests.get(self.awesome_prompt_url)
+            response.raise_for_status
+            resp.update(response.json())
+            if os.path.isfile(self.awesome_prompt_path) and not override:
+                resp.update(self.__get_acts())
+            self.__is_prompt_updated = True
+            with open(self.awesome_prompt_path, "w") as fh:
+                json.dump(resp, fh, indent=4)
+        else:
+            logging.debug("Ignoring remote prompt update")
 
     @property
     def all_acts(self) -> dict:
-        """All awesome_prompts
+        """All awesome_prompts & their indexes mapped to values
 
         Returns:
-            dict: _description_
+            dict: Awesome-prompts
         """
-        import json
 
         resp = {}
         if not os.path.isfile(self.awesome_prompt_path):
-            # Let's download the acts
-            logging.info("Downloading awesome prompts")
-            import requests
+            self.update_prompts_from_online()
+        resp.update(self.__get_acts())
 
-            response = requests.get(self.awesome_prompt_url)
-            response.raise_for_status
-            prompt_dict = response.json()
-            with open(self.awesome_prompt_path, "w") as fh:
-                json.dump(prompt_dict, fh, indent=4)
-            resp.update(prompt_dict)
-        else:
-            with open(self.awesome_prompt_path) as fh:
-                prompt_dict = json.load(fh)
-
-            resp.update(prompt_dict)
-
-        for count, key_value in enumerate(prompt_dict.items()):
+        for count, key_value in enumerate(self.__get_acts().items()):
             # Lets map also index to the value
             resp.update({count: key_value[1]})
 
@@ -240,13 +272,50 @@ class AwesomePrompts:
         Returns:
             str: Awesome prompt value
         """
+        if str(key).isdigit():
+            key = int(key)
         act = self.all_acts.get(key, default)
-        if not act:
-            if case_insensitive:
-                for key_, value in self.all_acts.items():
-                    if str(key).lower() in str(key_).lower():
-                        act = value
-                        break
-            if not act and raise_not_found:
-                raise KeyError(f"No act found for the key '{key}'")
+        if not act and case_insensitive:
+            act = self.all_acts.get(self.__search_key(key, raise_not_found))
         return act
+
+    def add_prompt(self, name: str, prompt: str) -> bool:
+        """Add new prompt or update an existing one.
+
+        Args:
+            name (str): act name
+            prompt (str): prompt value
+
+        Returns:
+            bool: is_successful report
+        """
+        current_prompts = self.__get_acts()
+        with open(self.awesome_prompt_path, "w") as fh:
+            current_prompts[name] = prompt
+            json.dump(current_prompts, fh, indent=4)
+        logging.info(f"New prompt added successfully - `{name}`")
+
+    def delete_prompt(
+        self, name: str, case_insensitive: bool = True, raise_not_found: bool = False
+    ) -> bool:
+        """Delete an existing prompt
+
+        Args:
+            name (str): act name
+            case_insensitive(bool, optional): Ignore the key cases. Defaults to True.
+            raise_not_found (bool, optional): Control KeyError exception. Default is False.
+        Returns:
+            bool: is_successful report
+        """
+        name = self.__search_key(name, raise_not_found) if case_insensitive else name
+        current_prompts = self.__get_acts()
+        is_name_available = (
+            current_prompts[name] if raise_not_found else current_prompts.get(name)
+        )
+        if is_name_available:
+            with open(self.awesome_prompt_path, "w") as fh:
+                current_prompts.pop(name)
+                json.dump(current_prompts, fh, indent=4)
+            logging.info(f"Prompt deleted successfully - `{name}`")
+        else:
+            return False
