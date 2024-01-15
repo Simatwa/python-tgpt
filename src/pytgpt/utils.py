@@ -5,7 +5,7 @@ import subprocess
 import logging
 import appdirs
 
-appdir = appdirs.AppDirs("tgpt", "Smartwa")
+appdir = appdirs.AppDirs("pytgpt", "Smartwa")
 
 default_path = appdir.user_cache_dir
 

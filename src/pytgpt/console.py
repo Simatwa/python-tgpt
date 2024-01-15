@@ -25,6 +25,7 @@ from typing import Iterator
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
 from pytgpt.utils import AwesomePrompts
+from WebChatGPT.console import chat as webchatgpt
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -1125,7 +1126,13 @@ def generate(
     bot.default(prompt, True)
 
 
-@tgpt2_.command()
+@tgpt2_.group()  # For awesome-prompts
+def awesome():
+    """Manipulate awesome-prompts"""
+    pass
+
+
+@awesome.command()
 @click.option(
     "-r",
     "--remote",
@@ -1148,7 +1155,7 @@ def update(remote, output, new):
     click.secho(f"Prompts saved to - '{AwesomePrompts.awesome_prompt_path}'", fg="cyan")
 
 
-@tgpt2_.command()
+@awesome.command()
 @click.option(
     "-k", "--key", required=True, type=click.STRING, help="Search keyword or index"
 )
@@ -1185,7 +1192,7 @@ def search(
     return resp != default
 
 
-@tgpt2_.command()
+@awesome.command()
 @click.option("-n", "--name", required=True, help="Prompt name")
 @click.option("-p", "--prompt", required=True, help="Prompt value")
 @click.option(
@@ -1202,7 +1209,7 @@ def add(name, prompt, file):
     return AwesomePrompts().add_prompt(name, prompt)
 
 
-@tgpt2_.command()
+@awesome.command()
 @click.argument("name")
 @click.option(
     "--case-sensitive",
@@ -1239,6 +1246,9 @@ def main(*args):
         len(args) == 1
     ):  # and platform.system() == "Windows": What do you think about this?
         sys.argv.insert(1, "interactive")
+    tgpt2_.add_command(
+        webchatgpt, "webchatgpt"
+    )  # Intergration with WebChatGPT https://github.com/Simatwa/WebChatGPT
     tgpt2_()
 
 

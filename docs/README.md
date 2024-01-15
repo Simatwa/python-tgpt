@@ -8,7 +8,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.3&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.4&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
@@ -61,11 +61,12 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 
 These are simply the hosts of the LLMs, which include:
 
-1. Leo *(By Brave)*
-2. Fakeopen
+1. [Brave Leo](https://brave.com/leo/) (llama-2-13b-chat)
+2. [FakeOpen](https://chat.geekgpt.org/)
 3. Koboldai
-4. Opengpt
-5. OpenAI *(API key required)*
+4. [OpenGPTs](https://opengpts-example-vz4y4ooboq-uc.a.run.app/)
+5. [OpenAI](https://chat.openai.com) *(API key required)*
+6. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(No API key required)*
 
 ## Prerequisites
 
@@ -293,6 +294,8 @@ bot = koboldai.KOBOLDAI(is_conversation=False)
 ```
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
+
+For more usage info run `$ pytgpt --help`
 
 
 ## Acknowledgements
