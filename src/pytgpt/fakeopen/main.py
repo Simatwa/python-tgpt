@@ -144,7 +144,7 @@ class FAKEOPEN(Provider):
             "messages": [{"content": conversation_prompt, "role": "user"}],
             "model": self.model,
             "presence_penalty": self.presence_penalty,
-            "stream": stream,
+            "stream": True,
             "temperature": self.temperature,
             "top_p": self.top_p,
         }
