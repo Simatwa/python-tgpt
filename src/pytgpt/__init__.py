@@ -1,10 +1,10 @@
 from .utils import appdir
 
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
 
-available_providers = ["leo", "openai", "fakeopen", "opengpt", "koboldai"]
+available_providers = ["leo", "openai", "fakeopen", "opengpt", "koboldai", "bard"]
 
 __all__ = [
     "appdir",

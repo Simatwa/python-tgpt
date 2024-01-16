@@ -129,3 +129,11 @@
 - [WebChatGPT](https://github.com/Simatwa/WebChatGPT/) added as provider
 - Awesome-prompts manipulation commands = **CRUD**
 - Other minor fixes.
+
+## v0.2.5
+
+**What's new?**
+
+- New provider : [Bard](https://github.com/acheong08/bard) by **Google**.
+- Check whole last response
+- Othetr minor fixes.

@@ -332,6 +332,18 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
+            elif provider == "bard":
+                from pytgpt.bard import BARD
+
+                assert (
+                    auth
+                ), f"Bard's session-id or path to bard.google.com.cookies.json file is required"
+                self.bot = BARD(
+                    auth=auth,
+                    proxy=proxies,
+                    timeout=timeout,
+                )
+
             else:
                 raise NotImplementedError(
                     f"The provider `{provider}` is not yet implemented."
@@ -593,6 +605,14 @@ class Main(cmd.Cmd):
         with open(history_file) as fh:
             self.bot.conversation.chat_history = fh.read()
         click.secho("Conversation loaded successfully.", fg="cyan")
+
+    def do_last_response(self, line):
+        """Show whole last response in json format"""
+        self.output_bond(
+            "Last Response",
+            self.bot.last_response,
+            is_json=True,
+        )
 
     @busy_bar.run()
     def default(self, line, exit_on_error: bool = False):
@@ -1298,7 +1318,7 @@ def all(json, indent, index, color, output):
     formatted_awesome_prompts = dumps(awesome_prompts)
     if json:
         # click.secho(formatted_awesome_prompts, fg=color)
-        rich.print_json(formatted_awesome_prompts,indent=indent)
+        rich.print_json(formatted_awesome_prompts, indent=indent)
 
     else:
         awesome_table = Table(show_lines=True, title="All Awesome-Prompts")
