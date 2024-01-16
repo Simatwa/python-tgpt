@@ -136,4 +136,11 @@
 
 - New provider : [Bard](https://github.com/acheong08/bard) by **Google**.
 - Check whole last response
-- Othetr minor fixes.
+- Other minor fixes.
+
+## v0.2.6
+
+**What's new?**
+
+- Bug fixed - *reset conversation*  - **bard**
+- Bug fixed - *low `httpx` logging level*. - **bard** 

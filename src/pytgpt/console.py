@@ -593,6 +593,8 @@ class Main(cmd.Cmd):
         self.bot.conversation.chat_history = click.prompt(
             "Introductory prompt", default=self.bot.conversation.intro
         )
+        if hasattr(self.bot, "reset"):
+            self.bot.reset()
         click.secho("Conversation reset successfully. New one created.", fg="cyan")
 
     @busy_bar.run("while loading conversation")

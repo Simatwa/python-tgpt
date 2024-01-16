@@ -181,3 +181,9 @@ class BARD(Provider):
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
         return response["content"]
+
+    def reset(self):
+        """Reset the current conversation"""
+        self.session.async_chatbot.conversation_id = ""
+        self.session.async_chatbot.response_id = ""
+        self.session.async_chatbot.choice_id = ""

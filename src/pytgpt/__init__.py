@@ -1,6 +1,6 @@
 from .utils import appdir
 
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
 
