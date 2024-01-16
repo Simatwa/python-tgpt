@@ -825,6 +825,12 @@ def tgpt2_():
     help="Override the filepath contents",
     is_flag=True,
 )
+@click.option(
+    "-wc",
+    "--with-copied",
+    is_flag=True,
+    help="Postfix prompt with last copied text",
+)
 @click.help_option("-h", "--help")
 def interactive(
     model,
@@ -851,6 +857,7 @@ def interactive(
     whole,
     quiet,
     new,
+    with_copied,
 ):
     """Chat with AI interactively"""
     clear_history_file(filepath, new)
@@ -879,6 +886,8 @@ def interactive(
     bot.vertical_overflow = vertical_overflow
     bot.disable_stream = whole
     if prompt:
+        if with_copied:
+            prompt = prompt + "\n" + clipman.get()
         bot.default(prompt)
     bot.cmdloop()
 
@@ -1045,6 +1054,12 @@ def interactive(
     help="Override the filepath contents",
     is_flag=True,
 )
+@click.option(
+    "-wc",
+    "--with-copied",
+    is_flag=True,
+    help="Postfix prompt with last copied text",
+)
 @click.help_option("-h", "--help")
 def generate(
     model,
@@ -1073,6 +1088,7 @@ def generate(
     vertical_overflow,
     quiet,
     new,
+    with_copied,
 ):
     """Generate a quick response with AI (Default)"""
     bot = Main(
@@ -1121,6 +1137,8 @@ def generate(
             # Just incase the previous timeout was not 0
 
     clear_history_file(filepath, new)
+    if with_copied:
+        prompt = prompt + "\n" + clipman.get()
     prompt = Optimizers.code(prompt) if code else prompt
     prompt = Optimizers.shell_command(prompt) if shell else prompt
     busy_bar.spin_index = busy_bar_index
