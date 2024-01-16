@@ -673,6 +673,10 @@ class Main(cmd.Cmd):
 
 
 @click.group()
+@click.version_option(
+    pytgpt.__version__, "-v", "--version", package_name="pytgpt", prog_name="pytgpt"
+)
+@click.help_option("-h", "--help")
 def tgpt2_():
     pass
 
@@ -821,6 +825,7 @@ def tgpt2_():
     help="Override the filepath contents",
     is_flag=True,
 )
+@click.help_option("-h", "--help")
 def interactive(
     model,
     temperature,
@@ -1040,6 +1045,7 @@ def interactive(
     help="Override the filepath contents",
     is_flag=True,
 )
+@click.help_option("-h", "--help")
 def generate(
     model,
     temperature,
@@ -1102,8 +1108,8 @@ def generate(
             prompt = click.get_text_stream("stdin").read()
         except TimeoutError as e:
             help_info = (
-                "Usage: tgpt generate [OPTIONS] PROMPT\n"
-                "Try 'tgpt generate --help' for help.\n"
+                "Usage: pytgpt generate [OPTIONS] PROMPT\n"
+                "Try 'pytgpt generate --help' for help.\n"
                 "Error: Missing argument 'PROMPT'.\n"
             )
             click.secho(
@@ -1127,6 +1133,7 @@ def generate(
 
 
 @tgpt2_.group()  # For awesome-prompts
+@click.help_option("-h", "--help")
 def awesome():
     """Manipulate awesome-prompts"""
     pass
@@ -1145,7 +1152,10 @@ def awesome():
     help="Path to save the prompts",
     default=AwesomePrompts.awesome_prompt_path,
 )
-@click.option("--new", is_flag=True, help="Override the existing contents in path")
+@click.option(
+    "-n", "--new", is_flag=True, help="Override the existing contents in path"
+)
+@click.help_option("-h", "--help")
 @handle_exception
 def update(remote, output, new):
     """Update awesome-prompts from remote source."""
@@ -1173,6 +1183,7 @@ def update(remote, output, new):
     help="Path to existing prompts",
     default=AwesomePrompts.awesome_prompt_path,
 )
+@click.help_option("-h", "--help")
 @handle_exception
 def search(
     key,
@@ -1202,6 +1213,7 @@ def search(
     help="Path to existing prompts",
     default=AwesomePrompts.awesome_prompt_path,
 )
+@click.help_option("-h", "--help")
 @handle_exception
 def add(name, prompt, file):
     """Add new prompt to awesome-prompt list"""
@@ -1225,6 +1237,7 @@ def add(name, prompt, file):
     help="Path to existing prompts",
     default=AwesomePrompts.awesome_prompt_path,
 )
+@click.help_option("-h", "--help")
 @handle_exception
 def delete(name, case_sensitive, file):
     """Delete a specific awesome-prompt"""
@@ -1236,15 +1249,10 @@ def main(*args):
     """Fireup console programmically"""
     sys.argv += list(args)
     args = sys.argv
-    if "--version" in args:
-        # Lets show version here and exit
-        click.secho(f"pytgpt v{pytgpt.__version__}")
-        sys.exit(0)
-    if len(args) > 1 and args[1] not in tgpt2_.commands.keys() and not "--help" in args:
-        sys.argv.insert(1, "generate")  # Just a hack to make default command
-    elif (
-        len(args) == 1
-    ):  # and platform.system() == "Windows": What do you think about this?
+    if len(args) > 1 and not "-" in args[1]:
+        if len(args) > 1 and args[1] not in tgpt2_.commands.keys():
+            sys.argv.insert(1, "generate")  # Just a hack to make default command
+    elif len(args) == 1:
         sys.argv.insert(1, "interactive")
     tgpt2_.add_command(
         webchatgpt, "webchatgpt"
