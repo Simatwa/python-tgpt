@@ -6,6 +6,9 @@ from os import path
 from json import load
 from json import dumps
 import warnings
+import logging
+
+logging.getLogger("httpx").setLevel(logging.ERROR)
 
 warnings.simplefilter("ignore", category=UserWarning)
 
