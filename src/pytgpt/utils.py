@@ -205,7 +205,7 @@ class AwesomePrompts:
         if raise_not_found:
             raise KeyError(f"Zero awesome prompt found with key - `{key}`")
 
-    def __get_acts(self):
+    def get_acts(self):
         """Retrieves all awesome-prompts"""
         with open(self.awesome_prompt_path) as fh:
             prompt_dict = json.load(fh)
@@ -225,7 +225,7 @@ class AwesomePrompts:
             response.raise_for_status
             resp.update(response.json())
             if os.path.isfile(self.awesome_prompt_path) and not override:
-                resp.update(self.__get_acts())
+                resp.update(self.get_acts())
             self.__is_prompt_updated = True
             with open(self.awesome_prompt_path, "w") as fh:
                 json.dump(resp, fh, indent=4)
@@ -243,9 +243,9 @@ class AwesomePrompts:
         resp = {}
         if not os.path.isfile(self.awesome_prompt_path):
             self.update_prompts_from_online()
-        resp.update(self.__get_acts())
+        resp.update(self.get_acts())
 
-        for count, key_value in enumerate(self.__get_acts().items()):
+        for count, key_value in enumerate(self.get_acts().items()):
             # Lets map also index to the value
             resp.update({count: key_value[1]})
 
@@ -289,7 +289,7 @@ class AwesomePrompts:
         Returns:
             bool: is_successful report
         """
-        current_prompts = self.__get_acts()
+        current_prompts = self.get_acts()
         with open(self.awesome_prompt_path, "w") as fh:
             current_prompts[name] = prompt
             json.dump(current_prompts, fh, indent=4)
@@ -308,7 +308,7 @@ class AwesomePrompts:
             bool: is_successful report
         """
         name = self.__search_key(name, raise_not_found) if case_insensitive else name
-        current_prompts = self.__get_acts()
+        current_prompts = self.get_acts()
         is_name_available = (
             current_prompts[name] if raise_not_found else current_prompts.get(name)
         )

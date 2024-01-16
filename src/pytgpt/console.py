@@ -1109,6 +1109,11 @@ def generate(
         provider,
         quiet,
     )
+    if with_copied:
+        sep = "\n" if prompt else ""
+        prompt = prompt + sep + clipman.get()
+        assert prompt.strip() != sep, "No copied text found, issue prompt"
+
     if not prompt:
         # Let's try to read piped input
         import signal
@@ -1137,8 +1142,6 @@ def generate(
             # Just incase the previous timeout was not 0
 
     clear_history_file(filepath, new)
-    if with_copied:
-        prompt = prompt + "\n" + clipman.get()
     prompt = Optimizers.code(prompt) if code else prompt
     prompt = Optimizers.shell_command(prompt) if shell else prompt
     busy_bar.spin_index = busy_bar_index
@@ -1261,6 +1264,57 @@ def delete(name, case_sensitive, file):
     """Delete a specific awesome-prompt"""
     AwesomePrompts.awesome_prompt_path = file
     return AwesomePrompts().delete_prompt(name, case_sensitive)
+
+
+@awesome.command()
+@click.option(
+    "-j",
+    "--json",
+    is_flag=True,
+    help="Display prompts in json format",
+)
+@click.option(
+    "-i",
+    "--indent",
+    type=click.IntRange(1, 20),
+    help="Json format indentation level",
+    default=4,
+)
+@click.option(
+    "-x",
+    "--index",
+    is_flag=True,
+    help="Display prompts with their corresponding indexes",
+)
+@click.option("-c", "--color", help="Prompts stdout font color")
+@click.option("-o", "--output", type=click.Path(), help="Path to save the prompts")
+@click.help_option("-h", "--help")
+def all(json, indent, index, color, output):
+    """Stdout all awesome prompts"""
+    ap = AwesomePrompts()
+    awesome_prompts = ap.all_acts if index else ap.get_acts()
+    from json import dumps
+
+    formatted_awesome_prompts = dumps(awesome_prompts)
+    if json:
+        # click.secho(formatted_awesome_prompts, fg=color)
+        rich.print_json(formatted_awesome_prompts,indent=indent)
+
+    else:
+        awesome_table = Table(show_lines=True, title="All Awesome-Prompts")
+        awesome_table.add_column("index", justify="center", style="yellow")
+        awesome_table.add_column("Act Name/Index", justify="left", style="cyan")
+        awesome_table.add_column(
+            "Prompt",
+            style=color,
+        )
+        for index, key_value in enumerate(awesome_prompts.items()):
+            awesome_table.add_row(str(index), str(key_value[0]), key_value[1])
+        rich.print(awesome_table)
+
+    if output:
+        with open(output, "w") as fh:
+            fh.write(formatted_awesome_prompts)
 
 
 tgpt2_.add_command(
