@@ -1135,7 +1135,7 @@ def generate(
 @tgpt2_.group()  # For awesome-prompts
 @click.help_option("-h", "--help")
 def awesome():
-    """Manipulate awesome-prompts"""
+    """Perform CRUD operations on awesome-prompts"""
     pass
 
 
@@ -1245,6 +1245,12 @@ def delete(name, case_sensitive, file):
     return AwesomePrompts().delete_prompt(name, case_sensitive)
 
 
+tgpt2_.add_command(
+    webchatgpt, "webchatgpt"
+)  # Intergration with WebChatGPT https://github.com/Simatwa/WebChatGPT
+
+
+# @handle_exception
 def main(*args):
     """Fireup console programmically"""
     sys.argv += list(args)
@@ -1254,9 +1260,6 @@ def main(*args):
             sys.argv.insert(1, "generate")  # Just a hack to make default command
     elif len(args) == 1:
         sys.argv.insert(1, "interactive")
-    tgpt2_.add_command(
-        webchatgpt, "webchatgpt"
-    )  # Intergration with WebChatGPT https://github.com/Simatwa/WebChatGPT
     tgpt2_()
 
 
