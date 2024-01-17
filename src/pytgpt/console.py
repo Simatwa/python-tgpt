@@ -374,22 +374,35 @@ class Main(cmd.Cmd):
     @property
     def prompt(self):
         current_time = datetime.datetime.now().strftime("%H:%M:%S")
-        find_range = lambda start, end: round(end - start, 1)
+
+        def find_range(start, end, hms: bool = False):
+            in_seconds = round(end - start, 1)
+            return (
+                str(datetime.timedelta(seconds=in_seconds)).split(".")[0].zfill(8)
+                if hms
+                else in_seconds
+            )
 
         if not self.disable_coloring:
-            return (
-                f"{Fore.LIGHTGREEN_EX}╭─[{Fore.CYAN}{getpass.getuser().capitalize()}@pyTGPT]{Fore.MAGENTA}({self.provider})"
-                f"{Fore.BLUE}~[{current_time}-"
-                f"{Fore.RED}T'{find_range(self.__init_time, time.time())}s,"
-                f"{Fore.YELLOW}L'{find_range(self.__start_time, self.__end_time)}s]"
-                f"\n╰─>{Fore.RESET}"
+            cmd_prompt = (
+                f"╭─[`{Fore.CYAN}{getpass.getuser().capitalize()}@pyTGPT]`"
+                f"(`{Fore.MAGENTA}{self.provider})`"
+                f"~[`{Fore.LIGHTWHITE_EX}🕒{Fore.BLUE}{current_time}-`"
+                f"{Fore.LIGHTWHITE_EX}💻{Fore.RED}{find_range(self.__init_time, time.time(), True)}-`"
+                f"{Fore.LIGHTWHITE_EX}⚡{Fore.YELLOW}{find_range(self.__start_time, self.__end_time)}s]`"
+                f"\n╰─>"
             )
+            whitelist = ["[", "]", "~", "-", "(", ")"]
+            for character in whitelist:
+                cmd_prompt = cmd_prompt.replace(character + "`", Fore.RESET + character)
+            return cmd_prompt
+
         else:
             return (
                 f"╭─[{getpass.getuser().capitalize()}@pyTGPT]({self.provider})"
-                f"~[{current_time}-"
-                f"T'{find_range(self.__init_time, time.time())}s,"
-                f"L'{find_range(self.__start_time, self.__end_time)}s]"
+                f"~[🕒{current_time}"
+                f"-💻{find_range(self.__init_time, time.time(), True)}"
+                f"-⚡{find_range(self.__start_time, self.__end_time)}s]"
                 "\n╰─>"
             )
 
@@ -921,7 +934,7 @@ def interactive(
     with_copied,
     no_coloring,
 ):
-    """Chat with AI interactively"""
+    """Chat with AI interactively (Default)"""
     clear_history_file(filepath, new)
     bot = Main(
         max_tokens,
@@ -1153,7 +1166,7 @@ def generate(
     new,
     with_copied,
 ):
-    """Generate a quick response with AI (Default)"""
+    """Generate a quick response with AI"""
     bot = Main(
         max_tokens,
         temperature,
