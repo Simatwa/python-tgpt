@@ -1190,20 +1190,21 @@ def generate(
         prompt = prompt + sep + clipman.get()
         assert prompt.strip() != sep, "No copied text found, issue prompt"
 
-    if not prompt:
-        # Let's try to read piped input
-        if sys.stdin.isatty():
-            help_info = (
-                "Usage: pytgpt generate [OPTIONS] PROMPT\n"
-                "Try 'pytgpt generate --help' for help.\n"
-                "Error: Missing argument 'PROMPT'.\n"
-            )
-            click.secho(
-                help_info
-            )  # Let's try to mimic the click's missing argument help info
-            sys.exit(1)
-        else:
-            prompt = click.get_text_stream("stdin").read()
+    if not prompt and not sys.stdin.isatty():
+        help_info = (
+            "Usage: pytgpt generate [OPTIONS] PROMPT\n"
+            "Try 'pytgpt generate --help' for help.\n"
+            "Error: Missing argument 'PROMPT'.\n"
+        )
+        click.secho(
+            help_info
+        )  # Let's try to mimic the click's missing argument help info
+        sys.exit(1)
+
+    # Let's try to read piped input
+    if sys.stdin.isatty():
+        stdin = click.get_text_stream("stdin").read()
+        prompt = prompt + "\n" + stdin if prompt else stdin
 
     clear_history_file(filepath, new)
     prompt = Optimizers.code(prompt) if code else prompt
