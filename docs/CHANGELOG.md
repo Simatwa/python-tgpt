@@ -151,3 +151,11 @@
 
 - Busy bar disabled when `--quiet` issued in *generate* mode. #12 Thanks to @johnd0e
 - `interactive` takes action on `$ pytgpt` otherwise one has to explictly declare the action. #11
+
+## v0.2.8
+
+**What's new?**
+
+- Auto-quiet on output redirection. Thanks to @johnd0e
+- Dropped support for output redirection. #12
+- Colorized command prompt. <kbd>interactive</kbd>

@@ -6,3 +6,4 @@ pyperclip==1.8.2
 appdirs==1.4.4
 webchatgpt==0.2.6
 GoogleBard==1.4.0
+colorama==0.4.6

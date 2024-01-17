@@ -12,6 +12,8 @@ import json
 import re
 import sys
 import platform
+import datetime
+import time
 from time import sleep
 from threading import Thread as thr
 from functools import wraps
@@ -27,6 +29,10 @@ from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
 from pytgpt.utils import AwesomePrompts
 from WebChatGPT.console import chat as webchatgpt
+from colorama import Fore
+from colorama import init as init_colorama
+
+init_colorama(autoreset=True)
 
 getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -207,7 +213,6 @@ class busy_bar:
 
 class Main(cmd.Cmd):
     intro = f"Welcome to AI Chat in terminal. Type 'help' or 'h' for usage info \n Submit any bug at {pytgpt.__repo__}/issues/new"
-    prompt = f"╭─[{getpass.getuser().capitalize()}@TGPT](v{pytgpt.__version__})\n╰─>"
 
     def __init__(
         self,
@@ -360,6 +365,33 @@ class Main(cmd.Cmd):
         self.quiet = quiet
         self.vertical_overflow = "ellipsis"
         self.disable_stream = False
+        self.provider = provider
+        self.disable_coloring = False
+        self.__init_time = time.time()
+        self.__start_time = time.time()
+        self.__end_time = time.time()
+
+    @property
+    def prompt(self):
+        current_time = datetime.datetime.now().strftime("%H:%M:%S")
+        find_range = lambda start, end: round(end - start, 1)
+
+        if not self.disable_coloring:
+            return (
+                f"{Fore.LIGHTGREEN_EX}╭─[{Fore.CYAN}{getpass.getuser().capitalize()}@pyTGPT]{Fore.MAGENTA}({self.provider})"
+                f"{Fore.BLUE}~[{current_time}-"
+                f"{Fore.RED}T'{find_range(self.__init_time, time.time())}s,"
+                f"{Fore.YELLOW}L'{find_range(self.__start_time, self.__end_time)}s]"
+                f"\n╰─>{Fore.RESET}"
+            )
+        else:
+            return (
+                f"╭─[{getpass.getuser().capitalize()}@pyTGPT]({self.provider})"
+                f"~[{current_time}-"
+                f"T'{find_range(self.__init_time, time.time())}s,"
+                f"L'{find_range(self.__start_time, self.__end_time)}s]"
+                "\n╰─>"
+            )
 
     def output_bond(
         self,
@@ -625,6 +657,7 @@ class Main(cmd.Cmd):
         if line.startswith("./"):
             os.system(line[2:])
         else:
+            self.__start_time = time.time()
             try:
 
                 def generate_response():
@@ -677,6 +710,8 @@ class Main(cmd.Cmd):
                 logging.error(getExc(e))
                 if exit_on_error:
                     sys.exit(1)
+            finally:
+                self.__end_time = time.time()
 
     def do_sys(self, line):
         """Execute system commands
@@ -854,6 +889,9 @@ def tgpt2_():
     is_flag=True,
     help="Postfix prompt with last copied text",
 )
+@click.option(
+    "-nc", "--no-coloring", is_flag=True, help="Disable intro prompt font-coloring"
+)
 @click.help_option("-h", "--help")
 def interactive(
     model,
@@ -881,6 +919,7 @@ def interactive(
     quiet,
     new,
     with_copied,
+    no_coloring,
 ):
     """Chat with AI interactively"""
     clear_history_file(filepath, new)
@@ -905,6 +944,7 @@ def interactive(
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
     bot.color = font_color
+    bot.disable_coloring = no_coloring
     bot.prettify = prettify
     bot.vertical_overflow = vertical_overflow
     bot.disable_stream = whole
