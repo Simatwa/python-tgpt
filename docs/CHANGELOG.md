@@ -159,3 +159,10 @@
 - Auto-quiet on output redirection. Thanks to @johnd0e
 - Dropped support for sourcing prompt from `stdin stream` in Windows. #12
 - Colorized command prompt. <kbd>interactive</kbd>
+
+## v0.2.9
+
+**What's new?**
+
+- Improved command prompt - *icon & color blending*
+- Bug fixed - *multiline prompt in `interactive`*
