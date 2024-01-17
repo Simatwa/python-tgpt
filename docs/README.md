@@ -123,7 +123,8 @@ Make use of flag `--provider` postfixed with the provider name of your choice. e
 
 You can also simply use `pytgpt` instead of `python -m pytgpt`.
 
-Starting from version 0.1.2, `generate` is the default command if you issue a prompt, and `interactive` takes action if you don't. Therefore, something like this will generate a response and exit `$ pytgpt "<Your prompt>"` while `$ pytgpt` will fire up an interactive prompt.
+Starting from version 0.2.7, running `$ pytgpt` without any other command or option will automatically enter the `interactive` mode. Otherwise, you'll need to explicitly declare the desired action, for example, by running `$ pytgpt generate`.
+
 
 <details>
 

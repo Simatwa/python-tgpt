@@ -1349,11 +1349,8 @@ def main(*args):
     """Fireup console programmically"""
     sys.argv += list(args)
     args = sys.argv
-    if len(args) > 1 and not "-" in args[1]:
-        if len(args) > 1 and args[1] not in tgpt2_.commands.keys():
-            sys.argv.insert(1, "generate")  # Just a hack to make default command
-    elif len(args) == 1:
-        sys.argv.insert(1, "interactive")
+    if len(args) == 1:
+        sys.argv.insert(1, "interactive") # Just a hack to make default command
     tgpt2_()
 
 
