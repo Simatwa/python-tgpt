@@ -157,5 +157,5 @@
 **What's new?**
 
 - Auto-quiet on output redirection. Thanks to @johnd0e
-- Dropped support for output redirection. #12
+- Dropped support for sourcing prompt from `stdin stream` in Windows. #12
 - Colorized command prompt. <kbd>interactive</kbd>
