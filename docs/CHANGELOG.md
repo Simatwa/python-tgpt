@@ -166,3 +166,20 @@
 
 - Improved command prompt - *icon & color blending*
 - Bug fixed - *multiline prompt in `interactive`*
+
+## v0.3.0
+
+**what's new?**
+
+<details>
+
+<summary>
+
+- Improved introductory prompt
+
+</summary>
+
+*You're a Large Language Model for chatting with people.
+Assume role of the LLM and give your response.*
+
+</details>

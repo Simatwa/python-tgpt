@@ -74,7 +74,8 @@ class Conversation:
 
     intro = (
         "You're a Large Language Model for chatting with people. "
-        "Your role: Provide ONLY response."
+        "Assume role of the LLM and give your response."
+        # "Refrain from regenerating the conversation between user and LLM."
     )
 
     def __init__(

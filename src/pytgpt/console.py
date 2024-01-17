@@ -893,7 +893,7 @@ def tgpt2_():
 @click.option(
     "-n",
     "--new",
-    help="Override the filepath contents",
+    help="Overwrite the filepath contents",
     is_flag=True,
 )
 @click.option(
