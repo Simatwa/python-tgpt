@@ -144,3 +144,10 @@
 
 - Bug fixed - *reset conversation*  - **bard**
 - Bug fixed - *low `httpx` logging level*. - **bard** 
+
+## v0.2.7
+
+**What's new?**
+
+- Busy bar disabled when `--quiet` issued in *generate* mode. #12 Thanks to @johnd0e
+- `interactive` takes action on `$ pytgpt` otherwise one has to explictly declare the action. #11
