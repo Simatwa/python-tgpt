@@ -11,6 +11,7 @@ import getpass
 import json
 import re
 import sys
+import platform
 from time import sleep
 from threading import Thread as thr
 from functools import wraps
@@ -1136,7 +1137,7 @@ def generate(
         prompt = prompt + sep + clipman.get()
         assert prompt.strip() != sep, "No copied text found, issue prompt"
 
-    if not prompt:
+    if not prompt and platform.system() != "Windows":
         # Let's try to read piped input
         import signal
 
