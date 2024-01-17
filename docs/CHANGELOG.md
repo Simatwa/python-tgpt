@@ -183,3 +183,6 @@
 Assume role of the LLM and give your response.*
 
 </details>
+
+- Combine both of piped and explicitly issued prompt #13
+- Support piping input in Windows. #13

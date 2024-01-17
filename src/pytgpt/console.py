@@ -11,7 +11,6 @@ import getpass
 import json
 import re
 import sys
-import platform
 import datetime
 import time
 from time import sleep
@@ -1190,7 +1189,7 @@ def generate(
         prompt = prompt + sep + clipman.get()
         assert prompt.strip() != sep, "No copied text found, issue prompt"
 
-    if not prompt and sys.stdin.isatty(): # No prompt issued and no piped input
+    if not prompt and sys.stdin.isatty():  # No prompt issued and no piped input
         help_info = (
             "Usage: pytgpt generate [OPTIONS] PROMPT\n"
             "Try 'pytgpt generate --help' for help.\n"
@@ -1201,7 +1200,7 @@ def generate(
         )  # Let's try to mimic the click's missing argument help info
         sys.exit(1)
 
-    if not sys.stdin.isatty(): # Piped input detected - True
+    if not sys.stdin.isatty():  # Piped input detected - True
         # Let's try to read piped input
         stdin = click.get_text_stream("stdin").read()
         prompt = prompt + "\n" + stdin if prompt else stdin
