@@ -1190,20 +1190,9 @@ def generate(
         prompt = prompt + sep + clipman.get()
         assert prompt.strip() != sep, "No copied text found, issue prompt"
 
-    if not prompt and platform.system() != "Windows":
+    if not prompt:
         # Let's try to read piped input
-        import signal
-
-        def timeout_handler(signum, frame):
-            raise TimeoutError("Timed out while waiting for input")
-
-        signal.signal(signal.SIGALRM, timeout_handler)
-        signal.alarm(
-            1
-        )  # Not to wait for long. I was thinking of making it 2 but I found it awful, what's your take?
-        try:
-            prompt = click.get_text_stream("stdin").read()
-        except TimeoutError as e:
+        if sys.stdin.isatty():
             help_info = (
                 "Usage: pytgpt generate [OPTIONS] PROMPT\n"
                 "Try 'pytgpt generate --help' for help.\n"
@@ -1214,8 +1203,7 @@ def generate(
             )  # Let's try to mimic the click's missing argument help info
             sys.exit(1)
         else:
-            signal.alarm(0)  # Reset the alarm if input is read successfully
-            # Just incase the previous timeout was not 0
+            prompt = click.get_text_stream("stdin").read()
 
     clear_history_file(filepath, new)
     prompt = Optimizers.code(prompt) if code else prompt
