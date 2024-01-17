@@ -1167,7 +1167,9 @@ def generate(
     clear_history_file(filepath, new)
     prompt = Optimizers.code(prompt) if code else prompt
     prompt = Optimizers.shell_command(prompt) if shell else prompt
-    busy_bar.spin_index = 0 if quiet else busy_bar_index
+    busy_bar.spin_index = (
+        0 if any([quiet, sys.stdout.isatty() == False]) else busy_bar_index
+    )
     bot.code_theme = code_theme
     bot.color = font_color
     bot.prettify = prettify
