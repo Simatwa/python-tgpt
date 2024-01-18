@@ -43,7 +43,7 @@ setup(
         "clipman==3.1.0",
         "pyperclip==1.8.2",
         "appdirs==1.4.4",
-        "webchatgpt==0.2.6",
+        "webchatgpt==0.2.7",
         "GoogleBard==1.4.0",
         "colorama==0.4.6",
     ],
