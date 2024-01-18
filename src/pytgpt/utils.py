@@ -93,8 +93,6 @@ class Conversation:
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
             update_file (bool, optional): Add new prompts and responses to the file. Defaults to True.
         """
-        # I was thinking of introducing offset so as to control payload size. (prompt)
-        #  What's your thought on that? Give a PR or raise an issue
         self.status = status
         self.max_tokens_to_sample = max_tokens
         self.chat_history = self.intro
@@ -103,8 +101,7 @@ class Conversation:
         self.update_file = update_file
         self.history_offset = 10250
         self.prompt_allowance = 10
-        if filepath:
-            self.load_conversation(filepath, False)
+        self.load_conversation(filepath, False) if filepath else None
 
     def load_conversation(self, filepath: str, exists: bool = True) -> None:
         """Load conversation into chat's history from .txt file
@@ -176,7 +173,7 @@ class Conversation:
         if self.file and self.update_file:
             with open(self.file, "a") as fh:
                 fh.write(new_history)
-        self.chat_history += new_history if self.status else ""
+        self.chat_history += new_history
 
 
 class AwesomePrompts:
@@ -215,7 +212,7 @@ class AwesomePrompts:
     def update_prompts_from_online(self, override: bool = False):
         """Download awesome-prompts and update existing ones if available
         args:
-           override (bool, optional): Override existing contents in path
+           override (bool, optional): Overwrite existing contents in path
         """
         resp = {}
         if not self.__is_prompt_updated:

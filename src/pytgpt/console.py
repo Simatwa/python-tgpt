@@ -484,7 +484,9 @@ class Main(cmd.Cmd):
             default=busy_bar.spin_index,
             type=click.IntRange(0, 3),
         )
-        self.color = click.prompt("Response stdout font color", default=self.color or 'white')
+        self.color = click.prompt(
+            "Response stdout font color", default=self.color or "white"
+        )
         self.code_theme = Prompt.ask(
             "Enter code_theme", choices=rich_code_themes, default=self.code_theme
         )
