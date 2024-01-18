@@ -14,7 +14,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.2.9",
+    version="0.3.0",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",

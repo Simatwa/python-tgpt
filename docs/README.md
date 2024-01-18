@@ -8,7 +8,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.2.9&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.3.0&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg"/></a>
@@ -314,11 +314,27 @@ Utilize the `--disable-conversation` flag in the console to achieve the same fun
 
 > **Warning** : **Bard** and **WebChatGPT** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the respective classes.
 
+### Advanced Usage of Placeholders
+
+The `generate` functionality has been enhanced starting from *v0.3.0* to enable comprehensive utilization of the `--with-copied` option and support for accepting piped inputs. This improvement introduces placeholders, offering dynamic values for more versatile interactions.
+
+| Placeholder | Represents |
+| ------------ | ----------- |
+| `{{stream}}` | The piped input |
+| `{{copied}}` | The last copied text |
+
+This feature is particularly beneficial for intricate operations. For example:
+
+```bash
+$ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise commit message from it, aligning with my commit message history: {{copied}}" -p fakeopen --with-copied --shell --new
+```
+> In this illustration, `{{stream}}` denotes the result of the `$ git diff` operation, while `{{copied}}` signifies the content copied from the output of the `$ git log` command.
+
 For more usage info run `$ pytgpt --help`
 
+## [CHANGELOG](https://github.com/Simatwa/python-tgpt/blob/main/docs/CHANGELOG.md)
 
 ## Acknowledgements
 
 1. [x] [tgpt](https://github.com/aandrew-me/tgpt)
 2. [x] You
-
