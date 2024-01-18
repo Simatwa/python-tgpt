@@ -286,9 +286,6 @@ class AwesomePrompts:
         Args:
             name (str): act name
             prompt (str): prompt value
-
-        Returns:
-            bool: is_successful report
         """
         current_prompts = self.get_acts()
         with open(self.awesome_prompt_path, "w") as fh:

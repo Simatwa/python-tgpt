@@ -13,7 +13,6 @@ import re
 import sys
 import datetime
 import time
-from time import sleep
 from threading import Thread as thr
 from functools import wraps
 from rich.panel import Panel
@@ -157,7 +156,7 @@ class busy_bar:
                 print(" " + spin, end="\r", flush=True)
                 if not cls.querying:
                     break
-                sleep(cls.sleep_time)
+                time.sleep(cls.sleep_time)
 
     @classmethod
     def start_spinning(
@@ -180,7 +179,7 @@ class busy_bar:
         """Stop displaying busy-bar"""
         if cls.querying:
             cls.querying = False
-            sleep(cls.sleep_time)
+            time.sleep(cls.sleep_time)
 
     @classmethod
     def run(cls, help: str = "Exception"):
@@ -211,7 +210,11 @@ class busy_bar:
 
 
 class Main(cmd.Cmd):
-    intro = f"Welcome to AI Chat in terminal. Type 'help' or 'h' for usage info \n Submit any bug at {pytgpt.__repo__}/issues/new"
+    intro = (
+        "Welcome to AI Chat in terminal. "
+        "Type 'help' or 'h' for usage info.\n"
+        f"Submit any bug at {pytgpt.__repo__}/issues/new"
+    )
 
     def __init__(
         self,
@@ -472,7 +475,7 @@ class Main(cmd.Cmd):
 
     @busy_bar.run("Settings saved")
     def do_settings(self, line):
-        """Configre settings"""
+        """Configure settings"""
         self.prettify = click.confirm(
             "\nPrettify markdown response", default=self.prettify
         )
@@ -481,7 +484,7 @@ class Main(cmd.Cmd):
             default=busy_bar.spin_index,
             type=click.IntRange(0, 3),
         )
-        self.color = click.prompt("Response stdout font color", default=self.color)
+        self.color = click.prompt("Response stdout font color", default=self.color or 'white')
         self.code_theme = Prompt.ask(
             "Enter code_theme", choices=rich_code_themes, default=self.code_theme
         )
