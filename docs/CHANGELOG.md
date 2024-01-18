@@ -186,3 +186,4 @@ Assume role of the LLM and give your response.*
 
 - Combine both of piped and explicitly issued prompt #13
 - Support piping input in Windows. #13
+- Placeholder for piped input `{{stream}}` and copied text `{{copied}}`. 
