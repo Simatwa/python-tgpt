@@ -13,6 +13,7 @@ import re
 import sys
 import datetime
 import time
+import subprocess
 from threading import Thread as thr
 from functools import wraps
 from rich.panel import Panel
@@ -52,6 +53,82 @@ except Exception as e:
 
     clipman.set = pyperclip.copy
     clipman.get = pyperclip.paste
+
+
+def run_system_command(
+    command: str, exit_on_error: bool = True, stdout_error: bool = True
+):
+    """Run commands against system
+
+    Args:
+        command (str): shell command
+        exit_on_error (bool, optional): Exit on error. Defaults to True.
+        stdout_error (bool, optional): Print out the error. Defaults to True.
+
+    Returns:
+        tuple : (is_successfull, object[Exception|Subprocess.run])
+    """
+    try:
+        # Run the command and capture the output
+        result = subprocess.run(
+            command,
+            shell=True,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return (True, result)
+    except subprocess.CalledProcessError as e:
+        # Handle error if the command returns a non-zero exit code
+        if stdout_error:
+            click.secho(f"Error Occurred: while running '{command}'", fg="yellow")
+            click.secho(e.stderr, fg="red")
+        exit(e.returncode) if exit_on_error else None
+        return (False, e)
+
+
+def g4f_providers_in_dict(
+    url=True, working=True, stream=False, context=False, gpt35=False, gpt4=False
+):
+    from pytgpt import g4f
+
+    hunted_providers = []
+    required_attrs = (
+        "url",
+        "working",
+        "supports_gpt_35_turbo",
+        "supports_gpt_4",
+        "supports_stream",
+        "supports_message_history",
+    )
+
+    def sanitize_provider(provider: object):
+        for attr in required_attrs:
+            if not hasattr(provider, attr):
+                setattr(provider, attr, False)
+
+        return provider
+
+    for provider_name, provider_class in g4f.Provider.__map__.items():
+        provider = sanitize_provider(provider_class)
+        provider_meta = dict(name=provider_name)
+        if url:
+            provider_meta["url"] = provider.url
+        if working:
+            provider_meta["working"] = provider.working
+        if stream:
+            provider_meta["stream"] = provider.supports_stream
+        if context:
+            provider_meta["context"] = provider.supports_message_history
+        if gpt35:
+            provider_meta["gpt35_turbo"] = provider.supports_gpt_35_turbo
+        if gpt4:
+            provider_meta["gpt4"] = provider.supports_gpt_4
+
+        hunted_providers.append(provider_meta)
+
+    return hunted_providers
 
 
 def stream_output(
@@ -182,17 +259,23 @@ class busy_bar:
             time.sleep(cls.sleep_time)
 
     @classmethod
-    def run(cls, help: str = "Exception"):
+    def run(cls, help: str = "Exception", index: int = None, immediate: bool = False):
         """Handle function exceptions safely why showing busy bar
 
         Args:
             help (str, optional): Message to be shown incase of an exception. Defaults to ''.
+            index (int, optional): Busy bars spin index. Defaults to `default`.
+            immediate (bool, optional): Start the spinning immediately. Defaults to False.
         """
+        if isinstance(index, int):
+            cls.spin_index = index
 
         def decorator(func):
             @wraps(func)  # Preserves function metadata
             def main(*args, **kwargs):
                 try:
+                    if immediate:
+                        cls.start_spinning()
                     return func(*args, **kwargs)
                 except KeyboardInterrupt:
                     cls.stop_spinning()
@@ -201,8 +284,9 @@ class busy_bar:
                     cls.querying = False
                     exit(logging.info("Stopping program"))
                 except Exception as e:
-                    cls.stop_spinning()
                     logging.error(f"{help} - {getExc(e)}")
+                finally:
+                    cls.stop_spinning()
 
             return main
 
@@ -235,6 +319,7 @@ class Main(cmd.Cmd):
         provider,
         quiet=False,
         chat_completion=False,
+        ignore_working=False,
         *args,
         **kwargs,
     ):
@@ -356,12 +441,15 @@ class Main(cmd.Cmd):
 
             elif provider in pytgpt.gpt4free_providers:
                 from pytgpt.gpt4free import GPT4FREE
+
                 self.bot = GPT4FREE(
                     provider=provider,
                     is_conversation=disable_conversation,
+                    auth=auth,
                     max_tokens=max_tokens,
                     model=model,
                     chat_completion=chat_completion,
+                    ignore_working=ignore_working,
                     timeout=timeout,
                     intro=intro,
                     filepath=filepath,
@@ -890,6 +978,10 @@ def tgpt2_():
     default=default_provider,
     help="Name of LLM provider.",
     envvar="llm_provider",
+    metavar=(
+        f"[{', '.join(pytgpt.tgpt_providers)}] etc, "
+        "run 'pytgpt gpt4free list providers -w' to view more providers"
+    ),
 )
 @click.option(
     "-vo",
@@ -934,6 +1026,12 @@ def tgpt2_():
     is_flag=True,
     help="Provide native context for gpt4free providers",
 )
+@click.option(
+    "-iw",
+    "--ignore-working",
+    is_flag=True,
+    help="Ignore working status of the provider",
+)
 @click.help_option("-h", "--help")
 def interactive(
     model,
@@ -963,6 +1061,7 @@ def interactive(
     with_copied,
     no_coloring,
     chat_completion,
+    ignore_working,
 ):
     """Chat with AI interactively (Default)"""
     clear_history_file(filepath, new)
@@ -984,6 +1083,7 @@ def interactive(
         provider,
         quiet,
         chat_completion,
+        ignore_working,
     )
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme
@@ -1167,6 +1267,12 @@ def interactive(
     is_flag=True,
     help="Postfix prompt with last copied text",
 )
+@click.option(
+    "-iw",
+    "--ignore-working",
+    is_flag=True,
+    help="Ignore working status of the provider",
+)
 @click.help_option("-h", "--help")
 def generate(
     model,
@@ -1196,6 +1302,7 @@ def generate(
     quiet,
     new,
     with_copied,
+    ignore_working,
 ):
     """Generate a quick response with AI"""
     bot = Main(
@@ -1215,6 +1322,7 @@ def generate(
         proxy_path,
         provider,
         quiet,
+        ignore_working=ignore_working,
     )
     prompt = prompt if prompt else ""
     if with_copied:
@@ -1398,16 +1506,14 @@ def delete(name, case_sensitive, file):
 @click.option("-c", "--color", help="Prompts stdout font color")
 @click.option("-o", "--output", type=click.Path(), help="Path to save the prompts")
 @click.help_option("-h", "--help")
-def all(json, indent, index, color, output):
+def whole(json, indent, index, color, output):
     """Stdout all awesome prompts"""
     ap = AwesomePrompts()
     awesome_prompts = ap.all_acts if index else ap.get_acts()
-    from json import dumps
 
-    formatted_awesome_prompts = dumps(awesome_prompts)
     if json:
         # click.secho(formatted_awesome_prompts, fg=color)
-        rich.print_json(formatted_awesome_prompts, indent=indent)
+        rich.print_json(data=awesome_prompts, indent=indent)
 
     else:
         awesome_table = Table(show_lines=True, title="All Awesome-Prompts")
@@ -1422,8 +1528,185 @@ def all(json, indent, index, color, output):
         rich.print(awesome_table)
 
     if output:
+        from json import dump
+
         with open(output, "w") as fh:
-            fh.write(formatted_awesome_prompts)
+            dump(awesome_prompts, fh, indent=4)
+
+
+@tgpt2_.group()
+@click.help_option("-h", "--help")
+def gpt4free():
+    """Discover gpt4free models, providers etc"""
+    pass
+
+
+@gpt4free.command()
+@busy_bar.run(index=1, immediate=True)
+@click.help_option("-h", "--help")
+def version():
+    """Check current installed version of gpt4free"""
+    version_string = run_system_command("pip show g4f")[1].stdout.split("\n")[1]
+    click.secho(version_string, fg="cyan")
+
+
+@gpt4free.command()
+@click.help_option("-h", "--help")
+@busy_bar.run(index=1, immediate=True)
+def update():
+    """Update GPT4FREE (Models and Providers)"""
+    command = "pip install --upgrade g4f"
+    is_successful, response = run_system_command(command)
+    version_string = run_system_command("pip show g4f")[1].stdout.split("\n")[1]
+    click.secho(f"GPT4FREE updated successfully - {version_string}", fg="cyan")
+
+
+@gpt4free.command("list")
+@click.argument("target")
+@click.option("-w", "--working", is_flag=True, help="Restrict to working providers")
+@click.option("-u", "--url", is_flag=True, help="Restrict to providers with url")
+@click.option(
+    "-s", "--stream", is_flag=True, help="Restrict to providers supporting stream"
+)
+@click.option(
+    "-c",
+    "--context",
+    is_flag=True,
+    help="Restrict to providers supporing context natively",
+)
+@click.option(
+    "-35",
+    "--gpt35",
+    is_flag=True,
+    help="Restrict to providers supporting gpt3.5_turbo model",
+)
+@click.option(
+    "-4", "--gpt4", is_flag=True, help="Restrict to providers supporting gpt4 model"
+)
+@click.option("-j", "--json", is_flag=True, help="Format output in json")
+@click.help_option("-h", "--help")
+def show(target, working, url, stream, context, gpt35, gpt4, json):
+    """List available models and providers"""
+    available_targets = ["models", "providers"]
+    assert (
+        target in available_targets
+    ), f"Target must be one of [{', '.join(available_targets)}]"
+    if target == "providers":
+        hunted_providers = list(
+            set(
+                map(
+                    lambda provider: provider["name"]
+                    if all(list(provider.values()))
+                    else None,
+                    g4f_providers_in_dict(
+                        url=url,
+                        working=working,
+                        stream=stream,
+                        context=context,
+                        gpt35=gpt35,
+                        gpt4=gpt4,
+                    ),
+                )
+            )
+        )
+        hunted_providers = (
+            hunted_providers[1:] if hunted_providers[0] is None else hunted_providers
+        )
+        if json:
+            rich.print_json(data=dict(providers=hunted_providers), indent=4)
+        else:
+            table = Table(show_lines=True)
+            table.add_column("No.", style="yellow", justify="center")
+            table.add_column("Provider", style="cyan")
+            for no, provider in enumerate(hunted_providers):
+                table.add_row(str(no), provider)
+            rich.print(table)
+
+    else:
+        models = dict(
+            Bard=[
+                "palm",
+            ],
+            HuggingFace=[
+                "h2ogpt-gm-oasst1-en-2048-falcon-7b-v3",
+                "h2ogpt-gm-oasst1-en-2048-falcon-40b-v1",
+                "h2ogpt-gm-oasst1-en-2048-open-llama-13b",
+                "gpt-neox-20b",
+                "oasst-sft-1-pythia-12b",
+                "oasst-sft-4-pythia-12b-epoch-3.5",
+                "santacoder",
+                "bloom",
+                "flan-t5-xxl",
+            ],
+            Anthropic=[
+                "claude-instant-v1",
+                "claude-v1",
+                "claude-v2",
+            ],
+            Cohere=[
+                "command-light-nightly",
+                "command-nightly",
+            ],
+            OpenAI=[
+                "code-davinci-002",
+                "text-ada-001",
+                "text-babbage-001",
+                "text-curie-001",
+                "text-davinci-002",
+                "text-davinci-003",
+                "gpt-3.5-turbo-16k",
+                "gpt-3.5-turbo-16k-0613",
+                "gpt-4-0613",
+            ],
+            Replicate=[
+                "llama13b-v2-chat",
+                "llama7b-v2-chat",
+            ],
+        )
+        if json:
+            rich.print_json(data=models, indent=4)
+        else:
+            table = Table(show_lines=True)
+            table.add_column("No.", justify="center", style="white")
+            table.add_column("Base Provider", style="cyan")
+            table.add_column("Model(s)", style="yellow")
+            for count, provider_models in enumerate(models.items()):
+                table.add_row(
+                    str(count), provider_models[0], "\n".join(provider_models[1])
+                )
+            rich.print(table)
+
+
+@tgpt2_.group()
+@click.help_option("-h", "--help")
+def utils():
+    """Utility endpoint for pytgpt"""
+    pass
+
+
+@utils.command()
+@click.argument("source", required=False)
+@click.option(
+    "-d", "--dev", is_flag=True, help="Update from version control (development)"
+)
+@click.help_option("-h", "--help")
+@busy_bar.run(index=1, immediate=True)
+def update(source, dev):
+    """Install latest version of pytgpt"""
+    if dev:
+        source = "git+" + pytgpt.__repo__ + ".git"
+
+    source = "python-tgpt" if source is None else source
+    assert (
+        "tgpt" in source or source == "."
+    ), f"Cannot update pytgpt from the source '{source}'"
+    click.secho(
+        f"[*] Updating from '{'pip' if source=='python-tgpt' else source}'", fg="yellow"
+    )
+    run_system_command(f"pip install --upgrade {source}")
+    response = run_system_command("pip show python-tgpt")[1]
+    click.secho(response.stdout)
+    click.secho("Congratulations! Pytgpt updated successfully.", fg="cyan")
 
 
 tgpt2_.add_command(
@@ -1438,7 +1721,11 @@ def main(*args):
     args = sys.argv
     if len(args) == 1:
         sys.argv.insert(1, "interactive")  # Just a hack to make default command
-    tgpt2_()
+    try:
+        return tgpt2_()
+    except Exception as e:
+        logging.error(getExc(e))
+        exit(1)
 
 
 if __name__ == "__main__":

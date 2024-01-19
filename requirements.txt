@@ -7,4 +7,4 @@ appdirs==1.4.4
 webchatgpt==0.2.7
 GoogleBard==1.4.0
 colorama==0.4.6
-g4f==0.2.0.3
+g4f>=0.2.0.3

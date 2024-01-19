@@ -2,11 +2,11 @@ from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
 from pytgpt.base import Provider
+from pytgpt import available_providers
 import g4f
 
-working_providers = [
-    provider.__name__ for provider in g4f.Provider.__providers__ if provider.working
-]
+
+working_providers = available_providers
 
 completion_allowed_models = [
     "code-davinci-002",
@@ -28,10 +28,11 @@ class GPT4FREE(Provider):
         self,
         provider: str = "Aura",
         is_conversation: bool = True,
+        auth: str = None,
         max_tokens: int = 600,
         model: str = None,
         chat_completion: bool = False,
-        stream: bool = True,
+        ignore_working: bool = False,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -43,10 +44,13 @@ class GPT4FREE(Provider):
         """Initialies GPT4FREE
 
         Args:
+            provider (str, optional): gpt4free based provider name. Defaults to Aura.
             is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
+            auth (str, optional): Authentication value for the provider incase it needs. Defaults to None.
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
             model (str, optional): LLM model name. Defaults to text-davinci-003|gpt-3.5-turbo.
-            chat_completion(bool, optional). Provide native auto-contexting (conversationally). Defaults False.
+            chat_completion(bool, optional): Provide native auto-contexting (conversationally). Defaults to False.
+            ignore_working (bool, optional): Ignore working status of the provider. Defaults to False.
             timeout (int, optional): Http request timeout. Defaults to 30.
             intro (str, optional): Conversation introductory prompt. Defaults to None.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
@@ -55,9 +59,9 @@ class GPT4FREE(Provider):
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
-        assert provider in working_providers, (
+        assert provider in available_providers, (
             f"Provider '{provider}' is not yet supported. "
-            f"Try others like {', '.join(working_providers)}"
+            f"Try others like {', '.join(available_providers)}"
         )
         if model is None:
             model = (
@@ -99,6 +103,9 @@ class GPT4FREE(Provider):
         self.model = model
         self.provider = provider
         self.chat_completion = chat_completion
+        self.ignore_working = ignore_working
+        self.auth = auth
+        self.proxy = None if not proxies else list(proxies.values())[0]
         self.__chat_class = g4f.ChatCompletion if chat_completion else g4f.Completion
 
     def ask(
@@ -143,6 +150,9 @@ class GPT4FREE(Provider):
                     provider=self.provider,  # g4f.Provider.Aichat,
                     messages=[{"role": "user", "content": conversation_prompt}],
                     stream=stream,
+                    ignore_working=self.ignore_working,
+                    auth=self.auth,
+                    proxy=self.proxy,
                 )
 
             else:
@@ -151,6 +161,9 @@ class GPT4FREE(Provider):
                     prompt=conversation_prompt,
                     provider=self.provider,
                     stream=stream,
+                    ignore_working=self.ignore_working,
+                    auth=self.auth,
+                    proxy=self.proxy,
                 )
 
         def format_response(response):

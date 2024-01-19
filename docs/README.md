@@ -8,7 +8,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.3.1&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.3.2&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img alt="Python Package flow" src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg?branch=master"/></a>
@@ -42,7 +42,7 @@ python-tgpt
 
 This project enables seamless interaction with over **45 free LLMs** without requiring an API Key.
 
-The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's Chapytgpt models, fostering a smoother AI interaction experience.
+The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available, fostering a smoother AI interaction experience.
 
 ### Features
 
@@ -54,7 +54,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🌊 Stream and non-stream response
 - 🚀 Ready to use (No API key required)
 - ⛓️ Chained requests via proxy
-- 🤖 Pass [awesome-chapytgpt prompts](https://github.com/f/awesome-chapytgpt-prompts) easily
+- 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
 - 🧠 Multiple LLM providers - **45+**
 
 ## Providers
@@ -73,50 +73,148 @@ These are simply the hosts of the LLMs, which include:
 
 <summary>
 
-+ 41 Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
+41+ Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
 
 </summary>
 
  - AiChatOnline
- - Aura
- - Bard
- - Bing
- - ChatBase
- - ChatForAi
- - Chatgpt4Online
- - ChatgptAi
- - ChatgptDemo
- - ChatgptNext
- - Chatxyz
- - DeepInfra
- - FakeGpt
- - FreeChatgpt
- - GPTalk
- - GeekGpt
- - GeminiProChat
+ - [Aura](https://openchat.team)
+ - [Bard](https://bard.google.com/)
+ - [Bing](https://bing.com)
+ - [ChatBase](https://www.chatbase.co/)
+ - [ChatForAi](https://chatforai.store/)
+ - [Chatgpt4Online](https://chatgpt4online.org)
+ - [ChatgptAi](https://chatgpt.ai/)
+ - [ChatgptDemo](ChatgptDemo https://chat.chatgptdemo.net)
+ - [ChatgptNext](https://www.chatgpt-free.c)
+ - [Chatxyz](https://chat.3211000.xyz)
+ - [DeepInfra](https://deepinfra.co)
+ - [FakeGpt](https://chat-shared2.zhile.io/)
+ - [FreeChatgpt](https://free.chatgpt.org.uk)
+ - [GPTalk](https://gptalk.net/)
+ - [GeekGpt](https://chat.geekgpt.org)
+ - [GeminiProChat](https://geminiprochat.com)
  - Gpt6
- - GptChatly
- - GptForLove
- - GptGo
+ - [GptChatly](https://gptchatly.com)
+ - [GptForLove](https://ai18.gptforlove.com/)
+ - [GptGo](https://gptgo.ai/)
  - GptTalkRu
- - Hashnode
- - HuggingChat
+ - [Hashnode](https://hashnode.com/)
+ - [HuggingChat](https://huggingface.co/chat)
  - Koala
- - Liaobots
- - Llama2
- - MyShell
+ - [Liaobots](https://liaobots.site)
+ - [Llama2](https://www.llama2.ai/)
+ - [MyShell](https://app.myshell.ai/chat)
  - OnlineGpt
  - OpenaiChat
  - PerplexityAi
- - Phind
+ - [Phind](https://www.phind.com)
  - Pi
  - Poe
- - Raycast
+ - [Raycast](https://raycast.com)
  - TalkAi
- - Theb
+ - [Theb](https://theb.ai/)
  - ThebApi
- - You
- - Yqcloud
+ - [You](https://you.com/)
+ - [Yqcloud](https://chat9.yqcloud.top/)
+
+ <details>
+
+ <summary>
+
+ All models. *(Include not working)*
+
+ </summary>
+
+ 1 [AItianhu](https://www.aitianhu.com)
+2 [AItianhuSpace](https://chat3.aiyunos.top/)
+3 [Acytoo](https://chat.acytoo.com)
+4 [AiAsk](https://e.aiask.me)
+5 [AiChatOnline](https://aichatonline.org)
+6 [AiChatting](https://www.aichatting.net)
+7 [AiService](https://aiservice.vercel.app/)
+8 [Aibn](https://aibn.cc)
+9 [Aichat](https://chat-gpt.org/chat)
+10 [Ails](https://ai.ls)
+11 [Aivvm](https://chat.aivvm.com)
+12 AsyncGeneratorProvider
+13 AsyncProvider
+14 [Aura](https://openchat.team)
+15 [Bard](https://bard.google.com)
+16 BaseProvider
+17 [Berlin](https://ai.berlin4h.top)
+18 [Bestim](https://chatgpt.bestim.org)
+19 [Bing](https://bing.com/chat)
+20 [ChatAiGpt](https://chataigpt.org)
+21 [ChatAnywhere](https://chatanywhere.cn)
+22 [ChatBase](https://www.chatbase.co)
+23 [ChatForAi](https://chatforai.store)
+24 [Chatgpt4Online](https://chatgpt4online.org)
+25 [ChatgptAi](https://chatgpt.ai)
+26 [ChatgptDemo](https://chat.chatgptdemo.net)
+27 [ChatgptDemoAi](https://chat.chatgptdemo.ai)
+28 [ChatgptDuo](https://chatgptduo.com)
+29 [ChatgptFree](https://chatgptfree.ai)
+30 [ChatgptLogin](https://chatgptlogin.ai)
+31 [ChatgptNext](https://www.chatgpt-free.cc)
+32 [ChatgptX](https://chatgptx.de)
+33 [Chatxyz](https://chat.3211000.xyz)
+34 [CodeLinkAva](https://ava-ai-ef611.web.app)
+35 CreateImagesProvider
+36 [Cromicle](https://cromicle.top)
+37 [DeepInfra](https://deepinfra.com)
+38 [DfeHub](https://chat.dfehub.com/)
+39 [EasyChat](https://free.easychat.work)
+40 [Equing](https://next.eqing.tech/)
+41 [FakeGpt](https://chat-shared2.zhile.io)
+42 [FastGpt](https://chat9.fastgpt.me/)
+43 [Forefront](https://forefront.com)
+44 [FreeChatgpt](https://free.chatgpt.org.uk)
+45 [FreeGpt](https://freegpts1.aifree.site/)
+46 [GPTalk](https://gptalk.net)
+47 [GeekGpt](https://chat.geekgpt.org)
+48 [GeminiProChat](https://geminiprochat.com)
+49 [GetGpt](https://chat.getgpt.world/)
+50 [Gpt6](https://gpt6.ai)
+51 [GptChatly](https://gptchatly.com)
+52 [GptForLove](https://ai18.gptforlove.com)
+53 [GptGo](https://gptgo.ai)
+54 [GptGod](https://gptgod.site)
+55 [GptTalkRu](https://gpttalk.ru)
+56 [H2o](https://gpt-gm.h2o.ai)
+57 [Hashnode](https://hashnode.com)
+58 [HuggingChat](https://huggingface.co/chat)
+59 [Koala](https://koala.sh)
+60 [Komo](https://komo.ai/api/ask)
+61 [Liaobots](https://liaobots.site)
+62 [Llama2](https://www.llama2.ai)
+63 [Lockchat](http://supertest.lockchat.app)
+64 [MikuChat](https://ai.okmiku.com)
+65 [MyShell](https://app.myshell.ai/chat)
+66 [Myshell](https://app.myshell.ai/chat)
+67 [OnlineGpt](https://onlinegpt.org)
+68 [Opchatgpts](https://opchatgpts.net)
+69 [OpenAssistant](https://open-assistant.io/chat)
+70 [OpenaiChat](https://chat.openai.com)
+71 [PerplexityAi](https://www.perplexity.ai)
+72 [Phind](https://www.phind.com)
+73 [Pi](https://pi.ai/talk)
+74 [Poe](https://poe.com)
+75 [Raycast](https://raycast.com)
+76 RetryProvider
+77 [TalkAi](https://talkai.info)
+78 [Theb](https://beta.theb.ai)
+79 [ThebApi](https://theb.ai)
+80 [V50](https://p5.v50.ltd)
+81 [Vercel](https://sdk.vercel.ai)
+82 [Vitalentum](https://app.vitalentum.io)
+83 [Wewordle](https://wewordle.org)
+84 [Wuguokai](https://chat.wuguokai.xyz)
+85 [Ylokh](https://chat.ylokh.xyz)
+86 [You](https://you.com)
+87 [Yqcloud](https://chat9.yqcloud.top/)
+ 
+ </details>
 
 </details>
 
@@ -333,9 +431,6 @@ print(bot.chat("<Your-prompt>"))
 
 </details>
 
-
-</details>
-
 <details>
 
 <summary>
@@ -351,7 +446,6 @@ print(bot.chat("<Your-prompt>"))
 ```
 
 </details>
-
 
 </details>
 
@@ -400,8 +494,31 @@ $ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise com
 ```
 > In this illustration, `{{stream}}` denotes the result of the `$ git diff` operation, while `{{copied}}` signifies the content copied from the output of the `$ git log` command.
 
+<details>
+
+<summary>
+
 For more usage info run `$ pytgpt --help`
 
+</summary>
+
+```
+Usage: pytgpt [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  -v, --version  Show the version and exit.
+  -h, --help     Show this message and exit.
+
+Commands:
+  awesome      Perform CRUD operations on awesome-prompts
+  generate     Generate a quick response with AI
+  gpt4free     Discover gpt4free models, providers etc
+  interactive  Chat with AI interactively (Default)
+  utils        Utility endpoint for pytgpt
+  webchatgpt   Reverse Engineered ChatGPT Web-Version
+```
+
+</details>
 ## [CHANGELOG](https://github.com/Simatwa/python-tgpt/blob/main/docs/CHANGELOG.md)
 
 ## Acknowledgements
