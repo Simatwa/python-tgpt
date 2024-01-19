@@ -28,7 +28,7 @@ python-tgpt
 </h3> 
 
 <p align="center">
-<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/console-demo.gif?raw=True" width='100%'/>
+<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/demo-1.gif?raw=True" width='80%'/>
 </p>
 
 
