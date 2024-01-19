@@ -158,7 +158,7 @@ Choose one of the following methods to get started.
 
 This package offers a convenient command-line interface.
 
-> **Note** : `leo` is the default *provider*.
+> **Note** : `Aura` is the default *provider*.
 
 - For a quick response:
   ```bash
