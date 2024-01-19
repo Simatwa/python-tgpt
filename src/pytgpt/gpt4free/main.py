@@ -1,19 +1,37 @@
-import re
-import json
-import requests
-from uuid import uuid4
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
+from pytgpt.base import Provider
+import g4f
 
-session = requests.Session()
+working_providers = [
+    provider.__name__ for provider in g4f.Provider.__providers__ if provider.working
+]
+
+completion_allowed_models = [
+    "code-davinci-002",
+    "text-ada-001",
+    "text-babbage-001",
+    "text-curie-001",
+    "text-davinci-002",
+    "text-davinci-003",
+]
+
+default_models = {
+    "completion": "text-davinci-003",
+    "chat_completion": "gpt-3.5-turbo",
+}
 
 
-class OPENGPT:
+class GPT4FREE(Provider):
     def __init__(
         self,
+        provider: str = "Aura",
         is_conversation: bool = True,
         max_tokens: int = 600,
+        model: str = None,
+        chat_completion: bool = False,
+        stream: bool = True,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -22,11 +40,13 @@ class OPENGPT:
         history_offset: int = 10250,
         act: str = None,
     ):
-        """Instantiates OPENGPT
+        """Initialies GPT4FREE
 
         Args:
-            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True
+            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
+            model (str, optional): LLM model name. Defaults to text-davinci-003|gpt-3.5-turbo.
+            chat_completion(bool, optional). Provide native auto-contexting (conversationally). Defaults False.
             timeout (int, optional): Http request timeout. Defaults to 30.
             intro (str, optional): Conversation introductory prompt. Defaults to None.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
@@ -35,40 +55,33 @@ class OPENGPT:
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
-        self.max_tokens_to_sample = max_tokens
-        self.is_conversation = is_conversation
-        self.chat_endpoint = (
-            "https://opengpts-example-vz4y4ooboq-uc.a.run.app/runs/stream"
+        assert provider in working_providers, (
+            f"Provider '{provider}' is not yet supported. "
+            f"Try others like {', '.join(working_providers)}"
         )
+        if model is None:
+            model = (
+                default_models["chat_completion"]
+                if chat_completion
+                else default_models["completion"]
+            )
+
+        elif not chat_completion:
+            assert model in completion_allowed_models, (
+                f"Model '{model}' is not yet supported for completion. "
+                f"Try other models like {', '.join(completion_allowed_models)}"
+            )
+        self.is_conversation = is_conversation
+        self.max_tokens_to_sample = max_tokens
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
-        self.assistant_id = "d50a5d6c-2598-437b-940e-e6918d19810c"
-        self.authority = "opengpts-example-vz4y4ooboq-uc.a.run.app"
-
-        self.uuid = uuid4().__str__()
-
-        self.headers = {
-            "authority": self.authority,
-            "accept": "text/event-stream",
-            "accept-language": "en-US,en;q=0.7",
-            "cache-control": "no-cache",
-            "content-type": "application/json",
-            "cookie": f"opengpts_user_id={self.uuid}",
-            "origin": "https://opengpts-example-vz4y4ooboq-uc.a.run.app",
-            "pragma": "no-cache",
-            "referer": "https://opengpts-example-vz4y4ooboq-uc.a.run.app/",
-            "sec-fetch-site": "same-origin",
-            "sec-gpc": "1",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        }
 
         self.__available_optimizers = (
             method
             for method in dir(Optimizers)
             if callable(getattr(Optimizers, method)) and not method.startswith("__")
         )
-        session.headers.update(self.headers)
         Conversation.intro = (
             AwesomePrompts().get_act(
                 act, raise_not_found=True, default=None, case_insensitive=True
@@ -77,10 +90,16 @@ class OPENGPT:
             else intro or Conversation.intro
         )
         self.conversation = Conversation(
-            is_conversation, self.max_tokens_to_sample, filepath, update_file
+            False if chat_completion else is_conversation,
+            self.max_tokens_to_sample,
+            filepath,
+            update_file,
         )
         self.conversation.history_offset = history_offset
-        session.proxies = proxies
+        self.model = model
+        self.provider = provider
+        self.chat_completion = chat_completion
+        self.__chat_class = g4f.ChatCompletion if chat_completion else g4f.Completion
 
     def ask(
         self,
@@ -102,27 +121,7 @@ class OPENGPT:
            dict : {}
         ```json
         {
-            "messages": [
-                {
-                    "content": "Hello there",
-                    "additional_kwargs": {},
-                    "type": "human",
-                    "example": false
-                },
-                {
-                    "content": "Hello! How can I assist you today?",
-                    "additional_kwargs": {
-                    "agent": {
-                        "return_values": {
-                            "output": "Hello! How can I assist you today?"
-                            },
-                        "log": "Hello! How can I assist you today?",
-                        "type": "AgentFinish"
-                    }
-                },
-                "type": "ai",
-                "example": false
-                }]
+          "text" : "How may I help you today?"
         }
         ```
         """
@@ -137,55 +136,49 @@ class OPENGPT:
                     f"Optimizer is not one of {self.__available_optimizers}"
                 )
 
-        session.headers.update(self.headers)
-        payload = {
-            "input": {
-                "messages": [
-                    # self.conversation.chat_history if conversationally else "",
-                    {
-                        "content": conversation_prompt,
-                        "additional_kwargs": {},
-                        "type": "human",
-                        "example": False,
-                    },
-                ]
-            },
-            "assistant_id": self.assistant_id,
-            "thread_id": "",
-        }
-
-        def for_stream():
-            response = session.post(
-                self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
-            )
-            if (
-                not response.ok
-                or not response.headers.get("Content-Type")
-                == "text/event-stream; charset=utf-8"
-            ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+        def payload():
+            if self.chat_completion:
+                return dict(
+                    model=self.model,
+                    provider=self.provider,  # g4f.Provider.Aichat,
+                    messages=[{"role": "user", "content": conversation_prompt}],
+                    stream=stream,
                 )
 
-            for value in response.iter_lines(
-                decode_unicode=True,
-                chunk_size=self.stream_chunk_size,
-            ):
-                try:
-                    modified_value = re.sub("data:", "", value)
-                    resp = json.loads(modified_value)
-                    self.last_response.update(resp)
-                    yield value if raw else resp
-                except json.decoder.JSONDecodeError:
-                    pass
+            else:
+                return dict(
+                    model=self.model,
+                    prompt=conversation_prompt,
+                    provider=self.provider,
+                    stream=stream,
+                )
+
+        def format_response(response):
+            return dict(text=response)
+
+        def for_stream():
+            previous_chunks = ""
+            response = self.__chat_class.create(**payload())
+
+            for chunk in response:
+                previous_chunks += chunk
+                formatted_resp = format_response(previous_chunks)
+                self.last_response.update(formatted_resp)
+                yield previous_chunks if raw else formatted_resp
+
             self.conversation.update_chat_history(
-                prompt, self.get_message(self.last_response)
+                prompt,
+                previous_chunks,
             )
 
         def for_non_stream():
-            for _ in for_stream():
-                pass
-            return self.last_response
+            response = self.__chat_class.create(**payload())
+            formatted_resp = format_response(response)
+
+            self.last_response.update(formatted_resp)
+            self.conversation.update_chat_history(prompt, response)
+
+            return response if raw else formatted_resp
 
         return for_stream() if stream else for_non_stream()
 
@@ -234,6 +227,4 @@ class OPENGPT:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return (
-            response["messages"][1]["content"] if "messages" in response.keys() else ""
-        )
+        return response["text"]

@@ -14,7 +14,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.3.0",
+    version="0.3.1",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -46,6 +46,7 @@ setup(
         "webchatgpt==0.2.7",
         "GoogleBard==1.4.0",
         "colorama==0.4.6",
+        "g4f==0.2.0.3",
     ],
     python_requires=">=3.9",
     keywords=[

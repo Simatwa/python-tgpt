@@ -36,7 +36,7 @@ getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
 rich_code_themes = ["monokai", "paraiso-dark", "igor", "vs", "fruity", "xcode"]
 
-default_provider = "leo"
+default_provider = "Aura"
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s : %(message)s ",  # [%(module)s,%(lineno)s]", # for debug purposes
@@ -234,6 +234,7 @@ class Main(cmd.Cmd):
         proxy_path,
         provider,
         quiet=False,
+        chat_completion=False,
         *args,
         **kwargs,
     ):
@@ -314,6 +315,7 @@ class Main(cmd.Cmd):
 
                 self.bot = OPENGPT(
                     is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
                     timeout=timeout,
                     intro=intro,
                     filepath=filepath,
@@ -350,6 +352,23 @@ class Main(cmd.Cmd):
                     auth=auth,
                     proxy=proxies,
                     timeout=timeout,
+                )
+
+            elif provider in pytgpt.gpt4free_providers:
+                from pytgpt.gpt4free import GPT4FREE
+                self.bot = GPT4FREE(
+                    provider=provider,
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    model=model,
+                    chat_completion=chat_completion,
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
                 )
 
             else:
@@ -909,6 +928,12 @@ def tgpt2_():
 @click.option(
     "-nc", "--no-coloring", is_flag=True, help="Disable intro prompt font-coloring"
 )
+@click.option(
+    "-cc",
+    "--chat-completion",
+    is_flag=True,
+    help="Provide native context for gpt4free providers",
+)
 @click.help_option("-h", "--help")
 def interactive(
     model,
@@ -937,6 +962,7 @@ def interactive(
     new,
     with_copied,
     no_coloring,
+    chat_completion,
 ):
     """Chat with AI interactively (Default)"""
     clear_history_file(filepath, new)
@@ -957,6 +983,7 @@ def interactive(
         proxy_path,
         provider,
         quiet,
+        chat_completion,
     )
     busy_bar.spin_index = busy_bar_index
     bot.code_theme = code_theme

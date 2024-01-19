@@ -8,7 +8,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.3.0&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.3.1&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img alt="Python Package flow" src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg?branch=master"/></a>
@@ -40,7 +40,7 @@ python-tgpt
 >>> 
 ```
 
-This project enables seamless interaction with free LLMs without requiring an API Key.
+This project enables seamless interaction with over **45 free LLMs** without requiring an API Key.
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available as well as OpenAI's Chapytgpt models, fostering a smoother AI interaction experience.
 
@@ -55,7 +55,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🚀 Ready to use (No API key required)
 - ⛓️ Chained requests via proxy
 - 🤖 Pass [awesome-chapytgpt prompts](https://github.com/f/awesome-chapytgpt-prompts) easily
-- 🧠 Multiple LLM providers
+- 🧠 Multiple LLM providers - **45+**
 
 ## Providers
 
@@ -68,6 +68,57 @@ These are simply the hosts of the LLMs, which include:
 5. [OpenAI](https://chat.openai.com) *(API key required)*
 6. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
 7. [Bard](https://github.com/acheong08/bard) - **Google** *(Session ID required)*
+
+<details>
+
+<summary>
+
++ 41 Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
+
+</summary>
+
+ - AiChatOnline
+ - Aura
+ - Bard
+ - Bing
+ - ChatBase
+ - ChatForAi
+ - Chatgpt4Online
+ - ChatgptAi
+ - ChatgptDemo
+ - ChatgptNext
+ - Chatxyz
+ - DeepInfra
+ - FakeGpt
+ - FreeChatgpt
+ - GPTalk
+ - GeekGpt
+ - GeminiProChat
+ - Gpt6
+ - GptChatly
+ - GptForLove
+ - GptGo
+ - GptTalkRu
+ - Hashnode
+ - HuggingChat
+ - Koala
+ - Liaobots
+ - Llama2
+ - MyShell
+ - OnlineGpt
+ - OpenaiChat
+ - PerplexityAi
+ - Phind
+ - Pi
+ - Poe
+ - Raycast
+ - TalkAi
+ - Theb
+ - ThebApi
+ - You
+ - Yqcloud
+
+</details>
 
 ## Prerequisites
 
@@ -289,6 +340,25 @@ print(bot.chat("<Your-prompt>"))
 
 <summary>
 
+Gpt4free providers
+
+</summary>
+
+```python
+import pytgpt.gpt4free as gpt4free
+bot = gpt4free.GPT4FREE(provider="Aura")
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+
+</details>
+
+<details>
+
+<summary>
+
 To obtain more tailored responses, consider utilizing [optimizers](pytgpt/utils.py) using the `optimizer` parameter. Its values can be set to either `code` or `system_command`.
 
 </summary>
@@ -312,7 +382,7 @@ bot = koboldai.KOBOLDAI(is_conversation=False)
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
 
-> **Warning** : **Bard** and **WebChatGPT** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the respective classes.
+> **Warning** : **Bard** and **WebChatGPT** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the respective classes. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
 
 ### Advanced Usage of Placeholders
 
@@ -337,4 +407,5 @@ For more usage info run `$ pytgpt --help`
 ## Acknowledgements
 
 1. [x] [tgpt](https://github.com/aandrew-me/tgpt)
-2. [x] You
+2. [x] [gpt4free](https://github.com/xtekky/gpt4free)
+3. [x] You

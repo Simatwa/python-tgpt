@@ -187,3 +187,61 @@ Assume role of the LLM and give your response.*
 - Combine both of piped and explicitly issued prompt #13
 - Support piping input in Windows. #13
 - Placeholder for piped input `{{stream}}` and copied text `{{copied}}`. 
+
+## v0.3.1
+
+**What's new?**
+
+<details>
+
+<summary>
+
+41 New models. Thanks to [gpt4free](https://github.com/xtekky/gpt4free).
+
+</summary>
+
+ - AiChatOnline
+ - Aura
+ - Bard
+ - Bing
+ - ChatBase
+ - ChatForAi
+ - Chatgpt4Online
+ - ChatgptAi
+ - ChatgptDemo
+ - ChatgptNext
+ - Chatxyz
+ - DeepInfra
+ - FakeGpt
+ - FreeChatgpt
+ - GPTalk
+ - GeekGpt
+ - GeminiProChat
+ - Gpt6
+ - GptChatly
+ - GptForLove
+ - GptGo
+ - GptTalkRu
+ - Hashnode
+ - HuggingChat
+ - Koala
+ - Liaobots
+ - Llama2
+ - MyShell
+ - OnlineGpt
+ - OpenaiChat
+ - PerplexityAi
+ - Phind
+ - Pi
+ - Poe
+ - Raycast
+ - TalkAi
+ - Theb
+ - ThebApi
+ - You
+ - Yqcloud
+
+</details>
+
+- **Aura** is the default provider
+- Other minor fixes.
