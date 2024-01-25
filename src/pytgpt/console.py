@@ -89,7 +89,7 @@ class this:
             if stdout_error:
                 click.secho(f"Error Occurred: while running '{command}'", fg="yellow")
                 click.secho(e.stderr, fg="red")
-            exit(e.returncode) if exit_on_error else None
+            sys.exit(e.returncode) if exit_on_error else None
             return (False, e)
 
     def g4f_providers_in_dict(
@@ -207,7 +207,7 @@ class this:
                 exit_status = False
                 logging.error(this.getExc(e))
             finally:
-                exit(0 if exit_status not in (False, "") else 1)
+                sys.exit(0 if exit_status not in (False, "") else 1)
 
         return decorator
 
@@ -287,7 +287,7 @@ class busy_bar:
                     return
                 except EOFError:
                     cls.querying = False
-                    exit(logging.info("Stopping program"))
+                    sys.exit(logging.info("Stopping program"))
                 except Exception as e:
                     logging.error(f"{help} - {this.getExc(e)}")
                 finally:
@@ -472,7 +472,7 @@ class Main(cmd.Cmd):
         except Exception as e:
             logging.error(this.getExc(e))
             click.secho("Quitting", fg="red")
-            exit(1)
+            sys.exit(1)
         self.prettify = True
         self.color = "cyan"
         self.code_theme = "monokai"
@@ -1454,13 +1454,16 @@ class Awesome:
 
     @staticmethod
     @click.command()
-    @click.option(
-        "-k", "--key", required=True, type=click.STRING, help="Search keyword or index"
+    @click.argument(
+        "key",
+        required=True,
+        type=click.STRING,
     )
     @click.option(
         "-d", "--default", help="Return this value if not found", default=None
     )
     @click.option(
+        "-c",
         "--case-sensitive",
         default=True,
         flag_value=False,
@@ -1801,7 +1804,7 @@ def main(*args):
         return EntryGroup.tgpt2_()
     except Exception as e:
         logging.error(this.getExc(e))
-        exit(1)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

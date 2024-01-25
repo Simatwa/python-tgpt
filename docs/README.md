@@ -40,7 +40,7 @@ python-tgpt
 >>> 
 ```
 
-This project enables seamless interaction with over **45 free LLMs** without requiring an API Key.
+This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key.
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available, fostering a smoother AI interaction experience.
 
@@ -72,7 +72,6 @@ These are simply the hosts of the LLMs, which include:
 <details>
 
 <summary>
-
 41+ Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
 
 </summary>
@@ -121,8 +120,8 @@ These are simply the hosts of the LLMs, which include:
  <details>
 
  <summary>
-
- All models. *(Include not working)*
+ 
+All models. *(Include not working)*
 
  </summary>
 
@@ -277,7 +276,7 @@ Starting from version 0.2.7, running `$ pytgpt` without any other command or opt
 
 <details>
 
-<summary>
+<summary> 
 
 ### Developer Docs
 
@@ -352,8 +351,7 @@ for value in resp:
 <details>
 
 <summary>
-
- Openai
+Openai
 
 </summary>
 
@@ -369,8 +367,7 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
-
- Koboldai
+Koboldai
 
 </summary>
 
@@ -386,7 +383,6 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
-
 Fakeopen
 
 </summary>
@@ -402,7 +398,6 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
-
 Opengpt
 
 </summary>
@@ -418,7 +413,6 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
-
 Bard
 
 </summary>
@@ -434,7 +428,6 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
-
 Gpt4free providers
 
 </summary>
@@ -452,7 +445,6 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
-
 To obtain more tailored responses, consider utilizing [optimizers](pytgpt/utils.py) using the `optimizer` parameter. Its values can be set to either `code` or `system_command`.
 
 </summary>
@@ -497,7 +489,6 @@ $ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise com
 <details>
 
 <summary>
-
 For more usage info run `$ pytgpt --help`
 
 </summary>

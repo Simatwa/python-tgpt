@@ -28,7 +28,7 @@ build: install
 	--distpath dist/$(shell uname) \
 	--workpath build/$(shell uname) \
 	--log-level INFO \
-	--exclude PIL \
+	--exclude numpy \
 	--exclude matplotlib \
 	--exclude PyQt5 \
 	--exclude share \
