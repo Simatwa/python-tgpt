@@ -46,7 +46,7 @@ setup(
         "webchatgpt==0.2.7",
         "GoogleBard==1.4.0",
         "colorama==0.4.6",
-        "g4f>=0.2.0.6 ",
+        "g4f>=0.2.0.6",
     ],
     python_requires=">=3.9",
     keywords=[
