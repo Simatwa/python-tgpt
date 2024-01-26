@@ -1765,6 +1765,7 @@ class Gpt4free:
         """Launch gpt4free web interface"""
         from g4f.gui import run_gui
 
+        port = port or 8000
         t1 = thr(
             target=run_gui,
             args=(
@@ -1776,7 +1777,7 @@ class Gpt4free:
         # run_gui(host=address, port=port, debug=debug)
         t1.start()
         if open:
-            click.launch(f"http://{address}:{port or 8000}")
+            click.launch(f"http://{address}:{port}")
         t1.join()
 
 
