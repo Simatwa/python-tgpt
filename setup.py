@@ -14,7 +14,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.3.2",
+    version="0.3.3",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -46,7 +46,7 @@ setup(
         "webchatgpt==0.2.7",
         "GoogleBard==1.4.0",
         "colorama==0.4.6",
-        "g4f>=0.2.0.3",
+        "g4f>=0.2.0.6 ",
     ],
     python_requires=">=3.9",
     keywords=[
@@ -64,6 +64,7 @@ setup(
         "koboldai",
         "openai",
         "bard",
+        "gpt4free",
     ],
     long_description=Path.open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

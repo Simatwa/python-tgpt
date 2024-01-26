@@ -8,7 +8,7 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.3.2&color=green"/></a>
+<a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/static/v1?logo=pypi&label=Pypi&message=0.3.3&color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/static/v1?logo=Black&label=Code-style&message=Black"/></a>
 <a href="#"><img alt="Passing" src="https://img.shields.io/static/v1?logo=Docs&label=Docs&message=Passing&color=green"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img alt="Python Package flow" src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg?branch=master"/></a>
@@ -33,11 +33,11 @@ python-tgpt
 
 
 ```python
->>> from pytgpt.leo import LEO
->>> bot = LEO()
->>> bot.chat('Hello there')
-"  Hello! It's nice to meet you. Is there something I can help you with or would you like to chat?"
->>> 
+>>> import pytgpt.fakeopen as fakeopen
+>>> bot = fakeopen.FAKEOPEN()
+>>> bot.chat('hello there')
+'Hello! How can I assist you today?'
+
 ```
 
 This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key.
@@ -72,6 +72,7 @@ These are simply the hosts of the LLMs, which include:
 <details>
 
 <summary>
+
 41+ Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
 
 </summary>
@@ -250,6 +251,8 @@ Choose one of the following methods to get started.
    cd python-tgpt
    pip install .
    ```
+
+> **Note** : Run `$ pytgpt gpt4free update` to install extra dependencies of **gpt4free**.
 
 ## Usage
 
@@ -445,6 +448,7 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
+
 To obtain more tailored responses, consider utilizing [optimizers](pytgpt/utils.py) using the `optimizer` parameter. Its values can be set to either `code` or `system_command`.
 
 </summary>
@@ -468,7 +472,7 @@ bot = koboldai.KOBOLDAI(is_conversation=False)
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
 
-> **Warning** : **Bard** and **WebChatGPT** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the respective classes. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
+> **Warning** : **Bard** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the class. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
 
 ### Advanced Usage of Placeholders
 
@@ -489,6 +493,7 @@ $ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise com
 <details>
 
 <summary>
+
 For more usage info run `$ pytgpt --help`
 
 </summary>

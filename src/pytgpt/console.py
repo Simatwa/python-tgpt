@@ -54,7 +54,7 @@ class this:
 
     rich_code_themes = ["monokai", "paraiso-dark", "igor", "vs", "fruity", "xcode"]
 
-    default_provider = "Aura"
+    default_provider = "FakeGpt"
 
     getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -1606,11 +1606,27 @@ class Gpt4free:
     @staticmethod
     @click.command()
     @click.help_option("-h", "--help")
+    @click.option(
+        "-e",
+        "--extra",
+        help="Extra required dependencies category",
+        multiple=True,
+        type=click.Choice(
+            ["all", "image", "webdriver", "openai", "api", "gui", "none"]
+        ),
+        default=["all"],
+    )
+    @click.option("-l", "--log", is_flag=True, help="Stdout installation logs")
     @busy_bar.run(index=1, immediate=True)
-    def update():
-        """Update GPT4FREE (Models and Providers)"""
-        command = "pip install --upgrade g4f"
+    def update(extra, log):
+        """Update GPT4FREE package (Models, Providers etc)"""
+        if "none" in extra:
+            command = f"pip install --upgrade g4f"
+        else:
+            command = f"pip install --upgrade g4f[{','.join(extra)}]"
         is_successful, response = this.run_system_command(command)
+        if log and is_successful:
+            click.echo(response.stdout)
         version_string = this.run_system_command("pip show g4f")[1].stdout.split("\n")[
             1
         ]
@@ -1734,6 +1750,35 @@ class Gpt4free:
                     )
                 rich.print(table)
 
+    @staticmethod
+    @click.command()
+    @click.argument("port", type=click.INT, required=False)
+    @click.option(
+        "-a", "--address", help="Host on this particular address", default="127.0.0.1"
+    )
+    @click.option("-d", "--debug", is_flag=True, help="Start server in debug mode")
+    @click.option(
+        "-o", "--open", is_flag=True, help="Proceed to the interface immediately"
+    )
+    @click.help_option("-h", "--help")
+    def gui(port, address, debug, open):
+        """Launch gpt4free web interface"""
+        from g4f.gui import run_gui
+
+        t1 = thr(
+            target=run_gui,
+            args=(
+                address,
+                port,
+                debug,
+            ),
+        )
+        # run_gui(host=address, port=port, debug=debug)
+        t1.start()
+        if open:
+            click.launch(f"http://{address}:{port or 8000}")
+        t1.join()
+
 
 class Utils:
     """Utilities command"""
@@ -1783,6 +1828,7 @@ def make_commands():
     EntryGroup.gpt4free.add_command(Gpt4free.version)
     EntryGroup.gpt4free.add_command(Gpt4free.update)
     EntryGroup.gpt4free.add_command(Gpt4free.show)
+    EntryGroup.gpt4free.add_command(Gpt4free.gui)
 
     # Awesome
     EntryGroup.awesome.add_command(Awesome.add)

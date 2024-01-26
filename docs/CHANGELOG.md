@@ -250,8 +250,16 @@ Assume role of the LLM and give your response.*
 
 **What's new?**
 
-- Add utility commands `utils` `gpt4free`  `update` etc
+- Added utility commands `utils` `gpt4free`  `update` etc
 - Support g4f-based non-working providers. 
 - Drop restriction to specific `g4f` dependency version (https://github.com/Simatwa/python-tgpt/issues/14#issuecomment-1899468911)
 - Pass auth value to g4f-based providers. `-k`
 - Support proxying in g4f providers
+
+## v0.3.3
+
+**What's new?**
+
+- **gpt4free** gui interface - `web`
+- `FakeGpt` - default provider.
+- *Other minor updates.*
