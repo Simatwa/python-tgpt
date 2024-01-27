@@ -28,8 +28,7 @@ python-tgpt
 </h3> 
 
 <p align="center">
-<video width='80%' height='auto' src="https://bx254.pythonanywhere.com/static/files/Simatwa/Uploads/github/python-tgpt-demo-v0.3.0.mp4">
-</video>
+<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/demo-1.gif?raw=True" width='80%'/>
 </p>
 
 
@@ -86,7 +85,7 @@ These are simply the hosts of the LLMs, which include:
  - [ChatForAi](https://chatforai.store/)
  - [Chatgpt4Online](https://chatgpt4online.org)
  - [ChatgptAi](https://chatgpt.ai/)
- - [ChatgptDemo](ChatgptDemo https://chat.chatgptdemo.net)
+ - [ChatgptDemo](https://chat.chatgptdemo.net)
  - [ChatgptNext](https://www.chatgpt-free.c)
  - [Chatxyz](https://chat.3211000.xyz)
  - [DeepInfra](https://deepinfra.co)
