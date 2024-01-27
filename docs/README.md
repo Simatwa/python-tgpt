@@ -28,7 +28,8 @@ python-tgpt
 </h3> 
 
 <p align="center">
-<img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/demo-1.gif?raw=True" width='80%'/>
+<video width='80%' height='auto' src="https://bx254.pythonanywhere.com/static/files/Simatwa/Uploads/github/python-tgpt-demo-v0.3.0.mp4">
+</video>
 </p>
 
 
