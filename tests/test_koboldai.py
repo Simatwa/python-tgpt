@@ -3,7 +3,7 @@ import tests.base as base
 from pytgpt.koboldai import KOBOLDAI
 
 
-class TestLeo(base.llmBase):
+class TestKoboldai(base.llmBase):
     def setUp(self):
         self.bot = KOBOLDAI()
         self.prompt = base.prompt

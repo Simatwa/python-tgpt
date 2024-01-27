@@ -3,7 +3,7 @@ import tests.base as base
 from pytgpt.gpt4free import GPT4FREE
 
 
-class TestLeo(base.llmBase):
+class TestGpt4free(base.llmBase):
     def setUp(self):
         self.bot = GPT4FREE()
         self.prompt = base.prompt

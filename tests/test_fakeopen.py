@@ -3,7 +3,7 @@ import tests.base as base
 from pytgpt.fakeopen import FAKEOPEN
 
 
-class TestLeo(base.llmBase):
+class TestBard(base.llmBase):
     def setUp(self):
         self.bot = FAKEOPEN()
         self.prompt = base.prompt

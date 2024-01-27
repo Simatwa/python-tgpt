@@ -4,7 +4,7 @@ from os import getenv
 from pytgpt.bard import BARD
 
 
-class TestLeo(base.llmBase):
+class TestBard(base.llmBase):
     def setUp(self):
         self.bot = BARD(getenv("bard_cookie_file"))
         self.prompt = base.prompt

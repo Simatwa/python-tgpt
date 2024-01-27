@@ -4,7 +4,7 @@ from os import getenv
 from pytgpt.openai import OPENAI
 
 
-class TestLeo(base.llmBase):
+class TestOpenai(base.llmBase):
     def setUp(self):
         self.bot = OPENAI(getenv("OPENAI_API_KEY"))
         self.prompt = base.prompt
