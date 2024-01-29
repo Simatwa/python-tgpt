@@ -17,12 +17,12 @@ jobs:
           - os: ubuntu-latest
             artifact_name: Linux
             asset_name: pytgpt-linux-amd64
-          - os: windows-latest
-            artifact_name: Windows
-            asset_name: pytgpt-windows-amd64.exe
           - os: macos-latest
             artifact_name: MacOS
             asset_name: pytgpt-macos-amd64
+          - os: windows-latest
+            artifact_name: Windows
+            asset_name: pytgpt-windows-amd64.exe
 
     steps:
     - uses: actions/checkout@v3

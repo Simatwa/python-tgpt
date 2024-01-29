@@ -3,7 +3,7 @@
 
 # Define variables
 PYTHON := python3
-PI := pip
+PI := $(PYTHON) -m pip
 PYINSTALLER := $(PYTHON) -m PyInstaller
 DEB := $(shell pwd)/assets/deb
 DEBLIB := $(DEB)/usr/lib
