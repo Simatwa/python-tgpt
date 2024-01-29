@@ -69,4 +69,4 @@ build-deb: install
 
 # Target to clean up build artifacts
 clean:
-	rm -rf build/ dist/ *.spec
+	rm -rf build/ dist/ *.spec *.deb
