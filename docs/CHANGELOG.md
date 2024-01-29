@@ -263,3 +263,10 @@ Assume role of the LLM and give your response.*
 - **gpt4free** gui interface - `web`
 - `FakeGpt` - default provider.
 - *Other minor updates.*
+
+## v0.3.4
+
+**What's new?**
+
+- Auto-detect placeholders (#17)
+- `Aura` - default provider
