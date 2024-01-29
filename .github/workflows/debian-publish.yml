@@ -1,5 +1,5 @@
 
-name: Make executables
+name: Debian Release
 
 on:
   push:
