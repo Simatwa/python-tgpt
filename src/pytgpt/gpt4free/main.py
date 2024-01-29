@@ -26,7 +26,7 @@ default_models = {
 class GPT4FREE(Provider):
     def __init__(
         self,
-        provider: str = "FakeGpt",
+        provider: str = "Aura",
         is_conversation: bool = True,
         auth: str = None,
         max_tokens: int = 600,
