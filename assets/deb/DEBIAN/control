@@ -1,0 +1,7 @@
+Package: pytgpt
+Version: 0.3.4
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: Smartwa Caleb <simatwacaleb@proton.me>
+Description: An application that uses free LLM providers to generate text.

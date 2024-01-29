@@ -166,3 +166,6 @@ README.md
 *.txt
 test-*.py
 make-*.py
+icons/
+*.deb
+*.spec

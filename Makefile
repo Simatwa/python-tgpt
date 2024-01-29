@@ -1,10 +1,13 @@
 # Define targets
-.PHONY: install test build clean
+.PHONY: install test build build-deb clean
 
 # Define variables
 PYTHON := python3
 PI := pip
 PYINSTALLER := $(PYTHON) -m PyInstaller
+DEB := $(shell pwd)/assets/deb
+DEBLIB := $(DEB)/usr/lib
+
 
 # Default target
 default: install test build
@@ -31,9 +34,39 @@ build: install
 	--exclude numpy \
 	--exclude matplotlib \
 	--exclude PyQt5 \
+	--exclude PyQt6 \
 	--exclude share \
-	--icon assets/logo.png
+	--icon assets/logo.png \
+	--noconfirm
+
+# Target to create .deb file
+build-deb: install
+	$(PYINSTALLER) main.py \
+	--onedir \
+	--exclude pandas \
+	--paths $(shell pwd) \
+	--distpath $(DEBLIB) \
+	--workpath build/$(shell uname) \
+	--log-level INFO \
+	--exclude numpy \
+	--exclude matplotlib \
+	--exclude PyQt5 \
+	--exclude PyQt6 \
+	--exclude share \
+	--name pytgpt \
+	--contents-directory . \
+	--noconfirm
+
+	echo "/usr/lib/pytgpt\n"\
+	"/usr/bin/pytgpt\n"\
+	"/usr/share/applications/icons/pytgpt.png\n"\
+	"/usr/share/applications/pytgpt.desktop" > $(DEBLIB)/pytgpt/entries.txt
+
+	cp assets/logo.png $(DEB)/usr/share/applications/icons/pytgpt.png
+
+	dpkg-deb --build $(DEB) "$(shell pytgpt -v).deb"
+
 
 # Target to clean up build artifacts
 clean:
-	rm -rf build/ dist/ main.spec
+	rm -rf build/ dist/ *.spec
