@@ -1,0 +1,32 @@
+
+name: Make executables
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    name: Executables for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+        include:
+          - os: ubuntu-latest
+            artifact_name: pytgpt.deb
+            asset_name: pytgpt-linux-amd64.deb
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build .deb file
+      run: |
+        make build-deb
+    - name: Upload .deb to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}
