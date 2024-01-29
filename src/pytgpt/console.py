@@ -54,7 +54,7 @@ class this:
 
     rich_code_themes = ["monokai", "paraiso-dark", "igor", "vs", "fruity", "xcode"]
 
-    default_provider = "FakeGpt"
+    default_provider = "Aura"
 
     getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -134,6 +134,7 @@ class this:
 
         return hunted_providers
 
+    @staticmethod
     def stream_output(
         iterable: Iterator,
         title: str = "",
@@ -169,9 +170,11 @@ class this:
                 render_this += entry
                 live.update(
                     Panel(
-                        Markdown(entry, code_theme=code_theme)
-                        if is_markdown
-                        else entry,
+                        (
+                            Markdown(entry, code_theme=code_theme)
+                            if is_markdown
+                            else entry
+                        ),
                         title=title,
                         style=style,
                     )
@@ -186,6 +189,7 @@ class this:
                 )
             )
 
+    @staticmethod
     def clear_history_file(file_path, is_true):
         """When --new flag is True"""
         if is_true and os.path.isfile(file_path):
@@ -196,6 +200,7 @@ class this:
                     f"Failed to clear previous chat history - {this.getExc(e)}"
                 )
 
+    @staticmethod
     def handle_exception(func):
         """Safely handles cli-based exceptions and exit status-codes"""
 
@@ -997,9 +1002,9 @@ class ChatInteractive:
         "-ap",
         "--awesome-prompt",
         default="0",
-        callback=lambda ctx, param, value: int(value)
-        if str(value).isdigit()
-        else value,
+        callback=lambda ctx, param, value: (
+            int(value) if str(value).isdigit() else value
+        ),
         help="Awesome prompt key or index. Alt. to intro",
     )
     @click.option(
@@ -1266,9 +1271,9 @@ class ChatGenerate:
         "-ap",
         "--awesome-prompt",
         default="0",
-        callback=lambda ctx, param, value: int(value)
-        if str(value).isdigit()
-        else value,
+        callback=lambda ctx, param, value: (
+            int(value) if str(value).isdigit() else value
+        ),
         help="Awesome prompt key or index. Alt. to intro",
     )
     @click.option(
@@ -1375,8 +1380,10 @@ class ChatGenerate:
             ignore_working=ignore_working,
         )
         prompt = prompt if prompt else ""
-        if with_copied:
-            copied_placeholder = "{{copied}}"
+        copied_placeholder = "{{copied}}"
+        stream_placeholder = "{{stream}}"
+
+        if with_copied or copied_placeholder in prompt:
             last_copied_text = clipman.get()
             assert last_copied_text, "No copied text found, issue prompt"
 
@@ -1401,11 +1408,14 @@ class ChatGenerate:
         if not sys.stdin.isatty():  # Piped input detected - True
             # Let's try to read piped input
             stream_text = click.get_text_stream("stdin").read()
-            stream_placeholder = "{{stream}}"
             if stream_placeholder in prompt:
                 prompt = prompt.replace(stream_placeholder, stream_text)
             else:
                 prompt = prompt + "\n" + stream_text if prompt else stream_text
+
+        elif prompt != prompt.replace(stream_placeholder, ""):
+            # {{stream}} without piped input
+            raise Exception(f"No piped input detected ~ {stream_placeholder}")
 
         this.clear_history_file(filepath, new)
         prompt = Optimizers.code(prompt) if code else prompt
@@ -1667,9 +1677,9 @@ class Gpt4free:
             hunted_providers = list(
                 set(
                     map(
-                        lambda provider: provider["name"]
-                        if all(list(provider.values()))
-                        else None,
+                        lambda provider: (
+                            provider["name"] if all(list(provider.values())) else None
+                        ),
                         this.g4f_providers_in_dict(
                             url=url,
                             working=working,
