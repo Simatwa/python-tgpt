@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=pytgpt
 GenericName=pytgpt
-Version=0.3.4
 Type=Application
 Comment=Interact with free LLMs.
 Exec=/usr/bin/pytgpt

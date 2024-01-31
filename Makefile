@@ -58,6 +58,7 @@ build-deb: install
 	--noconfirm
 
 	echo "Version: $(shell pytgpt --version | grep -oP 'version \K[\d.]+')" >> $(DEB)/DEBIAN/control
+	echo "Version=$(shell pytgpt --version | grep -oP 'version \K[\d.]+')" >> $(DEB)/usr/share/applications/pytgpt.desktop
 
 	echo "/usr/lib/pytgpt\n"\
 	"/usr/bin/pytgpt\n"\
