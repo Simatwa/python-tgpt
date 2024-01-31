@@ -13,7 +13,7 @@ DEBLIB := $(DEB)/usr/lib
 default: install test build
 
 # Target to install dependencies
-install:
+install: clean
 	$(PI) install -r requirements.txt 
 	$(PI) install .
 

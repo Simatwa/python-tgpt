@@ -270,3 +270,9 @@ Assume role of the LLM and give your response.*
 
 - Auto-detect placeholders (#17)
 - `Aura` - default provider
+
+## v0.3.5
+
+**What's new?**
+
+- *Binaries for all system.*
