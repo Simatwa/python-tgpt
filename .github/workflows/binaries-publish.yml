@@ -16,12 +16,15 @@ jobs:
         include:
           - os: ubuntu-latest
             artifact_name: Linux
+            artifact_upload_name: Linux
             asset_name: pytgpt-linux-amd64
           - os: macos-latest
             artifact_name: MacOS
+            artifact_upload_name: MacOS
             asset_name: pytgpt-macos-amd64
           - os: windows-latest
             artifact_name: Windows
+            artifact_upload_name: Windows.exe
             asset_name: pytgpt-windows-amd64.exe
 
     steps:
@@ -41,6 +44,6 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ matrix.artifact_name }}
+        file: dist/${{ matrix.artifact_upload_name }}
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
