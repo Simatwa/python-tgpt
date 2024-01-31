@@ -28,10 +28,10 @@ jobs:
     - uses: actions/checkout@v3
     - name: Update pip and pyinstaller
       run: |
-        python -m pip install --upgrade pip pyinstaller
+        python3 -m pip install --upgrade pip pyinstaller
     - name: Install python-tgpt
       run: |
-        python -m pip install .
+        python3 -m pip install .
     - name: Build executable
       run: |
         pyinstaller main.py \
