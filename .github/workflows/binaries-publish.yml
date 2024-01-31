@@ -26,15 +26,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Update pip and pyinstaller
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
       run: |
-        python3.11 -m pip install --upgrade pip pyinstaller
-    - name: Install python-tgpt
-      run: |
-        python3.11 setup.py install
+        python -m pip install --upgrade pip
+        python -m pip install .
     - name: Build executable
       run: |
-        python3.11 -m PyInstaller main.py \
+        pyinstaller main.py \
         --onefile \
         --exclude pandas \
         --distpath dist \
