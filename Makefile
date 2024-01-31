@@ -62,7 +62,7 @@ build-deb: install
 	"/usr/share/applications/icons/pytgpt.png\n"\
 	"/usr/share/applications/pytgpt.desktop" > $(DEBLIB)/pytgpt/entries.txt
 
-	cp assets/logo.png $(DEB)/usr/share/applications/icons/pytgpt.png
+#	cp assets/logo.png $(DEB)/usr/share/applications/icons/pytgpt.png
 
 	dpkg-deb --build $(DEB) pytgpt.deb
 
