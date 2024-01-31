@@ -1,7 +1,8 @@
 Package: pytgpt
-Version: 0.3.4
+Homepage: http://github.com/Simatwa/python-tgpt
 Section: utils
 Priority: optional
-Architecture: all
+Architecture: amd64
 Maintainer: Smartwa Caleb <simatwacaleb@proton.me>
 Description: An application that uses free LLM providers to generate text.
+Depends: libc6 (>= 2.17)

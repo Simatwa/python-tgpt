@@ -40,29 +40,16 @@ build: install
 	--noconfirm
 
 # Target to create .deb file
-build-deb: install
-	$(PYINSTALLER) main.py \
-	--onedir \
-	--exclude pandas \
-	--paths $(shell pwd) \
-	--distpath $(DEBLIB) \
-	--workpath build/$(shell uname) \
-	--log-level INFO \
-	--exclude numpy \
-	--exclude matplotlib \
-	--exclude PyQt5 \
-	--exclude PyQt6 \
-	--exclude share \
-	--name pytgpt \
-	--contents-directory . \
-	--noconfirm
+build-deb:
+
+	echo "Version: $(shell pytgpt --version | grep -oP 'version \K[\d.]+')" >> $(DEB)/DEBIAN/control
 
 	echo "/usr/lib/pytgpt\n"\
 	"/usr/bin/pytgpt\n"\
 	"/usr/share/applications/icons/pytgpt.png\n"\
 	"/usr/share/applications/pytgpt.desktop" > $(DEBLIB)/pytgpt/entries.txt
 
-#	cp assets/logo.png $(DEB)/usr/share/applications/icons/pytgpt.png
+	echo "Installed-Size: $(shell du -sh -B KB assets/deb | awk '{print $1}')" >> $(DEB)/DEBIAN/control
 
 	dpkg-deb --build -Zxz $(DEB) pytgpt.deb
 
