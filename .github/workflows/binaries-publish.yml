@@ -12,7 +12,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: ["3.11"]
         include:
           - os: ubuntu-latest
             artifact_name: Linux
@@ -47,3 +46,4 @@ jobs:
         file: dist/${{ matrix.artifact_upload_name }}
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
+        overwrite: true
