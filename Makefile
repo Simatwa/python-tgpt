@@ -64,7 +64,7 @@ build-deb: install
 
 #	cp assets/logo.png $(DEB)/usr/share/applications/icons/pytgpt.png
 
-	dpkg-deb --build $(DEB) pytgpt.deb
+	dpkg-deb --build -Zxz $(DEB) pytgpt.deb
 
 
 # Target to clean up build artifacts
