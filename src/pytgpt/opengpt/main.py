@@ -139,17 +139,14 @@ class OPENGPT:
 
         session.headers.update(self.headers)
         payload = {
-            "input": {
-                "messages": [
-                    # self.conversation.chat_history if conversationally else "",
-                    {
-                        "content": conversation_prompt,
-                        "additional_kwargs": {},
-                        "type": "human",
-                        "example": False,
-                    },
-                ]
-            },
+            "input": [
+                {
+                    "content": conversation_prompt,
+                    "additional_kwargs": {},
+                    "type": "human",
+                    "example": False,
+                },
+            ],
             "assistant_id": self.assistant_id,
             "thread_id": "",
         }
@@ -174,8 +171,10 @@ class OPENGPT:
                 try:
                     modified_value = re.sub("data:", "", value)
                     resp = json.loads(modified_value)
-                    self.last_response.update(resp)
-                    yield value if raw else resp
+                    if len(resp) == 1:
+                        continue
+                    self.last_response.update(resp[1])
+                    yield value if raw else resp[1]
                 except json.decoder.JSONDecodeError:
                     pass
             self.conversation.update_chat_history(
@@ -234,6 +233,4 @@ class OPENGPT:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return (
-            response["messages"][1]["content"] if "messages" in response.keys() else ""
-        )
+        return response["content"]

@@ -284,3 +284,4 @@ Assume role of the LLM and give your response.*
 - New provider  - *Phind* . Resolves #18
 - New util command `latest`. 
 - `phind` is the default provider - *console*
+- Fixed : `pytgpt` - (#19)
