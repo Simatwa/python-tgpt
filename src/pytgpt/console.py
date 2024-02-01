@@ -54,7 +54,7 @@ class this:
 
     rich_code_themes = ["monokai", "paraiso-dark", "igor", "vs", "fruity", "xcode"]
 
-    default_provider = "Aura"
+    default_provider = "phind"
 
     getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -447,6 +447,22 @@ class Main(cmd.Cmd):
                     auth=auth,
                     proxy=proxies,
                     timeout=timeout,
+                )
+
+            elif provider == "phind":
+                import pytgpt.phind.main as phind
+
+                self.bot = phind.PHIND(
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
+                    model=getOr(model, phind.default_model),
                 )
 
             elif provider in pytgpt.gpt4free_providers:
@@ -1627,13 +1643,20 @@ class Gpt4free:
         default=["all"],
     )
     @click.option("-l", "--log", is_flag=True, help="Stdout installation logs")
+    @click.option(
+        "-s",
+        "--sudo",
+        is_flag=True,
+        flag_value="sudo ",
+        help="Install with sudo privileges",
+    )
     @busy_bar.run(index=1, immediate=True)
-    def update(extra, log):
+    def update(extra, log, sudo):
         """Update GPT4FREE package (Models, Providers etc)"""
         if "none" in extra:
-            command = f"pip install --upgrade g4f"
+            command = f"{sudo or ''}pip install --upgrade g4f"
         else:
-            command = f"pip install --upgrade g4f[{','.join(extra)}]"
+            command = f"{sudo or ''}pip install --upgrade g4f[{','.join(extra)}]"
         is_successful, response = this.run_system_command(command)
         if log and is_successful:
             click.echo(response.stdout)
@@ -1800,9 +1823,16 @@ class Utils:
     @click.option(
         "-d", "--dev", is_flag=True, help="Update from version control (development)"
     )
+    @click.option(
+        "-s",
+        "--sudo",
+        is_flag=True,
+        flag_value="sudo ",
+        help="Install with sudo privileges",
+    )
     @click.help_option("-h", "--help")
     @busy_bar.run(index=1, immediate=True)
-    def update(source, dev):
+    def update(source, dev, sudo):
         """Install latest version of pytgpt"""
         if dev:
             source = "git+" + pytgpt.__repo__ + ".git"
@@ -1814,10 +1844,38 @@ class Utils:
             f"[*] Updating from '{'pip' if source=='python-tgpt' else source}'",
             fg="yellow",
         )
-        this.run_system_command(f"pip install --upgrade {source}")
+        this.run_system_command(f"{sudo or ''}pip install --upgrade {source}")
         response = this.run_system_command("pip show python-tgpt")[1]
         click.secho(response.stdout)
         click.secho("Congratulations! Pytgpt updated successfully.", fg="cyan")
+
+    @staticmethod
+    @click.command()
+    @click.option("-w", "--whole", is_flag=True, help="Stdout whole json info")
+    @click.option(
+        "-v", "--version", is_flag=True, help="Stdout latest version name only"
+    )
+    @click.option("-b", "--body", is_flag=True, help="Stdout changelog info only")
+    @click.option(
+        "-e", "--executable", is_flag=True, help="Stdout url to binary for your system"
+    )
+    @click.help_option("-h", "--help")
+    def latest(whole, version, body, executable):
+        """Check pytgpt latest version info"""
+        from pytgpt.utils import Updates
+
+        update = Updates()
+        if whole:
+            rich.print_json(data=update.latest(whole=True))
+
+        elif version:
+            rich.print(update.latest_version)
+        elif body:
+            rich.print(Markdown(update.latest()["body"]))
+        elif executable:
+            rich.print(update.executable())
+        else:
+            rich.print_json(data=update.latest())
 
 
 def make_commands():
@@ -1834,6 +1892,7 @@ def make_commands():
 
     # utils
     EntryGroup.utils.add_command(Utils.update)
+    EntryGroup.utils.add_command(Utils.latest)
 
     # gpt4free
     EntryGroup.gpt4free.add_command(Gpt4free.version)

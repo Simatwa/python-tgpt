@@ -258,7 +258,7 @@ Choose one of the following methods to get started.
 
 This package offers a convenient command-line interface.
 
-> **Note** : `Aura` is the default *provider*.
+> **Note** : `phind` is the default *provider*.
 
 - For a quick response:
   ```bash

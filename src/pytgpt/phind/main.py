@@ -1,40 +1,20 @@
+import re
+import json
+import requests
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
-from pytgpt.base import Provider
-from pytgpt import available_providers
-import g4f
+
+session = requests.Session()
+
+default_model = "Phind Model"
 
 
-working_providers = available_providers
-
-completion_allowed_models = [
-    "code-davinci-002",
-    "text-ada-001",
-    "text-babbage-001",
-    "text-curie-001",
-    "text-davinci-002",
-    "text-davinci-003",
-]
-
-default_models = {
-    "completion": "text-davinci-003",
-    "chat_completion": "gpt-3.5-turbo",
-}
-
-default_provider = "Aura"
-
-
-class GPT4FREE(Provider):
+class PHIND:
     def __init__(
         self,
-        provider: str = default_provider,
         is_conversation: bool = True,
-        auth: str = None,
         max_tokens: int = 600,
-        model: str = None,
-        chat_completion: bool = False,
-        ignore_working: bool = False,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -42,17 +22,13 @@ class GPT4FREE(Provider):
         proxies: dict = {},
         history_offset: int = 10250,
         act: str = None,
+        model: str = default_model,
     ):
-        """Initialies GPT4FREE
+        """Instantiates OPENGPT
 
         Args:
-            provider (str, optional): gpt4free based provider name. Defaults to Aura.
-            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
-            auth (str, optional): Authentication value for the provider incase it needs. Defaults to None.
+            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
-            model (str, optional): LLM model name. Defaults to text-davinci-003|gpt-3.5-turbo.
-            chat_completion(bool, optional): Provide native auto-contexting (conversationally). Defaults to False.
-            ignore_working (bool, optional): Ignore working status of the provider. Defaults to False.
             timeout (int, optional): Http request timeout. Defaults to 30.
             intro (str, optional): Conversation introductory prompt. Defaults to None.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
@@ -60,34 +36,29 @@ class GPT4FREE(Provider):
             proxies (dict, optional): Http request proxies. Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
+            model (str, optional): Model name. Defaults to "Phind Model".
         """
-        assert provider in available_providers, (
-            f"Provider '{provider}' is not yet supported. "
-            f"Try others like {', '.join(available_providers)}"
-        )
-        if model is None:
-            model = (
-                default_models["chat_completion"]
-                if chat_completion
-                else default_models["completion"]
-            )
-
-        elif not chat_completion:
-            assert model in completion_allowed_models, (
-                f"Model '{model}' is not yet supported for completion. "
-                f"Try other models like {', '.join(completion_allowed_models)}"
-            )
-        self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
+        self.is_conversation = is_conversation
+        self.chat_endpoint = "https://https.extension.phind.com/agent/"
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
+        self.model = model
+
+        self.headers = {
+            "Content-Type": "application/json",
+            "User-Agent": "",
+            "Accept": "*/*",
+            "Accept-Encoding": "Identity",
+        }
 
         self.__available_optimizers = (
             method
             for method in dir(Optimizers)
             if callable(getattr(Optimizers, method)) and not method.startswith("__")
         )
+        session.headers.update(self.headers)
         Conversation.intro = (
             AwesomePrompts().get_act(
                 act, raise_not_found=True, default=None, case_insensitive=True
@@ -96,19 +67,10 @@ class GPT4FREE(Provider):
             else intro or Conversation.intro
         )
         self.conversation = Conversation(
-            False if chat_completion else is_conversation,
-            self.max_tokens_to_sample,
-            filepath,
-            update_file,
+            is_conversation, self.max_tokens_to_sample, filepath, update_file
         )
         self.conversation.history_offset = history_offset
-        self.model = model
-        self.provider = provider
-        self.chat_completion = chat_completion
-        self.ignore_working = ignore_working
-        self.auth = auth
-        self.proxy = None if not proxies else list(proxies.values())[0]
-        self.__chat_class = g4f.ChatCompletion if chat_completion else g4f.Completion
+        session.proxies = proxies
 
     def ask(
         self,
@@ -130,7 +92,19 @@ class GPT4FREE(Provider):
            dict : {}
         ```json
         {
-          "text" : "How may I help you today?"
+            "id": "chatcmpl-r0wujizf2i2xb60mjiwt",
+            "object": "chat.completion.chunk",
+            "created": 1706775384,
+            "model": "trt-llm-phind-model-serving",
+            "choices": [
+                {
+                    "index": 0,
+                    "delta": {
+                        "content": "Hello! How can I assist you with your programming today?"
+                        },
+                    "finish_reason": null
+                }
+            ]
         }
         ```
         """
@@ -145,55 +119,57 @@ class GPT4FREE(Provider):
                     f"Optimizer is not one of {self.__available_optimizers}"
                 )
 
-        def payload():
-            if self.chat_completion:
-                return dict(
-                    model=self.model,
-                    provider=self.provider,  # g4f.Provider.Aichat,
-                    messages=[{"role": "user", "content": conversation_prompt}],
-                    stream=stream,
-                    ignore_working=self.ignore_working,
-                    auth=self.auth,
-                    proxy=self.proxy,
-                )
-
-            else:
-                return dict(
-                    model=self.model,
-                    prompt=conversation_prompt,
-                    provider=self.provider,
-                    stream=stream,
-                    ignore_working=self.ignore_working,
-                    auth=self.auth,
-                    proxy=self.proxy,
-                )
-
-        def format_response(response):
-            return dict(text=response)
+        session.headers.update(self.headers)
+        payload = {
+            "additional_extension_context": "",
+            "allow_magic_buttons": True,
+            "is_vscode_extension": True,
+            "message_history": [
+                {"content": conversation_prompt, "metadata": {}, "role": "user"}
+            ],
+            "requested_model": self.model,
+            "user_input": prompt,
+        }
 
         def for_stream():
-            previous_chunks = ""
-            response = self.__chat_class.create(**payload())
-
-            for chunk in response:
-                previous_chunks += chunk
-                formatted_resp = format_response(previous_chunks)
-                self.last_response.update(formatted_resp)
-                yield previous_chunks if raw else formatted_resp
-
+            response = session.post(
+                self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
+            )
+            if (
+                not response.ok
+                or not response.headers.get("Content-Type")
+                == "text/event-stream; charset=utf-8"
+            ):
+                raise Exception(
+                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                )
+            streaming_text = ""
+            for value in response.iter_lines(
+                decode_unicode=True,
+                chunk_size=self.stream_chunk_size,
+            ):
+                try:
+                    modified_value = re.sub("data:", "", value)
+                    json_modified_value = json.loads(modified_value)
+                    retrieved_text = self.get_message(json_modified_value)
+                    if not retrieved_text:
+                        continue
+                    streaming_text += retrieved_text
+                    json_modified_value["choices"][0]["delta"][
+                        "content"
+                    ] = streaming_text
+                    self.last_response.update(json_modified_value)
+                    yield value if raw else json_modified_value
+                except json.decoder.JSONDecodeError:
+                    pass
             self.conversation.update_chat_history(
-                prompt,
-                previous_chunks,
+                prompt, self.get_message(self.last_response)
             )
 
         def for_non_stream():
-            response = self.__chat_class.create(**payload())
-            formatted_resp = format_response(response)
-
-            self.last_response.update(formatted_resp)
-            self.conversation.update_chat_history(prompt, response)
-
-            return response if raw else formatted_resp
+            for _ in for_stream():
+                pass
+            return self.last_response
 
         return for_stream() if stream else for_non_stream()
 
@@ -242,4 +218,8 @@ class GPT4FREE(Provider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response["text"]
+        return (
+            response["choices"][0]["delta"]["content"]
+            if response["choices"][0]["finish_reason"] is None
+            else ""
+        )

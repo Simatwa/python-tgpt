@@ -314,3 +314,71 @@ class AwesomePrompts:
             logging.info(f"Prompt deleted successfully - `{name}`")
         else:
             return False
+
+
+class Updates:
+    """Pytgpt latest release info"""
+
+    url = "https://api.github.com/repos/Simatwa/python-tgpt/releases/latest"
+
+    @property
+    def latest_version(self):
+        return self.latest(version=True)
+
+    def executable(self, system: str = platform.system()) -> str:
+        """Url pointing to executable for particular system
+
+        Args:
+            system (str, optional): system name. Defaults to platform.system().
+
+        Returns:
+            str: url
+        """
+        for entry in self.latest()["assets"]:
+            if entry.get("target") == system:
+                return entry.get("url")
+
+    def latest(self, whole: bool = False, version: bool = False) -> dict:
+        """Check pytgpt latest version info
+
+        Args:
+            whole (bool, optional): Return whole json response. Defaults to False.
+            version (bool, optional): return version only. Defaults to False.
+
+        Returns:
+            bool|dict: version str or whole dict info
+        """
+        import requests
+
+        data = requests.get(self.url).json()
+        if whole:
+            return data
+
+        elif version:
+            return data.get("tag_name")
+
+        else:
+            sorted = dict(
+                tag_name=data.get("tag_name"),
+                tarball_url=data.get("tarball_url"),
+                zipball_url=data.get("zipball_url"),
+                html_url=data.get("html_url"),
+                body=data.get("body"),
+            )
+            whole_assets = []
+            for entry in data.get("assets"):
+                url = entry.get("browser_download_url")
+                assets = dict(url=url, size=entry.get("size"))
+                if ".deb" in url:
+                    assets["target"] = "Debian"
+                elif ".exe" in url:
+                    assets["target"] = "Windows"
+                elif "macos" in url:
+                    assets["target"] = "Mac"
+                elif "linux" in url:
+                    assets["target"] = "Linux"
+
+                whole_assets.append(assets)
+            sorted["assets"] = whole_assets
+
+            return sorted

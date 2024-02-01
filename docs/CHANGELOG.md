@@ -276,3 +276,11 @@ Assume role of the LLM and give your response.*
 **What's new?**
 
 - *Binaries for all system.*
+
+## v0.3.6
+
+**What's new?**
+
+- New provider  - *Phind* . Resolves #18
+- New util command `latest`. 
+- `phind` is the default provider - *console*

@@ -65,7 +65,7 @@ build-deb: install
 	"/usr/share/applications/icons/pytgpt.png\n"\
 	"/usr/share/applications/pytgpt.desktop" > $(DEBLIB)/pytgpt/entries.txt
 
-	echo "Installed-Size: $(shell du -sh -B KB $(DEB) | awk '{print $1}')" >> $(DEB)/DEBIAN/control
+	echo "Installed-Size: $(shell du -sh -B KB $(DEB) | awk '{print $$1}')" >> $(DEB)/DEBIAN/control
 
 	dpkg-deb --build -Zxz $(DEB) pytgpt.deb
 
