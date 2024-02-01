@@ -33,8 +33,8 @@ python-tgpt
 
 
 ```python
->>> import pytgpt.fakeopen as fakeopen
->>> bot = fakeopen.FAKEOPEN()
+>>> import pytgpt.phind as phind
+>>> bot = phind.PHIND()
 >>> bot.chat('hello there')
 'Hello! How can I assist you today?'
 
@@ -424,6 +424,21 @@ Bard
 ```python
 import pytgpt.bard as bard
 bot = bard.BARD('<Path-to-bard.google.com.cookies.json>')
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+<details>
+
+<summary>
+phind
+
+</summary>
+
+```python
+import pytgp.phind as phind
+bot = phind.PHIND()
 print(bot.chat("<Your-prompt>"))
 ```
 
