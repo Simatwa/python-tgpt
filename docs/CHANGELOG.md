@@ -285,3 +285,9 @@ Assume role of the LLM and give your response.*
 - New util command `latest`. 
 - `phind` is the default provider - *console*
 - Fixed : `pytgpt` - (#19)
+
+## v0.3.7
+
+**What's new?**
+
+- *Binaries dependencies fixed.*

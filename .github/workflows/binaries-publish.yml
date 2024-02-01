@@ -34,7 +34,7 @@ jobs:
         python-version: '3.11'
     - name: Install dependencies and python-tgpt
       run: |
-        python -m pip install --upgrade pip pyinstaller pillow
+        python -m pip install --upgrade pip pyinstaller pillow g4f[all]
         python -m pip install .
     - name: Build executable
       run: |

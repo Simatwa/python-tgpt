@@ -16,6 +16,7 @@ default: install test build
 install: clean
 	$(PI) install -r requirements.txt 
 	$(PI) install .
+	$(PI) install --upgrade g4f[all]
 
 # Target to run tests
 test:
