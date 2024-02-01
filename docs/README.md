@@ -68,6 +68,7 @@ These are simply the hosts of the LLMs, which include:
 5. [OpenAI](https://chat.openai.com) *(API key required)*
 6. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
 7. [Bard](https://github.com/acheong08/bard) - **Google** *(Session ID required)*
+8. [Phind](https://www.phind.com) - *default*
 
 <details>
 
