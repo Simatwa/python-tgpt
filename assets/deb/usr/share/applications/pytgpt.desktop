@@ -7,3 +7,4 @@ Exec=/usr/bin/pytgpt
 Terminal=true
 Icon=/usr/share/applications/icons/pytgpt.png
 Categories=Utils
+Version=0.3.7

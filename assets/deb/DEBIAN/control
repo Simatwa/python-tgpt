@@ -6,3 +6,5 @@ Architecture: amd64
 Maintainer: Smartwa Caleb <simatwacaleb@proton.me>
 Description: An application that uses free LLM providers to generate text.
 Depends: libc6 (>= 2.17)
+Version: 0.3.7
+Installed-Size: 271kB
