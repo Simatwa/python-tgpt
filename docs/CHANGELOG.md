@@ -291,3 +291,11 @@ Assume role of the LLM and give your response.*
 **What's new?**
 
 - *Binaries dependencies fixed.*
+
+## v0.3.8
+
+**What's new?**
+
+- Phind fixed. #21
+- Bard fixed. #23 #15
+- Full and minimal executables.
