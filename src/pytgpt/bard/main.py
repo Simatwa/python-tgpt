@@ -16,35 +16,40 @@ warnings.simplefilter("ignore", category=UserWarning)
 class BARD(Provider):
     def __init__(
         self,
-        auth: str,
+        cookie_file: str,
         proxy: dict = {},
         timeout: int = 30,
     ):
         """Initializes BARD
 
         Args:
-            auth (str): `__Secure-1PSID` cookie value (session id) or path to `bard.google.com.cookies.json` file
+            cookie_file (str): Path to `bard.google.com.cookies.json` file
             proxy (dict, optional): Http request proxy. Defaults to {}.
             timeout (int, optional): Http request timeout. Defaults to 30.
         """
         self.conversation = Conversation(False)
-        self.session_auth = None
-        assert isinstance(auth, str), f"auth should be of {str} only not '{type(auth)}'"
-        if path.isfile(auth):
+        self.session_auth1 = None
+        self.session_auth2 = None
+        assert isinstance(cookie_file, str), f"cookie_file should be of {str} only not '{type(cookie_file)}'"
+        if path.isfile(cookie_file):
             # let's assume auth is a path to exported .json cookie-file
-            with open(auth) as fh:
+            with open(cookie_file) as fh:
                 entries = load(fh)
             for entry in entries:
                 if entry["name"] == "__Secure-1PSID":
-                    self.session_auth = entry["value"]
-            assert bool(
-                self.session_auth
-            ), f"Failed to extract the required cookie value from file '{auth}'"
+                    self.session_auth1 = entry["value"]
+                elif entry['name']=="__Secure-1PAPISID":
+                    self.session_auth2 = entry["value"]
+                    
+            assert all(
+                [
+                    self.session_auth1, self.session_auth2 
+                 ]
+            ), f"Failed to extract the required cookie value from file '{cookie_file}'"
         else:
-            # Assume auth is the targeted cookie value
-            self.session_auth = auth
-
-        self.session = Chatbot(self.session_auth, proxy, timeout)
+            raise Exception(f'{cookie_file} is not a valid file path')
+        
+        self.session = Chatbot(self.session_auth1,self.session_auth2, proxy, timeout)
         self.last_response = {}
         self.__available_optimizers = (
             method

@@ -442,9 +442,9 @@ class Main(cmd.Cmd):
 
                 assert (
                     auth
-                ), f"Bard's session-id or path to bard.google.com.cookies.json file is required"
+                ), f"Path to bard.google.com.cookie.json file is required. Use the flag `--key` or `-k`"
                 self.bot = BARD(
-                    auth=auth,
+                    cookie_file=auth,
                     proxy=proxies,
                     timeout=timeout,
                 )
