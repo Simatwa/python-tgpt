@@ -299,3 +299,9 @@ Assume role of the LLM and give your response.*
 - Phind fixed. #21
 - Bard fixed. #23 #15
 - Full and minimal executables.
+
+## v0.3.8
+
+**What's new?**
+
+- Phind fixed. #https://github.com/Simatwa/python-tgpt/issues/21#issuecomment-1925326331

@@ -151,7 +151,6 @@ class PHIND:
             ):
                 try:
                     modified_value = re.sub("data:", "", value)
-                    print(modified_value)
                     json_modified_value = json.loads(modified_value)
                     retrieved_text = self.get_message(json_modified_value)
                     if not retrieved_text:
