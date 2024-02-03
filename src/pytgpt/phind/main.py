@@ -1,5 +1,6 @@
 import re
 import json
+import yaml
 import requests
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
@@ -150,6 +151,7 @@ class PHIND:
             ):
                 try:
                     modified_value = re.sub("data:", "", value)
+                    print(modified_value)
                     json_modified_value = json.loads(modified_value)
                     retrieved_text = self.get_message(json_modified_value)
                     if not retrieved_text:
@@ -218,8 +220,24 @@ class PHIND:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return (
-            response["choices"][0]["delta"]["content"]
-            if response["choices"][0]["finish_reason"] is None
+        delta : dict= response["choices"][0]["delta"]
+        
+        if not delta:
+            return ''
+        
+        elif delta.get('function_call'):
+            function_call: dict = delta['function_call']
+            if function_call.get('name'):
+                return function_call['name']
+            elif function_call.get('arguments'):
+                return function_call.get('arguments')
+            
+        elif delta.get('metadata'):
+            return yaml.dump(delta['metadata'])
+
+        else:
+            return (
+            response["choices"][0]["delta"].get("content")
+            if response["choices"][0].get("finish_reason") is None
             else ""
         )
