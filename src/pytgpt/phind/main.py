@@ -220,24 +220,24 @@ class PHIND:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        delta : dict= response["choices"][0]["delta"]
-        
+        delta: dict = response["choices"][0]["delta"]
+
         if not delta:
-            return ''
-        
-        elif delta.get('function_call'):
-            function_call: dict = delta['function_call']
-            if function_call.get('name'):
-                return function_call['name']
-            elif function_call.get('arguments'):
-                return function_call.get('arguments')
-            
-        elif delta.get('metadata'):
-            return yaml.dump(delta['metadata'])
+            return ""
+
+        elif delta.get("function_call"):
+            function_call: dict = delta["function_call"]
+            if function_call.get("name"):
+                return function_call["name"]
+            elif function_call.get("arguments"):
+                return function_call.get("arguments")
+
+        elif delta.get("metadata"):
+            return yaml.dump(delta["metadata"])
 
         else:
             return (
-            response["choices"][0]["delta"].get("content")
-            if response["choices"][0].get("finish_reason") is None
-            else ""
-        )
+                response["choices"][0]["delta"].get("content")
+                if response["choices"][0].get("finish_reason") is None
+                else ""
+            )
