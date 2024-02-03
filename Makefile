@@ -1,5 +1,5 @@
 # Define targets
-.PHONY: install test build build-deb clean
+.PHONY: install install-minimal test build build-deb build-minimal-deb clean
 
 # Define variables
 PYTHON := python3
@@ -17,6 +17,11 @@ install: clean
 	$(PI) install -r requirements.txt 
 	$(PI) install .
 	$(PI) install --upgrade g4f[all]
+
+# Target to install minimal dependencies
+install-minimal: clean
+	$(PI) install -r requirements.txt
+	$(PI) install .
 
 # Target to run tests
 test:
@@ -70,6 +75,35 @@ build-deb: install
 
 	dpkg-deb --build -Zxz $(DEB) pytgpt.deb
 
+# Target to build minimal deb
+build-minimal-deb: install-minimal
+	$(PYINSTALLER) main.py \
+	--onedir \
+	--exclude pandas \
+	--paths $(shell pwd) \
+	--distpath $(DEBLIB) \
+	--workpath build/$(shell uname) \
+	--log-level INFO \
+	--exclude numpy \
+	--exclude matplotlib \
+	--exclude PyQt5 \
+	--exclude PyQt6 \
+	--exclude share \
+	--name pytgpt \
+	--contents-directory . \
+	--noconfirm
+
+	echo "Version: $(shell pytgpt --version | grep -oP 'version \K[\d.]+')" >> $(DEB)/DEBIAN/control
+	echo "Version=$(shell pytgpt --version | grep -oP 'version \K[\d.]+')" >> $(DEB)/usr/share/applications/pytgpt.desktop
+
+	echo "/usr/lib/pytgpt\n"\
+	"/usr/bin/pytgpt\n"\
+	"/usr/share/applications/icons/pytgpt.png\n"\
+	"/usr/share/applications/pytgpt.desktop" > $(DEBLIB)/pytgpt/entries.txt
+
+	echo "Installed-Size: $(shell du -sh -B KB $(DEB) | awk '{print $$1}')" >> $(DEB)/DEBIAN/control
+
+	dpkg-deb --build -Zxz $(DEB) pytgpt.deb
 
 # Target to clean up build artifacts
 clean:

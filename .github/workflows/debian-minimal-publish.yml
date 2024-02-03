@@ -1,0 +1,41 @@
+
+name: Debian Minimal Release 
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    name: Minimal executable for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+        include:
+          - os: ubuntu-latest
+            artifact_name: pytgpt.deb
+            asset_name: pytgpt-linux-amd64-minimal.deb
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.11'
+    - name: Install pip and pyinstaller
+      run: python -m pip install --upgrade pip pyinstaller
+    - name: Install python-tgpt
+      run: python -m pip install .
+    - name: Build .deb file
+      run: |
+        make build-minimal-deb
+    - name: Upload .deb to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}
+        overwrite: true
