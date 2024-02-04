@@ -30,7 +30,9 @@ class BARD(Provider):
         self.conversation = Conversation(False)
         self.session_auth1 = None
         self.session_auth2 = None
-        assert isinstance(cookie_file, str), f"cookie_file should be of {str} only not '{type(cookie_file)}'"
+        assert isinstance(
+            cookie_file, str
+        ), f"cookie_file should be of {str} only not '{type(cookie_file)}'"
         if path.isfile(cookie_file):
             # let's assume auth is a path to exported .json cookie-file
             with open(cookie_file) as fh:
@@ -38,18 +40,16 @@ class BARD(Provider):
             for entry in entries:
                 if entry["name"] == "__Secure-1PSID":
                     self.session_auth1 = entry["value"]
-                elif entry['name']=="__Secure-1PAPISID":
+                elif entry["name"] == "__Secure-1PAPISID":
                     self.session_auth2 = entry["value"]
-                    
+
             assert all(
-                [
-                    self.session_auth1, self.session_auth2 
-                 ]
+                [self.session_auth1, self.session_auth2]
             ), f"Failed to extract the required cookie value from file '{cookie_file}'"
         else:
-            raise Exception(f'{cookie_file} is not a valid file path')
-        
-        self.session = Chatbot(self.session_auth1,self.session_auth2, proxy, timeout)
+            raise Exception(f"{cookie_file} is not a valid file path")
+
+        self.session = Chatbot(self.session_auth1, self.session_auth2, proxy, timeout)
         self.last_response = {}
         self.__available_optimizers = (
             method

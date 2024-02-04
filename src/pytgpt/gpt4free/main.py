@@ -5,6 +5,7 @@ from pytgpt.base import Provider
 from pytgpt import available_providers
 import g4f
 
+g4f.debug.version_check = False
 
 working_providers = available_providers
 
