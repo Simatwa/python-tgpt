@@ -5,7 +5,16 @@ __version__ = "0.3.9"
 __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
 
-tgpt_providers = ["leo", "openai", "fakeopen", "opengpt", "koboldai", "bard", "phind"]
+tgpt_providers = [
+    "leo",
+    "openai",
+    "fakeopen",
+    "opengpt",
+    "koboldai",
+    "bard",
+    "phind",
+    "llama2",
+]
 
 gpt4free_providers = [
     provider.__name__ for provider in g4f.Provider.__providers__  # if provider.working

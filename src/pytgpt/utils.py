@@ -152,7 +152,7 @@ class Conversation:
             prompt (str): _description_
 
         Returns:
-            str: _description_
+            str: Updated incomplete chat_history
         """
         if self.status:
             resp = self.chat_history + self.history_format % dict(user=prompt, llm="")
