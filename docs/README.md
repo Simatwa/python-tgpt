@@ -69,6 +69,8 @@ These are simply the hosts of the LLMs, which include:
 6. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
 7. [Bard](https://github.com/acheong08/bard) - **Google** *(Session ID required)*
 8. [Phind](https://www.phind.com) - *default*
+9. [Llama2](https://www.llama2.ai)
+10. [Blackboxai](https://www.blackbox.ai)
 
 <details>
 

@@ -485,6 +485,22 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
+            elif provider == "blackboxai":
+
+                from pytgpt.blackboxai import BLACKBOXAI
+
+                self.bot = BLACKBOXAI(
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
+                )
+
             elif provider in pytgpt.gpt4free_providers:
                 from pytgpt.gpt4free import GPT4FREE
 

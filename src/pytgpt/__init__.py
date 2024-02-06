@@ -14,6 +14,7 @@ tgpt_providers = [
     "bard",
     "phind",
     "llama2",
+    "blackboxai",
 ]
 
 gpt4free_providers = [

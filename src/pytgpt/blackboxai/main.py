@@ -1,25 +1,21 @@
-import requests
+import re
 import json
+import yaml
+import requests
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
-from pytgpt.base import Provider
 
 session = requests.Session()
 
-default_model = "meta/llama-2-70b-chat"
+default_model = None
 
 
-class LLAMA2(Provider):
+class BLACKBOXAI:
     def __init__(
         self,
         is_conversation: bool = True,
-        max_tokens: int = 800,
-        temperature: float = 0.75,
-        presence_penalty: int = 0,
-        frequency_penalty: int = 0,
-        top_p: float = 0.9,
-        model: str = default_model,
+        max_tokens: int = 600,
         timeout: int = 30,
         intro: str = None,
         filepath: str = None,
@@ -27,17 +23,13 @@ class LLAMA2(Provider):
         proxies: dict = {},
         history_offset: int = 10250,
         act: str = None,
+        model: str = default_model,
     ):
-        """Instantiates LLAMA2
+        """Instantiates OPENGPT
 
         Args:
-            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
-            max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 800.
-            temperature (float, optional): Charge of the generated text's randomness. Defaults to 0.75.
-            presence_penalty (int, optional): Chances of topic being repeated. Defaults to 0.
-            frequency_penalty (int, optional): Chances of word being repeated. Defaults to 0.
-            top_p (float, optional): Sampling threshold during inference time. Defaults to 0.9.
-            model (str, optional): LLM model name. Defaults to "meta/llama-2-70b-chat".
+            is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True
+            max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
             timeout (int, optional): Http request timeout. Defaults to 30.
             intro (str, optional): Conversation introductory prompt. Defaults to None.
             filepath (str, optional): Path to file containing conversation history. Defaults to None.
@@ -45,23 +37,28 @@ class LLAMA2(Provider):
             proxies (dict, optional): Http request proxies. Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
+            model (str, optional): Model name. Defaults to "Phind Model".
         """
-        self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
-        self.model = model
-        self.temperature = temperature
-        self.presence_penalty = presence_penalty
-        self.frequency_penalty = frequency_penalty
-        self.top_p = top_p
-        self.chat_endpoint = "https://www.llama2.ai/api"
+        self.is_conversation = is_conversation
+        self.chat_endpoint = "https://www.blackbox.ai/api/chat"
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
+        self.model = model
+        self.previewToken: str = None
+        self.userId: str = ""
+        self.codeModelMode: bool = True
+        self.id: str = ""
+        self.agentMode: dict = {}
+        self.trendingAgentMode: dict = {}
+        self.isMicMode: bool = False
+
         self.headers = {
             "Content-Type": "application/json",
-            "Referer": "https://www.llama2.ai/",
-            "Content-Type": "text/plain;charset=UTF-8",
-            "Origin": "https://www.llama2.ai",
+            "User-Agent": "",
+            "Accept": "*/*",
+            "Accept-Encoding": "Identity",
         }
 
         self.__available_optimizers = (
@@ -103,7 +100,7 @@ class LLAMA2(Provider):
            dict : {}
         ```json
         {
-           "text" : "How may I help you today?"
+           "text" : "print('How may I help you today?')"
         }
         ```
         """
@@ -117,22 +114,25 @@ class LLAMA2(Provider):
                 raise Exception(
                     f"Optimizer is not one of {self.__available_optimizers}"
                 )
-        session.headers.update(self.headers)
 
+        session.headers.update(self.headers)
         payload = {
-            "prompt": f"{conversation_prompt}<s>[INST] {prompt} [/INST]",
-            "model": self.model,
-            "systemPrompt": "You are a helpful assistant.",
-            "temperature": self.temperature,
-            "topP": self.top_p,
-            "maxTokens": self.max_tokens_to_sample,
-            "image": None,
-            "audio": None,
+            "messages": [
+                # json.loads(prev_messages),
+                {"content": conversation_prompt, "role": "user"}
+            ],
+            "id": self.id,
+            "previewToken": self.previewToken,
+            "userId": self.userId,
+            "codeModelMode": self.codeModelMode,
+            "agentMode": self.agentMode,
+            "trendingAgentMode": self.trendingAgentMode,
+            "isMicMode": self.isMicMode,
         }
 
         def for_stream():
             response = session.post(
-                self.chat_endpoint, json=payload, stream=stream, timeout=self.timeout
+                self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
             if (
                 not response.ok
@@ -142,19 +142,19 @@ class LLAMA2(Provider):
                 raise Exception(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
-
-            message_load: str = ""
+            streaming_text = ""
             for value in response.iter_lines(
                 decode_unicode=True,
-                delimiter="\n",
                 chunk_size=self.stream_chunk_size,
+                delimiter="\n",
             ):
                 try:
-                    if bool(value.strip()):
-                        message_load += value + ("\n" if stream else "")
-                        resp: dict = dict(text=message_load)
-                        yield value if raw else resp
+                    if bool(value):
+                        streaming_text += value + ("\n" if stream else "")
+
+                        resp = dict(text=streaming_text)
                         self.last_response.update(resp)
+                        yield value if raw else resp
                 except json.decoder.JSONDecodeError:
                     pass
             self.conversation.update_chat_history(
@@ -207,7 +207,7 @@ class LLAMA2(Provider):
         """Retrieves message only from response
 
         Args:
-            response (str): Response generated by `self.ask`
+            response (dict): Response generated by `self.ask`
 
         Returns:
             str: Message extracted
