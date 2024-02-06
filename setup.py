@@ -5,6 +5,31 @@ from setuptools import setup
 from setuptools import find_packages
 
 
+INSTALL_REQUIRE = [
+    "requests==2.28.2",
+    "appdirs==1.4.4",
+    "pyyaml==6.0.1",
+]
+
+cli_reqs = [
+    "click==8.1.3",
+    "rich==13.3.4",
+    "clipman==3.1.0",
+    "pyperclip==1.8.2",
+    "colorama==0.4.6",
+    "webchatgpt==0.2.7",
+    "GoogleBard1==2.1.1",
+    "g4f>=0.2.1.0",
+]
+
+EXTRA_REQUIRE = {
+    "cli": cli_reqs,
+    "all": [
+        "g4f[all]>=0.2.1.0",
+    ]
+    + cli_reqs,
+}
+
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"
 PATH = Path("README.md")
 if not PATH.exists():
@@ -14,7 +39,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.3.9",
+    version="0.4.0",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -36,18 +61,8 @@ setup(
             "pytgpt = pytgpt.console:main",
         ],
     },
-    install_requires=[
-        "requests==2.28.2",
-        "click==8.1.3",
-        "rich==13.3.4",
-        "clipman==3.1.0",
-        "pyperclip==1.8.2",
-        "appdirs==1.4.4",
-        "webchatgpt==0.2.7",
-        "GoogleBard1==2.1.1",
-        "colorama==0.4.6",
-        "g4f>=0.2.0.6",
-    ],
+    install_requires=INSTALL_REQUIRE,
+    extras_require=EXTRA_REQUIRE,
     python_requires=">=3.9",
     keywords=[
         "chatgpt",

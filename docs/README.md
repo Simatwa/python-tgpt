@@ -233,29 +233,23 @@ Download binaries for your system from [here.](https://github.com/Simatwa/python
 
 Alternatively, you can install non-binaries. *(Recommended)*
 
-Choose one of the following methods to get started.
+1. Developers:
 
-1. From PyPI:
-
-   ```bash
-   pip install --upgrade python-tgpt
+   ```sh
+   pip install python-tgpt
    ```
 
-2. Directly from the source:
+2. Commandline:
 
-   ```bash
-   pip install git+https://github.com/Simatwa/python-tgpt.git
+   ```sh
+   pip install python-tgpt[cli]
    ```
 
-3. Clone and Install:
+3. Full installation:
 
-   ```bash
-   git clone https://github.com/Simatwa/python-tgpt.git
-   cd python-tgpt
-   pip install .
+   ```sh
+   pip install python-tgpt[all]
    ```
-
-> **Note** : Run `$ pytgpt gpt4free update` to install extra dependencies of **gpt4free**.
 
 ## Usage
 
@@ -504,7 +498,7 @@ The `generate` functionality has been enhanced starting from *v0.3.0* to enable 
 This feature is particularly beneficial for intricate operations. For example:
 
 ```bash
-$ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise commit message from it, aligning with my commit message history: {{copied}}" -p fakeopen --with-copied --shell --new
+$ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise commit message from it, aligning with my commit message history: {{copied}}" -p fakeopen --shell --new
 ```
 > In this illustration, `{{stream}}` denotes the result of the `$ git diff` operation, while `{{copied}}` signifies the content copied from the output of the `$ git log` command.
 

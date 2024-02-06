@@ -300,8 +300,17 @@ Assume role of the LLM and give your response.*
 - Bard fixed. #23 #15
 - Full and minimal executables.
 
-## v0.3.8
+## v0.3.9
 
 **What's new?**
 
 - Phind fixed. #https://github.com/Simatwa/python-tgpt/issues/21#issuecomment-1925326331
+
+## v0.4.0
+
+**What's new?**
+
+- New provider - [Llama2](https://www.llama2.ai)
+- New provider - [Blackboxai](https://www.blackbox.ai)
+- Disable g4f version check.
+- Partial or full installation options.
