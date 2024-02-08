@@ -353,3 +353,11 @@ For instance:
 **What's new?**
 
 - Minor bug fix. RawDog : *generate*
+
+## v0.4.4
+
+**What's new?**
+
+- Execute python code in responses *(interactive)*- `exec`
+- Execute python codes using system installed python interpreter - *default*
+- Other minor fixes.
