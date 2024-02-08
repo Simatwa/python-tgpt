@@ -36,7 +36,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.4.2",
+    version="0.4.3",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -71,7 +71,8 @@ setup(
         "chatgpt-api",
         "llama-api",
         "leo",
-        "openfake",
+        "llama2",
+        "blackboxai",
         "opengpt",
         "koboldai",
         "openai",

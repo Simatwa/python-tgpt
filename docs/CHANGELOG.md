@@ -347,3 +347,9 @@ For instance:
    - Give consent to script execution
    - Execute script internally or externally
    - Choose python interpreter name
+
+## v0.4.3
+
+**What's new?**
+
+- Minor bug fix. RawDog : *generate*

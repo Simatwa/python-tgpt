@@ -1482,6 +1482,7 @@ class ChatGenerate:
         interpreter,
     ):
         """Generate a quick response with AI"""
+        this.clear_history_file(filepath, new)
         bot = Main(
             max_tokens,
             temperature,
@@ -1543,7 +1544,6 @@ class ChatGenerate:
             # {{stream}} without piped input
             raise Exception(f"No piped input detected ~ {stream_placeholder}")
 
-        this.clear_history_file(filepath, new)
         prompt = Optimizers.code(prompt) if code else prompt
         prompt = Optimizers.shell_command(prompt) if shell else prompt
         busy_bar.spin_index = (
