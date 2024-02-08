@@ -62,15 +62,14 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 These are simply the hosts of the LLMs, which include:
 
 1. [Leo](https://brave.com/leo/) - **Brave**
-2. [FakeOpen](https://chat.geekgpt.org/)
-3. Koboldai
-4. [OpenGPTs](https://opengpts-example-vz4y4ooboq-uc.a.run.app/)
-5. [OpenAI](https://chat.openai.com) *(API key required)*
-6. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
-7. [Bard](https://github.com/acheong08/bard) - **Google** *(Session ID required)*
-8. [Phind](https://www.phind.com) - *default*
-9. [Llama2](https://www.llama2.ai)
-10. [Blackboxai](https://www.blackbox.ai)
+2. [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
+3. [OpenGPTs](https://opengpts-example-vz4y4ooboq-uc.a.run.app/)
+4. [OpenAI](https://chat.openai.com) *(API key required)*
+5. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
+6. [Bard](https://github.com/acheong08/bard) - **Google** *(Session ID required)*
+9. [Phind](https://www.phind.com) - *default*
+10. [Llama2](https://www.llama2.ai)
+11. [Blackboxai](https://www.blackbox.ai)
 
 <details>
 
@@ -236,19 +235,19 @@ Alternatively, you can install non-binaries. *(Recommended)*
 1. Developers:
 
    ```sh
-   pip install python-tgpt
+   pip install "python-tgpt"
    ```
 
 2. Commandline:
 
    ```sh
-   pip install python-tgpt[cli]
+   pip install "python-tgpt[cli]"
    ```
 
 3. Full installation:
 
    ```sh
-   pip install python-tgpt[all]
+   pip install "python-tgpt[all]"
    ```
 
 ## Usage
@@ -267,7 +266,9 @@ This package offers a convenient command-line interface.
   python -m pytgpt interactive "<Kickoff prompt (though not mandatory)>"
   ```
 
-Make use of flag `--provider` postfixed with the provider name of your choice. e.g `--provider koboldai`
+Make use of flag `--provider` followed by the provider name of your choice. e.g `--provider koboldai`
+
+> To list all providers offered by gpt4free, use following commands: ```pytgpt gpt4free list providers```
 
 You can also simply use `pytgpt` instead of `python -m pytgpt`.
 
