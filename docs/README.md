@@ -56,6 +56,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - ⛓️ Chained requests via proxy
 - 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
 - 🧠 Multiple LLM providers - **45+**
+- 🎯 Customizable script generation and execution
 
 ## Providers
 
