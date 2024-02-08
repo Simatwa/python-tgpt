@@ -314,3 +314,26 @@ Assume role of the LLM and give your response.*
 - New provider - [Blackboxai](https://www.blackbox.ai)
 - Disable g4f version check.
 - Partial or full installation options.
+
+## v0.4.0
+
+**What's new?**
+
+- Rawdog : generate and execute python code in your system, driven by your prompts.
+
+<details>
+
+<summary>
+For instance:
+
+</summary>
+
+   ```sh
+   $ pytgpt generate -n -q "Visualize the disk usage using pie chart" --rawdog
+   ```
+   
+   <p align="center">
+   <img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/Figure_1.png?raw=true" width='60%'>
+   </p>
+   
+</details>

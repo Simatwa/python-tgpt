@@ -25,7 +25,7 @@ class BLACKBOXAI:
         act: str = None,
         model: str = default_model,
     ):
-        """Instantiates OPENGPT
+        """Instantiates BLACKBOXAI
 
         Args:
             is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True

@@ -4,6 +4,9 @@ import platform
 import subprocess
 import logging
 import appdirs
+import datetime
+import re
+import sys
 
 appdir = appdirs.AppDirs("pytgpt", "Smartwa")
 
@@ -11,6 +14,38 @@ default_path = appdir.user_cache_dir
 
 if not os.path.exists(default_path):
     os.makedirs(default_path)
+
+
+def run_system_command(
+    command: str, exit_on_error: bool = True, stdout_error: bool = True
+):
+    """Run commands against system
+    Args:
+        command (str): shell command
+        exit_on_error (bool, optional): Exit on error. Defaults to True.
+        stdout_error (bool, optional): Print out the error. Defaults to True.
+
+    Returns:
+        tuple : (is_successfull, object[Exception|Subprocess.run])
+    """
+    try:
+        # Run the command and capture the output
+        result = subprocess.run(
+            command,
+            shell=True,
+            check=True,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        return (True, result)
+    except subprocess.CalledProcessError as e:
+        # Handle error if the command returns a non-zero exit code
+        if stdout_error:
+            print(f"Error Occurred: while running '{command}'")
+            print(e.stderr)
+        sys.exit(e.returncode) if exit_on_error else None
+        return (False, e)
 
 
 class Optimizers:
@@ -382,3 +417,130 @@ class Updates:
             sorted["assets"] = whole_assets
 
             return sorted
+
+
+class RawDog:
+    """Generate and auto-execute Python scripts in the cli"""
+
+    # Idea borrowed from https://github.com/AbanteAI/rawdog
+
+    intro_prompt = f"""
+You are a command-line coding assistant called Rawdog that generates and auto-executes Python scripts.
+
+A typical interaction goes like this:
+1. The user gives you a natural language PROMPT.
+2. You:
+    i. Determine what needs to be done
+    ii. Write a short Python SCRIPT to do it
+    iii. Communicate back to the user by printing to the console in that SCRIPT
+3. The compiler extracts the script and then runs it using exec(). If there will be an exception raised,
+ it will be send back to you starting with "PREVIOUS SCRIPT EXCEPTION:".
+4. In case of exception, regenerate error free script.
+
+If you need to review script outputs before completing the task, you can print the word "CONTINUE" at the end of your SCRIPT.
+This can be useful for summarizing documents or technical readouts, reading instructions before
+deciding what to do, or other tasks that require multi-step reasoning.
+A typical 'CONTINUE' interaction looks like this:
+1. The user gives you a natural language PROMPT.
+2. You:
+    i. Determine what needs to be done
+    ii. Determine that you need to see the output of some subprocess call to complete the task
+    iii. Write a short Python SCRIPT to print that and then print the word "CONTINUE"
+3. The compiler
+    i. Checks and runs your SCRIPT
+    ii. Captures the output and appends it to the conversation as "LAST SCRIPT OUTPUT:"
+    iii. Finds the word "CONTINUE" and sends control back to you
+4. You again:
+    i. Look at the original PROMPT + the "LAST SCRIPT OUTPUT:" to determine what needs to be done
+    ii. Write a short Python SCRIPT to do it
+    iii. Communicate back to the user by printing to the console in that SCRIPT
+5. The compiler...
+
+Please follow these conventions carefully:
+- Decline any tasks that seem dangerous, irreversible, or that you don't understand.
+- Always review the full conversation prior to answering and maintain continuity.
+- If asked for information, just print the information clearly and concisely.
+- If asked to do something, print a concise summary of what you've done as confirmation.
+- If asked a question, respond in a friendly, conversational way. Use programmatically-generated and natural language responses as appropriate.
+- If you need clarification, return a SCRIPT that prints your question. In the next interaction, continue based on the user's response.
+- Assume the user would like something concise. For example rather than printing a massive table, filter or summarize it to what's likely of interest.
+- Actively clean up any temporary processes or files you use.
+- When looking through files, use git as available to skip files, and skip hidden files (.env, .git, etc) by default.
+- You can plot anything with matplotlib.
+- ALWAYS Return your SCRIPT inside of a single pair of ``` delimiters. Only the console output of the first such SCRIPT is visible to the user, so make sure that it's complete and don't bother returning anything else.
+
+Current system : {platform.system()}
+Python version : {run_system_command("python --version",exit_on_error=True,stdout_error=True)[1].stdout}
+Current directory : {os.getcwd()}
+Current Datetime : {datetime.datetime.now()}
+"""
+
+    def __init__(self, quiet: bool = False):
+        if not quiet:
+            print(
+                "To get the most out of Rawdog. Ensure the following are installed:\n"
+                " 1. Python interpreter.\n"
+                " 2. Dependency:\n"
+                "  - Matplotlib\n"
+                "Be alerted on the risk posed! (Experimental)\n"
+                "Use '--quiet' to suppress this message and code/logs stdout.\n"
+            )
+        self.quiet = quiet
+
+    def log(self, message: str, category: str = "info"):
+        """RawDog logger
+
+        Args:
+            message (str): Log message
+            category (str, optional): Log level. Defaults to 'info'.
+        """
+        if self.quiet:
+            return
+
+        if category == "error":
+            logging.error(message)
+        else:
+            logging.info(message)
+
+    def main(self, response: str) -> None:
+        """Exec code in response accordingly
+
+        Args:
+            response (str): AI response
+
+        Returns:
+            None|str: None if script executed successfully else stdout data
+        """
+        code_blocks = re.findall(r"```python.*?```", response, re.DOTALL)
+        if len(code_blocks) != 1:
+            print(response)
+        else:
+            raw_code = code_blocks[0]
+            raw_code_plus = re.sub(r"(```)(python)?", "", raw_code)
+
+            if not self.quiet:
+                print(raw_code_plus)
+
+            if "CONTINUE" in response:
+                self.log("Executing script")
+                path_to_script = os.path.join(default_path, "execute_this.py")
+                with open(path_to_script, "w") as fh:
+                    fh.write(raw_code_plus)
+                success, proc = run_system_command(
+                    f"python {path_to_script}", exit_on_error=False, stdout_error=False
+                )
+                if success:
+                    self.log("Returning success feedback")
+                    return f"LAST SCRIPT OUTPUT:\n{proc.stdout}"
+                else:
+                    self.log("Returning error feedback", "error")
+                    return f"PREVIOUS SCRIPT EXCEPTION:\n{proc.stderr}"
+            else:
+                try:
+                    exec(raw_code_plus)
+                except Exception as e:
+                    self.log(
+                        "Exception occurred while executing script. Responding with error.",
+                        "error",
+                    )
+                    return str(e)

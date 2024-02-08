@@ -24,10 +24,7 @@ cli_reqs = [
 
 EXTRA_REQUIRE = {
     "cli": cli_reqs,
-    "all": [
-        "g4f[all]>=0.2.1.0",
-    ]
-    + cli_reqs,
+    "all": ["g4f[all]>=0.2.1.0", "matplotlib"] + cli_reqs,
 }
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"
@@ -39,7 +36,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.4.0",
+    version="0.4.1",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",

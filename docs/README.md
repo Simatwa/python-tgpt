@@ -503,6 +503,22 @@ $ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise com
 ```
 > In this illustration, `{{stream}}` denotes the result of the `$ git diff` operation, while `{{copied}}` signifies the content copied from the output of the `$ git log` command.
 
+### Introducing RawDog
+
+RawDog is a masterpiece feature that exploits the versatile capabilities of Python to command and control your system as per your needs. You can do literally anything with it, since it generates and executes python codes, driven by **your prompts**! To have a bite of *rawdog* simply append the flag `--rawdog` *shortcut* `-rd` in *generate/interactive* mode. This introduces a never seen-before feature in the *tgpt ecosystem*. Thanks to [AbanteAI/rawdog](https://github.com/AbanteAI/rawdog) for the idea.
+
+This can be useful in some ways. For instance :
+
+   ```sh
+   $ pytgpt generate -n -q "Visualize the disk usage using pie chart" --rawdog
+   ```
+   
+   This will pop up a window showing system disk usage as shown below.
+   
+   <p align="center">
+   <img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/Figure_1.png?raw=true" width='60%'>
+   </p>
+
 <details>
 
 <summary>

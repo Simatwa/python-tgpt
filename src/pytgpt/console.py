@@ -27,6 +27,7 @@ from typing import Iterator
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
 from pytgpt.utils import AwesomePrompts
+from pytgpt.utils import RawDog
 from WebChatGPT.console import chat as webchatgpt
 from colorama import Fore
 from colorama import init as init_colorama
@@ -330,6 +331,7 @@ class Main(cmd.Cmd):
         quiet=False,
         chat_completion=False,
         ignore_working=False,
+        rawdog=False,
         *args,
         **kwargs,
     ):
@@ -342,6 +344,12 @@ class Main(cmd.Cmd):
 
         try:
             getOr = lambda option, default: option if option else default
+
+            if rawdog:
+                self.RawDog = RawDog(quiet=quiet)
+                intro = RawDog.intro_prompt
+                getpass.getuser = lambda:'RawDog'
+
             if provider == "leo":
                 import pytgpt.leo as leo
 
@@ -360,27 +368,6 @@ class Main(cmd.Cmd):
                     proxies=proxies,
                     history_offset=history_offset,
                     act=awesome_prompt,
-                )
-
-            elif provider == "fakeopen":
-                from pytgpt.fakeopen import main
-
-                self.bot = main.FAKEOPEN(
-                    disable_conversation,
-                    max_tokens,
-                    temperature,
-                    top_p,
-                    top_k,
-                    top_p,
-                    getOr(model, main.model),
-                    getOr(auth, main.auth),
-                    timeout,
-                    intro,
-                    filepath,
-                    update_file,
-                    proxies,
-                    history_offset,
-                    awesome_prompt,
                 )
 
             elif provider == "openai":
@@ -538,6 +525,7 @@ class Main(cmd.Cmd):
         self.disable_stream = False
         self.provider = provider
         self.disable_coloring = False
+        self.rawdog = rawdog
         self.__init_time = time.time()
         self.__start_time = time.time()
         self.__end_time = time.time()
@@ -837,11 +825,21 @@ class Main(cmd.Cmd):
 
     @busy_bar.run()
     def default(self, line, exit_on_error: bool = False):
-        """Chat with ChatGPT"""
+        """Chat with LLM"""
         if not bool(line):
             return
         if line.startswith("./"):
             os.system(line[2:])
+
+        elif self.rawdog:
+            self.__start_time = time.time()
+            busy_bar.start_spinning()
+            ai_response = self.bot.chat(line, stream=False)
+            is_feedback = self.RawDog.main(ai_response)
+            if is_feedback:
+                return self.default(self.bot.chat(is_feedback))
+            busy_bar.stop_spinning()
+
         else:
             self.__start_time = time.time()
             try:
@@ -1127,6 +1125,12 @@ class ChatInteractive:
         is_flag=True,
         help="Ignore working status of the provider",
     )
+    @click.option(
+        "-rd",
+        "--rawdog",
+        is_flag=True,
+        help="Generate and auto-execute Python scripts - (experimental)",
+    )
     @click.help_option("-h", "--help")
     def interactive(
         model,
@@ -1157,6 +1161,7 @@ class ChatInteractive:
         no_coloring,
         chat_completion,
         ignore_working,
+        rawdog,
     ):
         """Chat with AI interactively (Default)"""
         this.clear_history_file(filepath, new)
@@ -1179,6 +1184,7 @@ class ChatInteractive:
             quiet,
             chat_completion,
             ignore_working,
+            rawdog=rawdog,
         )
         busy_bar.spin_index = busy_bar_index
         bot.code_theme = code_theme
@@ -1380,6 +1386,12 @@ class ChatGenerate:
         is_flag=True,
         help="Ignore working status of the provider",
     )
+    @click.option(
+        "-rd",
+        "--rawdog",
+        is_flag=True,
+        help="Generate and auto-execute Python scripts - (experimental)",
+    )
     @click.help_option("-h", "--help")
     def generate(
         model,
@@ -1410,6 +1422,7 @@ class ChatGenerate:
         new,
         with_copied,
         ignore_working,
+        rawdog,
     ):
         """Generate a quick response with AI"""
         bot = Main(
@@ -1430,6 +1443,7 @@ class ChatGenerate:
             provider,
             quiet,
             ignore_working=ignore_working,
+            rawdog=rawdog,
         )
         prompt = prompt if prompt else ""
         copied_placeholder = "{{copied}}"
