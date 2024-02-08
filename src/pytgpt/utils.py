@@ -7,6 +7,9 @@ import appdirs
 import datetime
 import re
 import sys
+import click
+from rich.markdown import Markdown
+from rich.console import Console
 
 appdir = appdirs.AppDirs("pytgpt", "Smartwa")
 
@@ -424,7 +427,41 @@ class RawDog:
 
     # Idea borrowed from https://github.com/AbanteAI/rawdog
 
-    intro_prompt = f"""
+    def __init__(
+        self,
+        quiet: bool = False,
+        external_exec: bool = False,
+        confirm_script: bool = False,
+        interpreter: str = "python",
+        prettify: bool = True,
+    ):
+        """Constructor
+
+        Args:
+            quiet (bool, optional): Flag for control logging. Defaults to False.
+            external_exec (bool, optional): Execute scripts with system's python executable. Defaults to False.
+            confirm_script (bool, optional): Give consent to scripts prior to execution. Defaults to False.
+            interpreter (str, optional): Python's interpreter name. Defaults to Python.
+            prettify (bool, optional): Prettify the code on stdout. Defaults to True.
+        """
+        if not quiet:
+            print(
+                "To get the most out of Rawdog. Ensure the following are installed:\n"
+                " 1. Python interpreter.\n"
+                " 2. Dependency:\n"
+                "  - Matplotlib\n"
+                "Be alerted on the risk posed! (Experimental)\n"
+                "Use '--quiet' to suppress this message and code/logs stdout.\n"
+            )
+        self.external_exec = external_exec
+        self.confirm_script = confirm_script
+        self.quiet = quiet
+        self.interpreter = interpreter
+        self.prettify = prettify
+
+    @property
+    def intro_prompt(self):
+        return f"""
 You are a command-line coding assistant called Rawdog that generates and auto-executes Python scripts.
 
 A typical interaction goes like this:
@@ -470,22 +507,21 @@ Please follow these conventions carefully:
 - ALWAYS Return your SCRIPT inside of a single pair of ``` delimiters. Only the console output of the first such SCRIPT is visible to the user, so make sure that it's complete and don't bother returning anything else.
 
 Current system : {platform.system()}
-Python version : {run_system_command("python --version",exit_on_error=True,stdout_error=True)[1].stdout}
+Python version : {run_system_command(f"{self.interpreter} --version",exit_on_error=True,stdout_error=True)[1].stdout.split(' ')[1]}
 Current directory : {os.getcwd()}
 Current Datetime : {datetime.datetime.now()}
 """
 
-    def __init__(self, quiet: bool = False):
-        if not quiet:
-            print(
-                "To get the most out of Rawdog. Ensure the following are installed:\n"
-                " 1. Python interpreter.\n"
-                " 2. Dependency:\n"
-                "  - Matplotlib\n"
-                "Be alerted on the risk posed! (Experimental)\n"
-                "Use '--quiet' to suppress this message and code/logs stdout.\n"
-            )
-        self.quiet = quiet
+    def stdout(self, message: str) -> None:
+        """Stdout data
+
+        Args:
+            message (str): Text to be printed
+        """
+        if self.prettify:
+            Console().print(Markdown(message))
+        else:
+            click.secho(message, fg="yellow")
 
     def log(self, message: str, category: str = "info"):
         """RawDog logger
@@ -497,6 +533,7 @@ Current Datetime : {datetime.datetime.now()}
         if self.quiet:
             return
 
+        message = "[PYTGPT] - " + message
         if category == "error":
             logging.error(message)
         else:
@@ -513,34 +550,50 @@ Current Datetime : {datetime.datetime.now()}
         """
         code_blocks = re.findall(r"```python.*?```", response, re.DOTALL)
         if len(code_blocks) != 1:
-            print(response)
+            self.stdout(response)
+
         else:
             raw_code = code_blocks[0]
+
+            if self.confirm_script:
+                self.stdout(raw_code)
+                if not click.confirm("-  Do you wish to execute this"):
+                    return
+
+            elif not self.quiet:
+                self.stdout(raw_code)
+
             raw_code_plus = re.sub(r"(```)(python)?", "", raw_code)
 
-            if not self.quiet:
-                print(raw_code_plus)
-
-            if "CONTINUE" in response:
-                self.log("Executing script")
+            if "CONTINUE" in response or self.external_exec:
+                self.log("Executing script externally")
                 path_to_script = os.path.join(default_path, "execute_this.py")
                 with open(path_to_script, "w") as fh:
                     fh.write(raw_code_plus)
-                success, proc = run_system_command(
-                    f"python {path_to_script}", exit_on_error=False, stdout_error=False
-                )
-                if success:
-                    self.log("Returning success feedback")
-                    return f"LAST SCRIPT OUTPUT:\n{proc.stdout}"
+                if "CONTINUE" in response:
+
+                    success, proc = run_system_command(
+                        f"{self.interpreter} {path_to_script}",
+                        exit_on_error=False,
+                        stdout_error=False,
+                    )
+
+                    if success:
+                        self.log("Returning success feedback")
+                        return f"LAST SCRIPT OUTPUT:\n{proc.stdout}"
+                    else:
+                        self.log("Returning error feedback", "error")
+                        return f"PREVIOUS SCRIPT EXCEPTION:\n{proc.stderr}"
                 else:
-                    self.log("Returning error feedback", "error")
-                    return f"PREVIOUS SCRIPT EXCEPTION:\n{proc.stderr}"
+                    os.system(f"{self.interpreter} {path_to_script}")
+
             else:
                 try:
+                    self.log("Executing script internally")
                     exec(raw_code_plus)
                 except Exception as e:
                     self.log(
                         "Exception occurred while executing script. Responding with error.",
                         "error",
                     )
-                    return str(e)
+                    return f"PREVIOUS SCRIPT EXCEPTION:\n{str(e)}"

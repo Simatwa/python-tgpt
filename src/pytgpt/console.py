@@ -332,6 +332,9 @@ class Main(cmd.Cmd):
         chat_completion=False,
         ignore_working=False,
         rawdog=False,
+        external_exec=False,
+        confirm_script=False,
+        interpreter="python",
         *args,
         **kwargs,
     ):
@@ -346,9 +349,16 @@ class Main(cmd.Cmd):
             getOr = lambda option, default: option if option else default
 
             if rawdog:
-                self.RawDog = RawDog(quiet=quiet)
-                intro = RawDog.intro_prompt
-                getpass.getuser = lambda:'RawDog'
+
+                self.RawDog = RawDog(
+                    quiet=quiet,
+                    external_exec=external_exec,
+                    confirm_script=confirm_script,
+                    interpreter=interpreter,
+                    prettify=True,
+                )
+                intro = self.RawDog.intro_prompt
+                getpass.getuser = lambda: "RawDog"
 
             if provider == "leo":
                 import pytgpt.leo as leo
@@ -1131,6 +1141,25 @@ class ChatInteractive:
         is_flag=True,
         help="Generate and auto-execute Python scripts - (experimental)",
     )
+    @click.option(
+        "-ex",
+        "--external-exec",
+        is_flag=True,
+        help="RawDog : Execute scripts with system's python interpreter",
+    )
+    @click.option(
+        "-cs",
+        "--confirm-script",
+        is_flag=True,
+        help="RawDog : Give consent to generated scripts prior to execution",
+    )
+    @click.option(
+        "-int",
+        "--interpreter",
+        default="python",
+        help="RawDog : Python's interpreter name",
+        envvar="python_interpreter",
+    )
     @click.help_option("-h", "--help")
     def interactive(
         model,
@@ -1162,6 +1191,9 @@ class ChatInteractive:
         chat_completion,
         ignore_working,
         rawdog,
+        external_exec,
+        confirm_script,
+        interpreter,
     ):
         """Chat with AI interactively (Default)"""
         this.clear_history_file(filepath, new)
@@ -1185,6 +1217,9 @@ class ChatInteractive:
             chat_completion,
             ignore_working,
             rawdog=rawdog,
+            external_exec=external_exec,
+            confirm_script=confirm_script,
+            interpreter=interpreter,
         )
         busy_bar.spin_index = busy_bar_index
         bot.code_theme = code_theme
@@ -1392,6 +1427,25 @@ class ChatGenerate:
         is_flag=True,
         help="Generate and auto-execute Python scripts - (experimental)",
     )
+    @click.option(
+        "-ex",
+        "--external-exec",
+        is_flag=True,
+        help="RawDog : Execute scripts with system's python interpreter",
+    )
+    @click.option(
+        "-cs",
+        "--confirm-script",
+        is_flag=True,
+        help="RawDog : Give consent to generated scripts prior to execution",
+    )
+    @click.option(
+        "-int",
+        "--interpreter",
+        default="python",
+        help="RawDog : Python's interpreter name",
+        envvar="python_interpreter",
+    )
     @click.help_option("-h", "--help")
     def generate(
         model,
@@ -1423,6 +1477,9 @@ class ChatGenerate:
         with_copied,
         ignore_working,
         rawdog,
+        external_exec,
+        confirm_script,
+        interpreter,
     ):
         """Generate a quick response with AI"""
         bot = Main(
@@ -1444,6 +1501,9 @@ class ChatGenerate:
             quiet,
             ignore_working=ignore_working,
             rawdog=rawdog,
+            external_exec=external_exec,
+            confirm_script=confirm_script,
+            interpreter=interpreter,
         )
         prompt = prompt if prompt else ""
         copied_placeholder = "{{copied}}"

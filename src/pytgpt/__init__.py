@@ -1,14 +1,13 @@
 from .utils import appdir
 import g4f
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
 
 tgpt_providers = [
     "leo",
     "openai",
-    "fakeopen",
     "opengpt",
     "koboldai",
     "bard",

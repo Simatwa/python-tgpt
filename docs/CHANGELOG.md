@@ -315,7 +315,7 @@ Assume role of the LLM and give your response.*
 - Disable g4f version check.
 - Partial or full installation options.
 
-## v0.4.0
+## v0.4.1
 
 **What's new?**
 
@@ -337,3 +337,13 @@ For instance:
    </p>
    
 </details>
+
+
+## v0.4.2
+
+**What's new?**
+
+1. RawDog:
+   - Give consent to script execution
+   - Execute script internally or externally
+   - Choose python interpreter name
