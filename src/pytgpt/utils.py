@@ -430,7 +430,7 @@ class RawDog:
     def __init__(
         self,
         quiet: bool = False,
-        external_exec: bool = False,
+        internal_exec: bool = False,
         confirm_script: bool = False,
         interpreter: str = "python",
         prettify: bool = True,
@@ -439,7 +439,7 @@ class RawDog:
 
         Args:
             quiet (bool, optional): Flag for control logging. Defaults to False.
-            external_exec (bool, optional): Execute scripts with system's python executable. Defaults to False.
+            internal_exec (bool, optional): Execute scripts with exec function. Defaults to False.
             confirm_script (bool, optional): Give consent to scripts prior to execution. Defaults to False.
             interpreter (str, optional): Python's interpreter name. Defaults to Python.
             prettify (bool, optional): Prettify the code on stdout. Defaults to True.
@@ -453,7 +453,7 @@ class RawDog:
                 "Be alerted on the risk posed! (Experimental)\n"
                 "Use '--quiet' to suppress this message and code/logs stdout.\n"
             )
-        self.external_exec = external_exec
+        self.internal_exec = internal_exec
         self.confirm_script = confirm_script
         self.quiet = quiet
         self.interpreter = interpreter
@@ -565,7 +565,7 @@ Current Datetime : {datetime.datetime.now()}
 
             raw_code_plus = re.sub(r"(```)(python)?", "", raw_code)
 
-            if "CONTINUE" in response or self.external_exec:
+            if "CONTINUE" in response or not self.internal_exec:
                 self.log("Executing script externally")
                 path_to_script = os.path.join(default_path, "execute_this.py")
                 with open(path_to_script, "w") as fh:
@@ -593,7 +593,8 @@ Current Datetime : {datetime.datetime.now()}
                     exec(raw_code_plus)
                 except Exception as e:
                     self.log(
-                        "Exception occurred while executing script. Responding with error.",
+                        "Exception occurred while executing script. Responding with error: "
+                        f"{e.args[1] if len(e.args)>1 else str(e)}",
                         "error",
                     )
                     return f"PREVIOUS SCRIPT EXCEPTION:\n{str(e)}"

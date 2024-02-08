@@ -332,7 +332,7 @@ class Main(cmd.Cmd):
         chat_completion=False,
         ignore_working=False,
         rawdog=False,
-        external_exec=False,
+        internal_exec=False,
         confirm_script=False,
         interpreter="python",
         *args,
@@ -352,7 +352,7 @@ class Main(cmd.Cmd):
 
                 self.RawDog = RawDog(
                     quiet=quiet,
-                    external_exec=external_exec,
+                    internal_exec=internal_exec,
                     confirm_script=confirm_script,
                     interpreter=interpreter,
                     prettify=True,
@@ -535,6 +535,9 @@ class Main(cmd.Cmd):
         self.disable_stream = False
         self.provider = provider
         self.disable_coloring = False
+        self.internal_exec = internal_exec
+        self.confirm_script = confirm_script
+        self.interpreter = interpreter
         self.rawdog = rawdog
         self.__init_time = time.time()
         self.__start_time = time.time()
@@ -843,6 +846,30 @@ class Main(cmd.Cmd):
         )
 
     @busy_bar.run()
+    def do_exec(self, line):
+        """Exec python code in last response with RawDog"""
+        last_response = self.bot.get_message(self.bot.last_response)
+        assert last_response, "Last response is null"
+        assert "```python" in last_response, "Last response has no python code"
+        if self.rawdog:
+            self.RawDog.main(last_response)
+        else:
+            rawdog = RawDog(
+                quiet=self.quiet,
+                internal_exec=self.internal_exec,
+                confirm_script=self.confirm_script,
+                interpreter=self.interpreter,
+                prettify=self.prettify,
+            )
+            rawdog.main(last_response)
+
+    @busy_bar.run()
+    def do_rawdog(self, line):
+        """Repeat executing last rawdog's python code"""
+        assert self.rawdog, "Session not in rawdog mode. Restart with --rawdog"
+        self.default(self.bot.get_message(self.bot.last_response))
+
+    @busy_bar.run()
     def default(self, line, exit_on_error: bool = False):
         """Chat with LLM"""
         if not bool(line):
@@ -854,10 +881,11 @@ class Main(cmd.Cmd):
             self.__start_time = time.time()
             busy_bar.start_spinning()
             ai_response = self.bot.chat(line, stream=False)
+            busy_bar.stop_spinning()
             is_feedback = self.RawDog.main(ai_response)
             if is_feedback:
                 return self.default(self.bot.chat(is_feedback))
-            busy_bar.stop_spinning()
+            self.__end_time = time.time()
 
         else:
             self.__start_time = time.time()
@@ -1151,10 +1179,10 @@ class ChatInteractive:
         help="Generate and auto-execute Python scripts - (experimental)",
     )
     @click.option(
-        "-ex",
-        "--external-exec",
+        "-ix",
+        "--internal-exec",
         is_flag=True,
-        help="RawDog : Execute scripts with system's python interpreter",
+        help="RawDog : Execute scripts with exec function instead of out-of-script interpreter",
     )
     @click.option(
         "-cs",
@@ -1200,7 +1228,7 @@ class ChatInteractive:
         chat_completion,
         ignore_working,
         rawdog,
-        external_exec,
+        internal_exec,
         confirm_script,
         interpreter,
     ):
@@ -1226,7 +1254,7 @@ class ChatInteractive:
             chat_completion,
             ignore_working,
             rawdog=rawdog,
-            external_exec=external_exec,
+            internal_exec=internal_exec,
             confirm_script=confirm_script,
             interpreter=interpreter,
         )
@@ -1437,10 +1465,10 @@ class ChatGenerate:
         help="Generate and auto-execute Python scripts - (experimental)",
     )
     @click.option(
-        "-ex",
-        "--external-exec",
+        "-ix",
+        "--internal-exec",
         is_flag=True,
-        help="RawDog : Execute scripts with system's python interpreter",
+        help="RawDog : Execute scripts with exec function instead of out-of-script interpreter",
     )
     @click.option(
         "-cs",
@@ -1486,7 +1514,7 @@ class ChatGenerate:
         with_copied,
         ignore_working,
         rawdog,
-        external_exec,
+        internal_exec,
         confirm_script,
         interpreter,
     ):
@@ -1511,7 +1539,7 @@ class ChatGenerate:
             quiet,
             ignore_working=ignore_working,
             rawdog=rawdog,
-            external_exec=external_exec,
+            internal_exec=internal_exec,
             confirm_script=confirm_script,
             interpreter=interpreter,
         )
