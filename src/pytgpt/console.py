@@ -781,6 +781,15 @@ class Main(cmd.Cmd):
         if click.confirm("Do you wish to run the command(s) generated in your system"):
             self.do_sys(self.bot.get_message(self.bot.last_response))
 
+    @busy_bar.run("While changing directory")
+    def do_cd(self, line):
+        """Change directory
+        Usage :
+             cd <path-to-directory>
+        """
+        assert line, "File path is required"
+        os.chdir(line)
+
     def do_clear(self, line):
         """Clear console"""
         sys.stdout.write("\u001b[2J\u001b[H")
