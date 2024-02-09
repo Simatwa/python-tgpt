@@ -19,7 +19,7 @@ cli_reqs = [
     "colorama==0.4.6",
     "webchatgpt==0.2.7",
     "GoogleBard1==2.1.1",
-    "g4f>=0.2.1.0",
+    "g4f>=0.2.1.2",
 ]
 
 EXTRA_REQUIRE = {
