@@ -379,3 +379,9 @@ For instance:
    pytgpt gpt4free test -y
    ```
 - Order providers in ascending. #31
+
+## v0.4.7
+
+**What's new?**
+
+- `g4fauto` fixed.
