@@ -239,19 +239,19 @@ Alternatively, you can install non-binaries. *(Recommended)*
 1. Developers:
 
    ```sh
-   pip install "python-tgpt"
+   pip install --upgrade python-tgpt
    ```
 
 2. Commandline:
 
    ```sh
-   pip install "python-tgpt[cli]"
+   pip install ---upgrade "python-tgpt[cli]"
    ```
 
 3. Full installation:
 
    ```sh
-   pip install "python-tgpt[all]"
+   pip install  --upgrade "python-tgpt[all]"
    ```
 
 ## Usage
