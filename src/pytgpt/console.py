@@ -498,6 +498,26 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
+            elif provider == "gpt4all":
+                from pytgpt.gpt4all import GPT4ALL
+
+                assert (
+                    auth
+                ), f"Path to LLM (.gguf or .bin) file is required. Use the flag `--key` or `-k`"
+                self.bot = GPT4ALL(
+                    model=auth,
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    presence_penalty=top_p,
+                    frequency_penalty=top_k,
+                    top_p=top_p,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    history_offset=history_offset,
+                )
+
             elif provider in pytgpt.gpt4free_providers:
                 from pytgpt.gpt4free import GPT4FREE
 
@@ -1037,7 +1057,7 @@ class ChatInteractive:
         "-k",
         "--key",
         envvar="auth_key",
-        help="LLM API access key or auth value",
+        help="LLM API access key or auth value or path to LLM with provider.",
     )
     @click.option(
         "-ct",
@@ -1314,7 +1334,7 @@ class ChatGenerate:
         "-k",
         "--key",
         envvar="auth_key",
-        help="LLM API access key or auth value",
+        help="LLM API access key or auth value or path to LLM with provider.",
     )
     @click.option(
         "-ct",

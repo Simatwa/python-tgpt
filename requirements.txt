@@ -10,3 +10,4 @@ colorama==0.4.6
 g4f>=0.2.1.0
 pyyaml==6.0.1
 matplotlib
+gpt4all==2.2.0

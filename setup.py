@@ -9,6 +9,7 @@ INSTALL_REQUIRE = [
     "requests==2.28.2",
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
+    "gpt4all==2.2.0",
 ]
 
 cli_reqs = [
@@ -36,7 +37,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.4.4",
+    version="0.4.5",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -78,6 +79,8 @@ setup(
         "openai",
         "bard",
         "gpt4free",
+        "gpt4all-cli",
+        "gptcli",
     ],
     long_description=Path.open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

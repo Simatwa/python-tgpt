@@ -361,3 +361,9 @@ For instance:
 - Execute python code in responses *(interactive)*- `exec`
 - Execute python codes using system installed python interpreter - *default*
 - Other minor fixes.
+
+## v0.4.5
+
+**What's new?**
+
+- New model : **GPT4ALL** - Support offline LLM.

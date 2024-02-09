@@ -44,6 +44,7 @@ This project enables seamless interaction with over **45 free LLM providers** wi
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available, fostering a smoother AI interaction experience.
 
+
 ### Features
 
 - 🗨️ Enhanced conversational chat experience
@@ -57,6 +58,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
 - 🧠 Multiple LLM providers - **45+**
 - 🎯 Customizable script generation and execution
+- 🔌 Offline support for Large Language Models
 
 ## Providers
 
@@ -71,6 +73,7 @@ These are simply the hosts of the LLMs, which include:
 9. [Phind](https://www.phind.com) - *default*
 10. [Llama2](https://www.llama2.ai)
 11. [Blackboxai](https://www.blackbox.ai)
+12. [gpt4all](https://gpt4all.io) *(Offline)*
 
 <details>
 
