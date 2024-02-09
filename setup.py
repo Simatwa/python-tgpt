@@ -9,7 +9,6 @@ INSTALL_REQUIRE = [
     "requests==2.28.2",
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
-    "gpt4all==2.2.0",
 ]
 
 cli_reqs = [
@@ -25,7 +24,7 @@ cli_reqs = [
 
 EXTRA_REQUIRE = {
     "cli": cli_reqs,
-    "all": ["g4f[all]>=0.2.1.0", "matplotlib"] + cli_reqs,
+    "all": ["g4f[all]>=0.2.1.0", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
 }
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"

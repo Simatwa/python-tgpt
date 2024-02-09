@@ -437,9 +437,8 @@ class Main(cmd.Cmd):
             elif provider == "bard":
                 from pytgpt.bard import BARD
 
-                assert (
-                    auth
-                ), f"Path to bard.google.com.cookie.json file is required. Use the flag `--key` or `-k`"
+                assert auth, f"Path to bard.google.com.cookie.json file is required. "
+                "Use the flag `--key` or `-k`"
                 self.bot = BARD(
                     cookie_file=auth,
                     proxy=proxies,
@@ -499,11 +498,12 @@ class Main(cmd.Cmd):
                 )
 
             elif provider == "gpt4all":
+                assert auth, f"Path to LLM (.gguf or .bin) file is required. "
+                "Download models from <https://gpt4all.io>. "
+                "Use the flag `--key` or `-k`"
+
                 from pytgpt.gpt4all import GPT4ALL
 
-                assert (
-                    auth
-                ), f"Path to LLM (.gguf or .bin) file is required. Use the flag `--key` or `-k`"
                 self.bot = GPT4ALL(
                     model=auth,
                     is_conversation=disable_conversation,
@@ -516,6 +516,21 @@ class Main(cmd.Cmd):
                     filepath=filepath,
                     update_file=update_file,
                     history_offset=history_offset,
+                )
+
+            elif provider == "webchatgpt":
+                assert auth, f"Path to `chat.openai.cookies.com.json` is required. "
+                "Use the flag `--key` or `-k`"
+
+                from pytgpt.webchatgpt import main
+
+                self.bot = main.WEBCHATGPT(
+                    cookie_file=auth,
+                    model=getOr(model, main.default_model),
+                    proxy=proxies,
+                    timeout=timeout,
+                    filepath=filepath,
+                    update_file=update_file,
                 )
 
             elif provider in pytgpt.gpt4free_providers:

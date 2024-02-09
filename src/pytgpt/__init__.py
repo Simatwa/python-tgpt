@@ -15,6 +15,7 @@ tgpt_providers = [
     "llama2",
     "blackboxai",
     "gpt4all",
+    "webchatgpt",
 ]
 
 gpt4free_providers = [

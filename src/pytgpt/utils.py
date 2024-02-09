@@ -198,14 +198,17 @@ class Conversation:
 
         return prompt
 
-    def update_chat_history(self, prompt: str, response: str) -> None:
+    def update_chat_history(
+        self, prompt: str, response: str, force: bool = False
+    ) -> None:
         """Updates chat history
 
         Args:
             prompt (str): user prompt
             response (str): LLM response
+            force (bool, optional): Force update
         """
-        if not self.status:
+        if not self.status and not force:
             return
         new_history = self.history_format % dict(user=prompt, llm=response)
         if self.file and self.update_file:
