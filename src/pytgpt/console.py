@@ -386,6 +386,11 @@ class Main(cmd.Cmd):
                         history_offset=history_offset,
                         act=awesome_prompt,
                     )
+                else:
+                    raise Exception(
+                        "No working g4f provider found. "
+                        "Consider running 'pytgpt gpt4free test -y' first"
+                    )
 
             elif provider == "leo":
                 import pytgpt.leo as leo

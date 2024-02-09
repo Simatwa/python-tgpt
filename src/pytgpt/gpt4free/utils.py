@@ -65,12 +65,14 @@ class TestProviders:
         ]
         self.results_path: Path = results_path
         self.__create_empty_file(ignore_if_found=True)
+        self.results_file_is_empty: bool = False
 
     def __create_empty_file(self, ignore_if_found: bool = False):
         if ignore_if_found and self.results_path.is_file():
             return
         with self.results_path.open("w") as fh:
             dump({"results": []}, fh)
+        self.results_file_is_empty = True
 
     def test_provider(self, name: str):
         """Test each provider and save successful ones
@@ -90,6 +92,7 @@ class TestProviders:
         except Exception as e:
             pass
         else:
+            self.results_file_is_empty = False
             with self.results_path.open() as fh:
                 current_results = load(fh)
             new_result = dict(time=time() - start_time, name=name)
@@ -142,13 +145,20 @@ class TestProviders:
         Returns:
             list[dict]|str: Test results.
         """
-        if run:
+        if run or self.results_file_is_empty:
             self.main()
 
         with self.results_path.open() as fh:
             results: dict = load(fh)
 
         results = results["results"]
+        if not results:
+            if run:
+                raise Exception("Unable to find working g4f provider")
+            else:
+                logging.warning("Hunting down working g4f providers.")
+                return self.get_results(run=True, best=best)
+
         time_list = []
 
         sorted_list = []
