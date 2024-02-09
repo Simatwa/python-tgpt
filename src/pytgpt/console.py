@@ -1970,6 +1970,10 @@ class Gpt4free:
                 ],
             )
             if json:
+                for key, value in models.items():
+                    value.sort()
+                    models[key] = value
+
                 rich.print_json(data=models, indent=4)
             else:
                 table = Table(show_lines=True)
@@ -1977,9 +1981,9 @@ class Gpt4free:
                 table.add_column("Base Provider", style="cyan")
                 table.add_column("Model(s)", style="yellow")
                 for count, provider_models in enumerate(models.items()):
-                    table.add_row(
-                        str(count), provider_models[0], "\n".join(provider_models[1])
-                    )
+                    models = provider_models[1]
+                    models.sort()
+                    table.add_row(str(count), provider_models[0], "\n".join(models))
                 rich.print(table)
 
     @staticmethod

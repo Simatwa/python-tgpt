@@ -372,6 +372,7 @@ For instance:
 
 **What's new?**
 
+- Revamped provider `webchatgpt`.
 - Dynamic provider `g4fauto`. #29
 - Test and save working g4f providers . #29
    ```sh
