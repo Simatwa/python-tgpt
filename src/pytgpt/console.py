@@ -59,6 +59,8 @@ class this:
 
     getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
+    context_settings = dict(auto_envvar_prefix="PYTGPT")
+
     """Console utils"""
 
     @staticmethod
@@ -459,6 +461,7 @@ class Main(cmd.Cmd):
                     history_offset=history_offset,
                     act=awesome_prompt,
                     model=getOr(model, phind.default_model),
+                    quiet=quiet,
                 )
 
             elif provider == "llama2":
@@ -1034,7 +1037,7 @@ class ChatInteractive:
     """Interactive command"""
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.option(
         "-m",
         "--model",
@@ -1071,7 +1074,6 @@ class ChatInteractive:
     @click.option(
         "-k",
         "--key",
-        envvar="auth_key",
         help="LLM API access key or auth value or path to LLM with provider.",
     )
     @click.option(
@@ -1125,7 +1127,6 @@ class ChatInteractive:
     @click.option(
         "-ho",
         "--history-offset",
-        envvar="history_offset",
         help="Limit conversation history to this number of last texts",
         type=click.IntRange(100, 16000),
         default=10250,
@@ -1143,7 +1144,6 @@ class ChatInteractive:
         "-pp",
         "--proxy-path",
         type=click.Path(exists=True),
-        envvar="proxy_path",
         help="Path to .json file containing proxies",
     )
     @click.option(
@@ -1152,7 +1152,6 @@ class ChatInteractive:
         type=click.Choice(pytgpt.available_providers),
         default=this.default_provider,
         help="Name of LLM provider.",
-        envvar="llm_provider",
         metavar=(
             f"[{', '.join(pytgpt.tgpt_providers)}] etc, "
             "run 'pytgpt gpt4free list providers -w' to view more providers"
@@ -1161,7 +1160,6 @@ class ChatInteractive:
     @click.option(
         "-vo",
         "--vertical-overflow",
-        envvar="vertical_overflow",
         help="Vertical overflow behaviour on content display",
         type=click.Choice(["visible", "crop", "ellipsis"]),
         default="ellipsis",
@@ -1177,7 +1175,7 @@ class ChatInteractive:
         "-q",
         "--quiet",
         is_flag=True,
-        help="Flag for controlling response-framing",
+        help="Flag for controlling response-framing and response verbosity",
         default=False,
     )
     @click.option(
@@ -1230,7 +1228,6 @@ class ChatInteractive:
         "--interpreter",
         default="python",
         help="RawDog : Python's interpreter name",
-        envvar="python_interpreter",
     )
     @click.help_option("-h", "--help")
     def interactive(
@@ -1311,7 +1308,7 @@ class ChatGenerate:
     """Generate command"""
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.option(
         "-m",
         "--model",
@@ -1348,7 +1345,6 @@ class ChatGenerate:
     @click.option(
         "-k",
         "--key",
-        envvar="auth_key",
         help="LLM API access key or auth value or path to LLM with provider.",
     )
     @click.option(
@@ -1427,7 +1423,6 @@ class ChatGenerate:
     @click.option(
         "-ho",
         "--history-offset",
-        envvar="history_offset",
         help="Limit conversation history to this number of last texts",
         type=click.IntRange(100, 16000),
         default=10250,
@@ -1445,7 +1440,6 @@ class ChatGenerate:
         "-pp",
         "--proxy-path",
         type=click.Path(exists=True),
-        envvar="proxy_path",
         help="Path to .json file containing proxies",
     )
     @click.option(
@@ -1454,7 +1448,6 @@ class ChatGenerate:
         type=click.Choice(pytgpt.available_providers),
         default=this.default_provider,
         help="Name of LLM provider.",
-        envvar="llm_provider",
         metavar=(
             f"[{', '.join(pytgpt.tgpt_providers)}] etc, "
             "run 'pytgpt gpt4free list providers -w' to view more providers"
@@ -1463,7 +1456,6 @@ class ChatGenerate:
     @click.option(
         "-vo",
         "--vertical-overflow",
-        envvar="vertical_overflow",
         help="Vertical overflow behaviour on content display",
         type=click.Choice(["visible", "crop", "ellipsis"]),
         default="ellipsis",
@@ -1472,7 +1464,7 @@ class ChatGenerate:
         "-q",
         "--quiet",
         is_flag=True,
-        help="Flag for controlling response-framing",
+        help="Flag for controlling response-framing and response verbosity",
         default=False,
     )
     @click.option(
@@ -1516,7 +1508,6 @@ class ChatGenerate:
         "--interpreter",
         default="python",
         help="RawDog : Python's interpreter name",
-        envvar="python_interpreter",
     )
     @click.help_option("-h", "--help")
     def generate(
@@ -1633,7 +1624,7 @@ class Awesome:
     """Awesome commands"""
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.option(
         "-r",
         "--remote",
@@ -1661,7 +1652,7 @@ class Awesome:
         )
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.argument(
         "key",
         required=True,
@@ -1704,7 +1695,7 @@ class Awesome:
             return resp != default
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.option("-n", "--name", required=True, help="Prompt name")
     @click.option("-p", "--prompt", required=True, help="Prompt value")
     @click.option(
@@ -1722,7 +1713,7 @@ class Awesome:
         return AwesomePrompts().add_prompt(name, prompt)
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.argument("name")
     @click.option(
         "--case-sensitive",
@@ -1746,7 +1737,7 @@ class Awesome:
         return AwesomePrompts().delete_prompt(name, case_sensitive)
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.option(
         "-j",
         "--json",
@@ -1801,7 +1792,7 @@ class Gpt4free:
     """Commands for gpt4free"""
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @busy_bar.run(index=1, immediate=True)
     @click.help_option("-h", "--help")
     def version():
@@ -1812,7 +1803,7 @@ class Gpt4free:
         click.secho(version_string, fg="cyan")
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.help_option("-h", "--help")
     @click.option(
         "-e",
@@ -1848,7 +1839,7 @@ class Gpt4free:
         click.secho(f"GPT4FREE updated successfully - {version_string}", fg="cyan")
 
     @staticmethod
-    @click.command("list")
+    @click.command("list", context_settings=this.context_settings)
     @click.argument("target")
     @click.option("-w", "--working", is_flag=True, help="Restrict to working providers")
     @click.option("-u", "--url", is_flag=True, help="Restrict to providers with url")
@@ -1966,7 +1957,7 @@ class Gpt4free:
                 rich.print(table)
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.argument("port", type=click.INT, required=False)
     @click.option(
         "-a", "--address", help="Host on this particular address", default="127.0.0.1"
@@ -2000,7 +1991,7 @@ class Utils:
     """Utilities command"""
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.argument("source", required=False)
     @click.option(
         "-d", "--dev", is_flag=True, help="Update from version control (development)"
@@ -2032,7 +2023,7 @@ class Utils:
         click.secho("Congratulations! Pytgpt updated successfully.", fg="cyan")
 
     @staticmethod
-    @click.command()
+    @click.command(context_settings=this.context_settings)
     @click.option("-w", "--whole", is_flag=True, help="Stdout whole json info")
     @click.option(
         "-v", "--version", is_flag=True, help="Stdout latest version name only"

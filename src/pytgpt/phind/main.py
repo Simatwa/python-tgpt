@@ -24,8 +24,9 @@ class PHIND:
         history_offset: int = 10250,
         act: str = None,
         model: str = default_model,
+        quiet: bool = False,
     ):
-        """Instantiates OPENGPT
+        """Instantiates PHIND
 
         Args:
             is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True
@@ -38,6 +39,7 @@ class PHIND:
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
             model (str, optional): Model name. Defaults to "Phind Model".
+            quiet (bool, optional): Ignore web search-results and yield final response only. Defaults to False.
         """
         self.max_tokens_to_sample = max_tokens
         self.is_conversation = is_conversation
@@ -46,6 +48,7 @@ class PHIND:
         self.timeout = timeout
         self.last_response = {}
         self.model = model
+        self.quiet = quiet
 
         self.headers = {
             "Content-Type": "application/json",
@@ -219,12 +222,18 @@ class PHIND:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
+        if response.get("type", "") == "metadata":
+            return
+
         delta: dict = response["choices"][0]["delta"]
 
         if not delta:
             return ""
 
         elif delta.get("function_call"):
+            if self.quiet:
+                return ""
+
             function_call: dict = delta["function_call"]
             if function_call.get("name"):
                 return function_call["name"]
@@ -232,6 +241,8 @@ class PHIND:
                 return function_call.get("arguments")
 
         elif delta.get("metadata"):
+            if self.quiet:
+                return ""
             return yaml.dump(delta["metadata"])
 
         else:
