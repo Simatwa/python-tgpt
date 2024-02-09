@@ -362,7 +362,32 @@ class Main(cmd.Cmd):
                 intro = self.RawDog.intro_prompt
                 getpass.getuser = lambda: "RawDog"
 
-            if provider == "leo":
+            if provider == "g4fauto":
+                from pytgpt.gpt4free.utils import TestProviders
+
+                test = TestProviders(quiet=quiet, timeout=timeout)
+                g4fauto = test.best if ignore_working else test.auto
+                if isinstance(g4fauto, str):
+                    provider = "g4fauto+" + g4fauto
+                    from pytgpt.gpt4free import GPT4FREE
+
+                    self.bot = GPT4FREE(
+                        provider=g4fauto,
+                        auth=auth,
+                        max_tokens=max_tokens,
+                        model=model,
+                        chat_completion=chat_completion,
+                        ignore_working=ignore_working,
+                        timeout=timeout,
+                        intro=intro,
+                        filepath=filepath,
+                        update_file=update_file,
+                        proxies=proxies,
+                        history_offset=history_offset,
+                        act=awesome_prompt,
+                    )
+
+            elif provider == "leo":
                 import pytgpt.leo as leo
 
                 self.bot = leo.LEO(
@@ -1892,6 +1917,7 @@ class Gpt4free:
                 if hunted_providers[0] is None
                 else hunted_providers
             )
+            hunted_providers.sort()
             if json:
                 rich.print_json(data=dict(providers=hunted_providers), indent=4)
 
@@ -1986,6 +2012,72 @@ class Gpt4free:
             click.launch(f"http://{address}:{port}")
         t1.join()
 
+    @staticmethod
+    @click.command(context_settings=this.context_settings)
+    @click.option(
+        "-t",
+        "--timeout",
+        type=click.INT,
+        help="Provider response generation tiemout",
+        default=20,
+    )
+    @click.option(
+        "-r",
+        "--thread",
+        type=click.INT,
+        help="Test n amount of providers at once",
+        default=5,
+    )
+    @click.option("-q", "--quiet", is_flag=True, help="Suppress all stdout")
+    @click.option(
+        "-j", "--json", is_flag=True, help="Stdout test results in json format"
+    )
+    @click.option("-d", "--dry-test", is_flag=True, help="Return previous test results")
+    @click.option(
+        "-b", "--best", is_flag=True, help="Stdout the fastest provider <name only>"
+    )
+    @click.option("-y", "--yes", is_flag=True, help="Okay to all confirmations")
+    @click.help_option("-h", "--help")
+    def test(timeout, thread, quiet, json, dry_test, best, yes):
+        """Test and save working providers"""
+        from pytgpt.gpt4free import utils
+
+        test = utils.TestProviders(test_at_once=thread, quiet=quiet, timeout=timeout)
+        if best:
+            click.secho(test.best)
+            return
+        elif dry_test:
+            results = test.get_results(
+                run=False,
+            )
+        else:
+            if (
+                yes
+                or os.path.isfile(utils.results_path)
+                and click.confirm("Are you sure to run new test")
+            ):
+                results = test.get_results(run=True)
+            else:
+                results = test.get_results(
+                    run=False,
+                )
+        if json:
+            rich.print_json(data=dict(results=results))
+        else:
+            table = Table(
+                title="G4f Providers Test Results",
+                show_lines=True,
+            )
+            table.add_column("No.", style="white", justify="center")
+            table.add_column("Provider", style="yellow", justify="left")
+            table.add_column("Response Time(s)", style="cyan")
+
+            for no, provider in enumerate(results, start=1):
+                table.add_row(
+                    str(no), provider["name"], str(round(provider["time"], 2))
+                )
+            rich.print(table)
+
 
 class Utils:
     """Utilities command"""
@@ -2072,6 +2164,7 @@ def make_commands():
     EntryGroup.gpt4free.add_command(Gpt4free.update)
     EntryGroup.gpt4free.add_command(Gpt4free.show)
     EntryGroup.gpt4free.add_command(Gpt4free.gui)
+    EntryGroup.gpt4free.add_command(Gpt4free.test)
 
     # Awesome
     EntryGroup.awesome.add_command(Awesome.add)

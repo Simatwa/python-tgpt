@@ -81,6 +81,11 @@ These are simply the hosts of the LLMs, which include:
 
 41+ Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
 
+- To list working providers run:
+   ```sh
+   $ pytgpt gpt4free test -y
+   ```
+
 </summary>
 
  - AiChatOnline
@@ -529,7 +534,7 @@ This can be useful in some ways. For instance :
 
 ## Passing Environment Variables
 
-Pytgpt **v0.4.6** onwards introduces a convention way of taking variables from the environment.
+Pytgpt **v0.4.6** introduces a convention way of taking variables from the environment.
 To achieve that, set the environment variables in your operating system or script with prefix `PYTGPT_` followed by the option name in uppercase, replacing dashes with underscores.
 
 For example, for the option `--provider`, you would set an environment variable `PYTGPT_PROVIDER` to provide a default value for that option. Same case applies to boolean flags such as `--rawdog` whose environment variable will be `PYTGPT_RAWDOG` with value being either `true/false`. Finally, `--awesome-prompt` will take the environment variable `PYTGPT_AWESOME_PROMPT`.
@@ -537,6 +542,10 @@ For example, for the option `--provider`, you would set an environment variable 
 The environment variables can be overridden by explicitly declaring new value.
 
 > **Note** : This is not limited to any command.
+
+## Dynamic Provider
+
+Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
 
 For more usage info run `$ pytgpt --help`
 

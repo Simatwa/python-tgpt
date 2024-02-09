@@ -1,7 +1,7 @@
 from .utils import appdir
 import g4f
 
-__version__ = "0.4.5"
+__version__ = "0.4.6"
 __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
 
@@ -16,6 +16,7 @@ tgpt_providers = [
     "blackboxai",
     "gpt4all",
     "webchatgpt",
+    "g4fauto",
 ]
 
 gpt4free_providers = [

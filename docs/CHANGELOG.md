@@ -367,3 +367,14 @@ For instance:
 **What's new?**
 
 - New model : **GPT4ALL** - Support offline LLM.
+
+## v0.4.6
+
+**What's new?**
+
+- Dynamic provider `g4fauto`. #29
+- Test and save working g4f providers . #29
+   ```sh
+   pytgpt gpt4free test -y
+   ```
+- Order providers in ascending. #31
