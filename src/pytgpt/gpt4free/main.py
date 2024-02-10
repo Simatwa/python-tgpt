@@ -156,6 +156,7 @@ class GPT4FREE(Provider):
                     ignore_working=self.ignore_working,
                     auth=self.auth,
                     proxy=self.proxy,
+                    timeout=self.timeout,
                 )
 
             else:
@@ -167,6 +168,7 @@ class GPT4FREE(Provider):
                     ignore_working=self.ignore_working,
                     auth=self.auth,
                     proxy=self.proxy,
+                    timeout=self.timeout,
                 )
 
         def format_response(response):
