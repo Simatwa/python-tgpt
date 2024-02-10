@@ -1189,8 +1189,10 @@ class ChatInteractive:
         default=this.default_provider,
         help="Name of LLM provider.",
         metavar=(
-            f"[{', '.join(pytgpt.tgpt_providers)}] etc, "
-            "run 'pytgpt gpt4free list providers -w' to view more providers"
+            f"[{'|'.join(pytgpt.tgpt_providers)}] etc, "
+            "run 'pytgpt gpt4free list providers -w' to "
+            "view more providers and 'pytgpt gpt4free test -y' "
+            "for advanced g4f providers test"
         ),
     )
     @click.option(
@@ -1485,8 +1487,10 @@ class ChatGenerate:
         default=this.default_provider,
         help="Name of LLM provider.",
         metavar=(
-            f"[{', '.join(pytgpt.tgpt_providers)}] etc, "
-            "run 'pytgpt gpt4free list providers -w' to view more providers"
+            f"[{'|'.join(pytgpt.tgpt_providers)}] etc, "
+            "run 'pytgpt gpt4free list providers -w' to "
+            "view more providers and 'pytgpt gpt4free test -y' "
+            "for advanced g4f providers test"
         ),
     )
     @click.option(
