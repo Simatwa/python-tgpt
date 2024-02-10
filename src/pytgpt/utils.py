@@ -20,14 +20,17 @@ if not os.path.exists(default_path):
 
 
 def run_system_command(
-    command: str, exit_on_error: bool = True, stdout_error: bool = True
+    command: str,
+    exit_on_error: bool = True,
+    stdout_error: bool = True,
+    help: str = None,
 ):
     """Run commands against system
     Args:
         command (str): shell command
         exit_on_error (bool, optional): Exit on error. Defaults to True.
-        stdout_error (bool, optional): Print out the error. Defaults to True.
-
+        stdout_error (bool, optional): Print out the error. Defaults to True
+        help (str, optional): Help info incase of exception. Defaults to None.
     Returns:
         tuple : (is_successfull, object[Exception|Subprocess.run])
     """
@@ -45,8 +48,10 @@ def run_system_command(
     except subprocess.CalledProcessError as e:
         # Handle error if the command returns a non-zero exit code
         if stdout_error:
-            print(f"Error Occurred: while running '{command}'")
-            print(e.stderr)
+            click.secho(f"Error Occurred: while running '{command}'", fg="yellow")
+            click.secho(e.stderr, fg="red")
+            if help is not None:
+                click.secho(help, fg="cyan")
         sys.exit(e.returncode) if exit_on_error else None
         return (False, e)
 
@@ -450,7 +455,7 @@ class RawDog:
         if not quiet:
             print(
                 "To get the most out of Rawdog. Ensure the following are installed:\n"
-                " 1. Python interpreter.\n"
+                " 1. Python 3.x\n"
                 " 2. Dependency:\n"
                 "  - Matplotlib\n"
                 "Be alerted on the risk posed! (Experimental)\n"
@@ -461,6 +466,16 @@ class RawDog:
         self.quiet = quiet
         self.interpreter = interpreter
         self.prettify = prettify
+        self.python_version = (
+            f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+            if self.internal_exec
+            else run_system_command(
+                f"{self.interpreter} --version",
+                exit_on_error=True,
+                stdout_error=True,
+                help="If you're using pytgpt-cli, use the flag '--internal-exec'",
+            )[1].stdout.split(" ")[1]
+        )
 
     @property
     def intro_prompt(self):
@@ -510,7 +525,7 @@ Please follow these conventions carefully:
 - ALWAYS Return your SCRIPT inside of a single pair of ``` delimiters. Only the console output of the first such SCRIPT is visible to the user, so make sure that it's complete and don't bother returning anything else.
 
 Current system : {platform.system()}
-Python version : {run_system_command(f"{self.interpreter} --version",exit_on_error=True,stdout_error=True)[1].stdout.split(' ')[1]}
+Python version : {self.python_version}
 Current directory : {os.getcwd()}
 Current Datetime : {datetime.datetime.now()}
 """
