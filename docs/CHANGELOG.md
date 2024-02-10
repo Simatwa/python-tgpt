@@ -385,3 +385,11 @@ For instance:
 **What's new?**
 
 - `g4fauto` fixed.
+
+## v0.4.8
+
+**What's new?**
+
+- Execute scripts native interpreter - *rawdog*
+- Typos fixed.
+- Other minor fixes.

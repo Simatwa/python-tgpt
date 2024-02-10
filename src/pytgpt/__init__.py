@@ -1,7 +1,7 @@
 from .utils import appdir
 import g4f
 
-__version__ = "0.4.7"
+__version__ = "0.4.8"
 __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
 
