@@ -9,6 +9,8 @@ INSTALL_REQUIRE = [
     "requests==2.28.2",
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
+    "webchatgpt==0.2.7",
+    "GoogleBard1==2.1.1",
 ]
 
 cli_reqs = [
@@ -17,8 +19,6 @@ cli_reqs = [
     "clipman==3.1.0",
     "pyperclip==1.8.2",
     "colorama==0.4.6",
-    "webchatgpt==0.2.7",
-    "GoogleBard1==2.1.1",
     "g4f>=0.2.1.2",
 ]
 
