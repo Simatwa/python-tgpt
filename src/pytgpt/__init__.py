@@ -3,9 +3,9 @@ import g4f
 from importlib import metadata
 
 try:
-  __version__ = metadata.version('python-tgpt')
+    __version__ = metadata.version("python-tgpt")
 except metadata.PackageNotFoundError:
-  __version__ = '0.0.0'
+    __version__ = "0.0.0"
 
 __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
@@ -22,6 +22,7 @@ tgpt_providers = [
     "gpt4all",
     "webchatgpt",
     "g4fauto",
+    "poe",
 ]
 
 gpt4free_providers = [

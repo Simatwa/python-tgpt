@@ -413,7 +413,9 @@ class Main(cmd.Cmd):
                 )
 
             elif provider == "openai":
-                assert auth, "OpenAI API key is required"
+                assert auth, (
+                    "OpenAI's API-key is required. " "Use the flag `--key` or `-k`"
+                )
                 from pytgpt.openai import main
 
                 self.bot = main.OPENAI(
@@ -584,6 +586,24 @@ class Main(cmd.Cmd):
                             color="cyan",
                         ),
                     )
+
+            elif provider == "poe":
+                assert auth, (
+                    "Path to poe.com.cookie.json file or 'p-b' cookie-value is required. "
+                    "Use the flag `--key` or `-k`"
+                )
+                from pytgpt.poe import POE, default_model
+
+                self.bot = POE(
+                    cookie=auth,
+                    model=getOr(model, default_model),
+                    proxy=bool(proxies),
+                    timeout=timeout,
+                    filepath=filepath,
+                    update_file=update_file,
+                    intro=intro,
+                    act=awesome_prompt,
+                )
 
             elif provider in pytgpt.gpt4free_providers:
                 from pytgpt.gpt4free import GPT4FREE

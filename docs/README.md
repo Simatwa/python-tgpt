@@ -74,6 +74,7 @@ These are simply the hosts of the LLMs, which include:
 10. [Llama2](https://www.llama2.ai)
 11. [Blackboxai](https://www.blackbox.ai)
 12. [gpt4all](https://gpt4all.io) *(Offline)*
+13. [Poe](poe.com) - Poe|Quora *(Session ID required)*
 
 <details>
 
