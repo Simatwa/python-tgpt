@@ -11,6 +11,7 @@ INSTALL_REQUIRE = [
     "pyyaml==6.0.1",
     "webchatgpt==0.2.7",
     "GoogleBard1==2.1.1",
+    "poe-api-wrapper==1.3.6",
 ]
 
 cli_reqs = [
