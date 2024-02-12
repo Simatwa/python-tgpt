@@ -1656,9 +1656,12 @@ class ChatGenerate:
             else:
                 prompt = prompt + "\n" + stream_text if prompt else stream_text
 
-        elif prompt != prompt.replace(stream_placeholder, ""):
-            # {{stream}} without piped input
-            raise Exception(f"No piped input detected ~ {stream_placeholder}")
+        assert stream_placeholder not in prompt, (
+            "No piped input detected ~ " + stream_placeholder
+        )
+        assert copied_placeholder not in prompt, (
+            "No copied text found ~ " + copied_placeholder
+        )
 
         prompt = Optimizers.code(prompt) if code else prompt
         prompt = Optimizers.shell_command(prompt) if shell else prompt
