@@ -393,3 +393,11 @@ For instance:
 - Execute scripts native interpreter - *rawdog*
 - Typos fixed.
 - Other minor fixes.
+
+## v0.4.9
+
+**What's new?**
+
+- `webchatgpt` supports intro prompt.
+- Fix: placeholders consistency - `{{stream}}|{{copied}}`
+- Other minor fixes.
