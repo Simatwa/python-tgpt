@@ -553,6 +553,7 @@ class Main(cmd.Cmd):
                     filepath=filepath,
                     update_file=update_file,
                     history_offset=history_offset,
+                    act=awesome_prompt,
                 )
 
             elif provider == "webchatgpt":
@@ -570,7 +571,19 @@ class Main(cmd.Cmd):
                     timeout=timeout,
                     filepath=filepath,
                     update_file=update_file,
+                    intro=intro,
+                    act=awesome_prompt,
                 )
+                intro_response = self.bot.chat(self.bot.conversation.intro, stream=True)
+                if not quiet:
+                    this.stream_output(
+                        intro_response,
+                        title="Intro Response",
+                        is_markdown=True,
+                        style=Style(
+                            color="cyan",
+                        ),
+                    )
 
             elif provider in pytgpt.gpt4free_providers:
                 from pytgpt.gpt4free import GPT4FREE

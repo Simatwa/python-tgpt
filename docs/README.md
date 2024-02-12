@@ -250,7 +250,7 @@ Alternatively, you can install non-binaries. *(Recommended)*
 2. Commandline:
 
    ```sh
-   pip install ---upgrade "python-tgpt[cli]"
+   pip install --upgrade "python-tgpt[cli]"
    ```
 
 3. Full installation:

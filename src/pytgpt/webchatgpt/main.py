@@ -3,6 +3,7 @@ from WebChatGPT.utils import get_message
 from pytgpt.base import Provider
 from pytgpt.utils import Conversation
 from pytgpt.utils import Optimizers
+from pytgpt.utils import AwesomePrompts
 
 default_model = "text-davinci-002-render-sha"
 
@@ -16,6 +17,8 @@ class WEBCHATGPT(Provider):
         timeout: int = 30,
         filepath: str = None,
         update_file: str = True,
+        intro: str = None,
+        act: str = None,
     ):
         """Initializes WEBCHATGPT
 
@@ -26,10 +29,9 @@ class WEBCHATGPT(Provider):
             timeout (int, optional): Http request timeout. Defaults to 30.
             filepath (str, optional): Path to save the chat history. Defaults to None.
             update_file (str, optional): Flag for controlling chat history updates. Defaults to True.
+            intro (str, optional): Conversation introductory prompt. Defaults to None.
+            act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
         """
-        self.conversation = Conversation(
-            status=False, filepath=filepath, update_file=update_file
-        )
         self.session = ChatGPT(cookie_path=cookie_file, model=model, timeout=timeout)
         self.session.session.proxies = proxy
         self.last_response = {}
@@ -37,6 +39,16 @@ class WEBCHATGPT(Provider):
             method
             for method in dir(Optimizers)
             if callable(getattr(Optimizers, method)) and not method.startswith("__")
+        )
+        Conversation.intro = (
+            AwesomePrompts().get_act(
+                act, raise_not_found=True, default=None, case_insensitive=True
+            )
+            if act
+            else intro or Conversation.intro
+        )
+        self.conversation = Conversation(
+            status=False, filepath=filepath, update_file=update_file
         )
 
     def ask(
