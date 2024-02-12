@@ -958,7 +958,7 @@ class Main(cmd.Cmd):
             busy_bar.stop_spinning()
             is_feedback = self.RawDog.main(ai_response)
             if is_feedback:
-                return self.default(self.bot.chat(is_feedback))
+                return self.default(is_feedback)
             self.__end_time = time.time()
 
         else:
