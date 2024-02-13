@@ -44,6 +44,12 @@ python-tgpt
 # CLI
 from pytgpt.console import main
 main()
+"""
+Welcome to AI Chat in terminal. Type 'help' or 'h' for usage info.
+Submit any bug at https://github.com/Simatwa/python-tgpt/issues/new
+╭─[Smartwa@pyTGPT](phind)~[🕒04:05:55-💻00:00:00-⚡0.0s]
+╰─>
+"""
 ```
 
 This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key.
