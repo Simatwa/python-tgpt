@@ -53,10 +53,10 @@ class POE(Provider):
         cookie_path = Path(cookie)
 
         if cookie_path.exists() or any(["/" in cookie, ".json" in cookie]):
-
+            cookie = None
             all_cookies = loads(cookie_path.read_text())
             for entry in all_cookies:
-                if entry["name"] == "m-b":
+                if entry["name"] == "p-b":
                     cookie = entry["value"]
             assert (
                 cookie
