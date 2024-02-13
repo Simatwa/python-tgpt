@@ -7,6 +7,13 @@ from pytgpt.utils import AwesomePrompts
 from pathlib import Path
 from json import loads
 from json import dumps
+from loguru import logger
+import logging
+
+logging.getLogger("httpx").setLevel(logging.ERROR)
+logging.getLogger("websocket").setLevel(logging.ERROR)
+
+logger.remove()
 
 default_model = "Assistant"
 
@@ -42,7 +49,7 @@ class POE(Provider):
         ), f"Cookie must be of {str} datatype only not {type(cookie)}"
         assert (
             model in BOTS_LIST.keys()
-        ), f"model name'{model}' is not one of {', '.join(list(BOTS_LIST.keys()))}"
+        ), f"model name '{model}' is not one of {', '.join(list(BOTS_LIST.keys()))}"
         cookie_path = Path(cookie)
 
         if cookie_path.exists() or any(["/" in cookie, ".json" in cookie]):
