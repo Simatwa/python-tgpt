@@ -401,3 +401,9 @@ For instance:
 - `webchatgpt` supports intro prompt.
 - Fix: placeholders consistency - `{{stream}}|{{copied}}`
 - Other minor fixes.
+
+## v0.5.0
+
+**What's new?**
+
+- added: Provider [poe](https://poe.com). Supports multiple models. Thanks to [snowby666/poe-api-wrapper](https://github.com/snowby666/poe-api-wrapper).
