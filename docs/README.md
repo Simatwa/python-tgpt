@@ -40,6 +40,12 @@ python-tgpt
 
 ```
 
+```python
+# CLI
+from pytgpt.console import main
+main()
+```
+
 This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key.
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available, fostering a smoother AI interaction experience.
@@ -264,7 +270,8 @@ Alternatively, you can install non-binaries. *(Recommended)*
 
 This package offers a convenient command-line interface.
 
-> **Note** : `phind` is the default *provider*.
+> [!NOTE]
+> `phind` is the default *provider*.
 
 - For a quick response:
   ```bash
@@ -357,7 +364,8 @@ for value in resp:
 """
 ```
 
-> **Note** : All providers have got a common class methods.
+> [!NOTE]
+> All providers have got a common class methods.
 
 <details>
 
@@ -495,7 +503,8 @@ bot = koboldai.KOBOLDAI(is_conversation=False)
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
 
-> **Warning** : **Bard** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the class. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
+> [!WARNING]
+> **Bard** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the class. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
 
 ### Advanced Usage of Placeholders
 
@@ -542,7 +551,8 @@ For example, for the option `--provider`, you would set an environment variable 
 
 The environment variables can be overridden by explicitly declaring new value.
 
-> **Note** : This is not limited to any command.
+> [!NOTE]
+> This is not limited to any command.
 
 ## Dynamic Provider
 
