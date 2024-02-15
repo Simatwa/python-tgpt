@@ -132,7 +132,7 @@ class LLAMA2(Provider):
 
         def for_stream():
             response = session.post(
-                self.chat_endpoint, json=payload, stream=stream, timeout=self.timeout
+                self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
             if (
                 not response.ok
