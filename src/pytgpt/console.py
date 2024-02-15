@@ -31,8 +31,11 @@ from pytgpt.utils import RawDog
 from WebChatGPT.console import chat as webchatgpt
 from colorama import Fore
 from colorama import init as init_colorama
+from envist import Envist
 
 init_colorama(autoreset=True)
+
+Envist()  # loads .env variables
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s : %(message)s ",  # [%(module)s,%(lineno)s]", # for debug purposes
@@ -96,10 +99,18 @@ class this:
             return (False, e)
 
     def g4f_providers_in_dict(
-        url=True, working=True, stream=False, context=False, gpt35=False, gpt4=False
+        url=True,
+        working=True,
+        stream=False,
+        context=False,
+        gpt35=False,
+        gpt4=False,
+        selenium=False,
     ):
         from pytgpt import g4f
+        import g4f.Provider.selenium as selenium_based
 
+        selenium_based_providers: list = dir(selenium_based)
         hunted_providers = []
         required_attrs = (
             "url",
@@ -132,6 +143,13 @@ class this:
                 provider_meta["gpt35_turbo"] = provider.supports_gpt_35_turbo
             if gpt4:
                 provider_meta["gpt4"] = provider.supports_gpt_4
+            if selenium:
+                try:
+                    selenium_based_providers.index(provider_meta["name"])
+                    value = True
+                except ValueError:
+                    value = False
+                provider_meta["non_selenium"] = value
 
             hunted_providers.append(provider_meta)
 
@@ -1937,9 +1955,15 @@ class Gpt4free:
     @click.option(
         "-4", "--gpt4", is_flag=True, help="Restrict to providers supporting gpt4 model"
     )
+    @click.option(
+        "-se",
+        "--selenium",
+        is_flag=True,
+        help="Restrict to selenium dependent providers",
+    )
     @click.option("-j", "--json", is_flag=True, help="Format output in json")
     @click.help_option("-h", "--help")
-    def show(target, working, url, stream, context, gpt35, gpt4, json):
+    def show(target, working, url, stream, context, gpt35, gpt4, selenium, json):
         """List available models and providers"""
         available_targets = ["models", "providers"]
         assert (
@@ -1959,15 +1983,14 @@ class Gpt4free:
                             context=context,
                             gpt35=gpt35,
                             gpt4=gpt4,
+                            selenium=selenium,
                         ),
                     )
                 )
             )
-            hunted_providers = (
-                hunted_providers[1:]
-                if hunted_providers[0] is None
-                else hunted_providers
-            )
+            while None in hunted_providers:
+                hunted_providers.remove(None)
+
             hunted_providers.sort()
             if json:
                 rich.print_json(data=dict(providers=hunted_providers), indent=4)
@@ -2020,8 +2043,13 @@ class Gpt4free:
                     "llama7b-v2-chat",
                 ],
             )
+            for provider in pytgpt.g4f.Provider.__providers__:
+                if hasattr(provider, "models"):
+                    models[provider.__name__] = provider.models
             if json:
                 for key, value in models.items():
+                    while None in value:
+                        value.remove(None)
                     value.sort()
                     models[key] = value
 
@@ -2083,7 +2111,7 @@ class Gpt4free:
         help="Test n amount of providers at once",
         default=5,
     )
-    @click.option("-q", "--quiet", is_flag=True, help="Suppress all stdout")
+    @click.option("-q", "--quiet", is_flag=True, help="Suppress progress bar")
     @click.option(
         "-j", "--json", is_flag=True, help="Stdout test results in json format"
     )
@@ -2091,13 +2119,33 @@ class Gpt4free:
     @click.option(
         "-b", "--best", is_flag=True, help="Stdout the fastest provider <name only>"
     )
+    @click.option(
+        "-se",
+        "--selenium",
+        help="Test even selenium dependent providers",
+        is_flag=True,
+    )
+    @click.option(
+        "-dl",
+        "--disable-logging",
+        is_flag=True,
+        help="Disable logging",
+    )
     @click.option("-y", "--yes", is_flag=True, help="Okay to all confirmations")
     @click.help_option("-h", "--help")
-    def test(timeout, thread, quiet, json, dry_test, best, yes):
+    def test(
+        timeout, thread, quiet, json, dry_test, best, selenium, disable_logging, yes
+    ):
         """Test and save working providers"""
         from pytgpt.gpt4free import utils
 
-        test = utils.TestProviders(test_at_once=thread, quiet=quiet, timeout=timeout)
+        test = utils.TestProviders(
+            test_at_once=thread,
+            quiet=quiet,
+            timeout=timeout,
+            selenium=selenium,
+            do_log=disable_logging == False,
+        )
         if best:
             click.secho(test.best)
             return

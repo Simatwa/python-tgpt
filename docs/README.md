@@ -557,6 +557,9 @@ For example, for the option `--provider`, you would set an environment variable 
 
 The environment variables can be overridden by explicitly declaring new value.
 
+> [!TIP]
+> Save the variables in a `.env` file in your current directory or export the them in your `.zshrc` file.
+
 > [!NOTE]
 > This is not limited to any command.
 

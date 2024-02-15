@@ -407,3 +407,12 @@ For instance:
 **What's new?**
 
 - added: Provider [poe](https://poe.com). Supports multiple models. Thanks to [snowby666/poe-api-wrapper](https://github.com/snowby666/poe-api-wrapper).
+
+## v0.5.1
+
+**What's new?**
+
+- added: Load variables from `.env` file.
+- patch: Exclude selenium dependents providers from test. [#33](https://github.com/Simatwa/python-tgpt/issues/33)
+- patch: Show more gpt4free models.
+- added: Test logging flag.

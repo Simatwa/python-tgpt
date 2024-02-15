@@ -21,6 +21,7 @@ cli_reqs = [
     "pyperclip==1.8.2",
     "colorama==0.4.6",
     "g4f>=0.2.1.2",
+    "envist==0.0.4",
 ]
 
 EXTRA_REQUIRE = {
@@ -37,7 +38,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.5.0",
+    version="0.5.1",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -81,6 +82,7 @@ setup(
         "gpt4free",
         "gpt4all-cli",
         "gptcli",
+        "poe-api",
     ],
     long_description=Path.open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

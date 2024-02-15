@@ -47,25 +47,65 @@ def is_working(provider: str) -> bool:
 
 class TestProviders:
 
-    def __init__(self, test_at_once: int = 5, quiet: bool = False, timeout: int = 20):
+    def __init__(
+        self,
+        test_at_once: int = 5,
+        quiet: bool = False,
+        timeout: int = 20,
+        selenium: bool = False,
+        do_log: bool = True,
+    ):
         """Constructor
 
         Args:
             test_at_once (int, optional): Test n providers at once. Defaults to 5.
             quiet (bool, optinal): Disable stdout. Defaults to False.
             timout (int, optional): Thread timeout for each provider. Defaults to 20.
+            selenium (bool, optional): Test even selenium dependent providers. Defaults to False.
+            do_log (bool, optional): Flag to control logging. Defaults to True.
         """
         self.test_at_once: int = test_at_once
         self.quiet = quiet
         self.timeout = timeout
+        self.do_log = do_log
+        self.__logger = logging.getLogger(__name__)
         self.working_providers: list = [
             provider.__name__
             for provider in g4f.Provider.__providers__
             if provider.working
         ]
+
+        if not selenium:
+            import g4f.Provider.selenium as selenium_based
+            from g4f import webdriver
+
+            webdriver.has_requirements = False
+            selenium_based_providers: list = dir(selenium_based)
+            for provider in self.working_providers:
+                try:
+                    selenium_based_providers.index(provider)
+                except ValueError:
+                    pass
+                else:
+                    self.__log(
+                        30, f"Dropping provider - {provider} - [Selenium dependent]"
+                    )
+                    self.working_providers.remove(provider)
+
         self.results_path: Path = results_path
         self.__create_empty_file(ignore_if_found=True)
         self.results_file_is_empty: bool = False
+
+    def __log(
+        self,
+        level: int,
+        message: str,
+    ):
+        """class logger"""
+        if self.do_log:
+            self.__logger.log(level, message)
+        else:
+            pass
 
     def __create_empty_file(self, ignore_if_found: bool = False):
         if ignore_if_found and self.results_path.is_file():
@@ -97,7 +137,7 @@ class TestProviders:
                 current_results = load(fh)
             new_result = dict(time=time() - start_time, name=name)
             current_results["results"].append(new_result)
-            logging.info(f"Test result - {new_result['name']} - {new_result['time']}")
+            self.__log(20, f"Test result - {new_result['name']} - {new_result['time']}")
 
             with self.results_path.open("w") as fh:
                 dump(current_results, fh)
@@ -111,7 +151,7 @@ class TestProviders:
         # Create a progress bar
         total = len(self.working_providers)
         with Progress() as progress:
-            logging.info(f"Testing {total} providers : {self.working_providers}")
+            self.__log(20, f"Testing {total} providers : {self.working_providers}")
             task = progress.add_task(
                 f"[cyan]Testing...[{self.test_at_once}]",
                 total=total,
@@ -156,7 +196,7 @@ class TestProviders:
             if run:
                 raise Exception("Unable to find working g4f provider")
             else:
-                logging.warning("Hunting down working g4f providers.")
+                self.__log(30, "Hunting down working g4f providers.")
                 return self.get_results(run=True, best=best)
 
         time_list = []
@@ -182,6 +222,6 @@ class TestProviders:
     def auto(self):
         """Best working provider"""
         for result in self.get_results(run=False, best=False):
-            logging.info("Confirming working status of provider : " + result["name"])
+            self.__log(20, "Confirming working status of provider : " + result["name"])
             if is_working(result["name"]):
                 return result["name"]
