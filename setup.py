@@ -21,7 +21,7 @@ cli_reqs = [
     "pyperclip==1.8.2",
     "colorama==0.4.6",
     "g4f>=0.2.1.2",
-    "envist==0.0.4",
+    "python-dotenv==1.0.0",
 ]
 
 EXTRA_REQUIRE = {

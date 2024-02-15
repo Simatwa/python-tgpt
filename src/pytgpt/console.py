@@ -31,11 +31,11 @@ from pytgpt.utils import RawDog
 from WebChatGPT.console import chat as webchatgpt
 from colorama import Fore
 from colorama import init as init_colorama
-from envist import Envist
+from dotenv import load_dotenv
 
 init_colorama(autoreset=True)
 
-Envist()  # loads .env variables
+load_dotenv()  # loads .env variables
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s : %(message)s ",  # [%(module)s,%(lineno)s]", # for debug purposes

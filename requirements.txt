@@ -12,4 +12,4 @@ pyyaml==6.0.1
 matplotlib
 gpt4all==2.2.0
 poe-api-wrapper==1.3.6
-envist==0.0.4
+python-dotenv==1.0.0
