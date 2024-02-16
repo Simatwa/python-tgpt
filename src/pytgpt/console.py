@@ -2222,7 +2222,7 @@ class ImageGen:
     def generate_image(
         prompt, directory, amount, name, timeout, proxy, no_additives, quiet
     ):
-        """Generate images with pollination.ai"""
+        """Generate images with pollinations.ai"""
         with Progress() as progress:
             task = progress.add_task(
                 f"[cyan]Generating ...[{amount}]",
