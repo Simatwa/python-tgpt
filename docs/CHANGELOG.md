@@ -422,3 +422,9 @@ For instance:
 **What's new?**
 
 - fix: llama2. #34
+
+## v0.5.3
+
+**What's new?**
+
+- added: Support for image generation.

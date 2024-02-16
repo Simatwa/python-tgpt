@@ -23,11 +23,13 @@ from rich.console import Console
 from rich.live import Live
 from rich.table import Table
 from rich.prompt import Prompt
+from rich.progress import Progress
 from typing import Iterator
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
 from pytgpt.utils import AwesomePrompts
 from pytgpt.utils import RawDog
+from pytgpt.imager import Imager
 from WebChatGPT.console import chat as webchatgpt
 from colorama import Fore
 from colorama import init as init_colorama
@@ -2182,6 +2184,62 @@ class Gpt4free:
             rich.print(table)
 
 
+class ImageGen:
+
+    @staticmethod
+    @click.command(context_settings=this.context_settings)
+    @click.argument("prompt")
+    @click.option(
+        "-d",
+        "--directory",
+        type=click.Path(exists=True),
+        help="Folder for saving the images",
+        default=os.getcwd(),
+    )
+    @click.option(
+        "-a",
+        "--amount",
+        type=click.IntRange(1, 100),
+        help="Total images to be generated",
+        default=1,
+    )
+    @click.option("-n", "--name", help="Name for the generated images")
+    @click.option(
+        "-t",
+        "--timeout",
+        type=click.IntRange(5, 300),
+        help="Http request timeout in seconds",
+    )
+    @click.option("-p", "--proxy", help="Http request proxy")
+    @click.option(
+        "-nd",
+        "--no-additives",
+        is_flag=True,
+        help="Disable prompt altering for effective image generation",
+    )
+    @click.option("-q", "--quiet", is_flag=True, help="Suppress progress bar")
+    @click.help_option("-h", "--help")
+    def generate_image(
+        prompt, directory, amount, name, timeout, proxy, no_additives, quiet
+    ):
+        """Generate images with pollination.ai"""
+        with Progress() as progress:
+            task = progress.add_task(
+                f"[cyan]Generating ...[{amount}]",
+                total=amount,
+                visible=quiet == False,
+            )
+            imager = Imager(timeout=timeout, proxies=proxy if proxy else {})
+            for image in imager.generate(
+                prompt=prompt,
+                amount=amount,
+                additives=no_additives == False,
+                stream=True,
+            ):
+                imager.save([image], name=name, dir=directory)
+                progress.update(task, advance=1)
+
+
 class Utils:
     """Utilities command"""
 
@@ -2275,6 +2333,9 @@ def make_commands():
     EntryGroup.awesome.add_command(Awesome.search)
     EntryGroup.awesome.add_command(Awesome.update)
     EntryGroup.awesome.add_command(Awesome.whole)
+
+    # Image generator
+    EntryGroup.tgpt2_.add_command(ImageGen.generate_image, "imager")
 
 
 # @this.handle_exception

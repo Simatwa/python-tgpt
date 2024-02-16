@@ -6,9 +6,7 @@ from json import dump, load
 from time import time
 from threading import Thread as thr
 from functools import wraps
-import datetime
 from rich.progress import Progress
-import click
 import logging
 
 results_path = Path(default_path) / "provider_test.json"
@@ -88,7 +86,7 @@ class TestProviders:
                     pass
                 else:
                     self.__log(
-                        30, f"Dropping provider - {provider} - [Selenium dependent]"
+                        10, f"Dropping provider - {provider} - [Selenium dependent]"
                     )
                     self.working_providers.remove(provider)
 

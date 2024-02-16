@@ -50,7 +50,7 @@ Submit any bug at https://github.com/Simatwa/python-tgpt/issues/new
 """
 ```
 
-This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key.
+This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key as well generating images.
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available, fostering a smoother AI interaction experience.
 
@@ -69,6 +69,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🧠 Multiple LLM providers - **45+**
 - 🎯 Customizable script generation and execution
 - 🔌 Offline support for Large Language Models
+- 🎨 Image generation capabilities
 
 ## Providers
 
@@ -86,158 +87,19 @@ These are simply the hosts of the LLMs, which include:
 12. [gpt4all](https://gpt4all.io) *(Offline)*
 13. [Poe](poe.com) - Poe|Quora *(Session ID required)*
 
+
 <details>
 
 <summary>
 
 41+ Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
 
+</summary>
+
 - To list working providers run:
    ```sh
    $ pytgpt gpt4free test -y
    ```
-
-</summary>
-
- - AiChatOnline
- - [Aura](https://openchat.team)
- - [Bard](https://bard.google.com/)
- - [Bing](https://bing.com)
- - [ChatBase](https://www.chatbase.co/)
- - [ChatForAi](https://chatforai.store/)
- - [Chatgpt4Online](https://chatgpt4online.org)
- - [ChatgptAi](https://chatgpt.ai/)
- - [ChatgptDemo](https://chat.chatgptdemo.net)
- - [ChatgptNext](https://www.chatgpt-free.c)
- - [Chatxyz](https://chat.3211000.xyz)
- - [DeepInfra](https://deepinfra.co)
- - [FakeGpt](https://chat-shared2.zhile.io/)
- - [FreeChatgpt](https://free.chatgpt.org.uk)
- - [GPTalk](https://gptalk.net/)
- - [GeekGpt](https://chat.geekgpt.org)
- - [GeminiProChat](https://geminiprochat.com)
- - Gpt6
- - [GptChatly](https://gptchatly.com)
- - [GptForLove](https://ai18.gptforlove.com/)
- - [GptGo](https://gptgo.ai/)
- - GptTalkRu
- - [Hashnode](https://hashnode.com/)
- - [HuggingChat](https://huggingface.co/chat)
- - Koala
- - [Liaobots](https://liaobots.site)
- - [Llama2](https://www.llama2.ai/)
- - [MyShell](https://app.myshell.ai/chat)
- - OnlineGpt
- - OpenaiChat
- - PerplexityAi
- - [Phind](https://www.phind.com)
- - Pi
- - Poe
- - [Raycast](https://raycast.com)
- - TalkAi
- - [Theb](https://theb.ai/)
- - ThebApi
- - [You](https://you.com/)
- - [Yqcloud](https://chat9.yqcloud.top/)
-
- <details>
-
- <summary>
- 
-All models. *(Include not working)*
-
- </summary>
-
-1. [AItianhu](https://www.aitianhu.com)
-2. [AItianhuSpace](https://chat3.aiyunos.top/)
-3. [Acytoo](https://chat.acytoo.com)
-4. [AiAsk](https://e.aiask.me)
-5. [AiChatOnline](https://aichatonline.org)
-6. [AiChatting](https://www.aichatting.net)
-7. [AiService](https://aiservice.vercel.app/)
-8. [Aibn](https://aibn.cc)
-9. [Aichat](https://chat-gpt.org/chat)
-10. [Ails](https://ai.ls)
-11. [Aivvm](https://chat.aivvm.com)
-12. AsyncGeneratorProvider
-13. AsyncProvider
-14. [Aura](https://openchat.team)
-15. [Bard](https://bard.google.com)
-16. BaseProvider
-17. [Berlin](https://ai.berlin4h.top)
-18. [Bestim](https://chatgpt.bestim.org)
-19. [Bing](https://bing.com/chat)
-20. [ChatAiGpt](https://chataigpt.org)
-21. [ChatAnywhere](https://chatanywhere.cn)
-22. [ChatBase](https://www.chatbase.co)
-23. [ChatForAi](https://chatforai.store)
-24. [Chatgpt4Online](https://chatgpt4online.org)
-25. [ChatgptAi](https://chatgpt.ai)
-26. [ChatgptDemo](https://chat.chatgptdemo.net)
-27. [ChatgptDemoAi](https://chat.chatgptdemo.ai)
-28. [ChatgptDuo](https://chatgptduo.com)
-29. [ChatgptFree](https://chatgptfree.ai)
-30. [ChatgptLogin](https://chatgptlogin.ai)
-31. [ChatgptNext](https://www.chatgpt-free.cc)
-32. [ChatgptX](https://chatgptx.de)
-33. [Chatxyz](https://chat.3211000.xyz)
-34. [CodeLinkAva](https://ava-ai-ef611.web.app)
-35. CreateImagesProvider
-36. [Cromicle](https://cromicle.top)
-37. [DeepInfra](https://deepinfra.com)
-38. [DfeHub](https://chat.dfehub.com/)
-39. [EasyChat](https://free.easychat.work)
-40. [Equing](https://next.eqing.tech/)
-41. [FakeGpt](https://chat-shared2.zhile.io)
-42. [FastGpt](https://chat9.fastgpt.me/)
-43. [Forefront](https://forefront.com)
-44. [FreeChatgpt](https://free.chatgpt.org.uk)
-45. [FreeGpt](https://freegpts1.aifree.site/)
-46. [GPTalk](https://gptalk.net)
-47. [GeekGpt](https://chat.geekgpt.org)
-48. [GeminiProChat](https://geminiprochat.com)
-49. [GetGpt](https://chat.getgpt.world/)
-50. [Gpt6](https://gpt6.ai)
-51. [GptChatly](https://gptchatly.com)
-52. [GptForLove](https://ai18.gptforlove.com)
-53. [GptGo](https://gptgo.ai)
-54. [GptGod](https://gptgod.site)
-55. [GptTalkRu](https://gpttalk.ru)
-56. [H2o](https://gpt-gm.h2o.ai)
-57. [Hashnode](https://hashnode.com)
-58. [HuggingChat](https://huggingface.co/chat)
-59. [Koala](https://koala.sh)
-60. [Komo](https://komo.ai/api/ask)
-61. [Liaobots](https://liaobots.site)
-62. [Llama2](https://www.llama2.ai)
-63. [Lockchat](http://supertest.lockchat.app)
-64. [MikuChat](https://ai.okmiku.com)
-65. [MyShell](https://app.myshell.ai/chat)
-66. [Myshell](https://app.myshell.ai/chat)
-67. [OnlineGpt](https://onlinegpt.org)
-68. [Opchatgpts](https://opchatgpts.net)
-69. [OpenAssistant](https://open-assistant.io/chat)
-70. [OpenaiChat](https://chat.openai.com)
-71. [PerplexityAi](https://www.perplexity.ai)
-72. [Phind](https://www.phind.com)
-73. [Pi](https://pi.ai/talk)
-74. [Poe](https://poe.com)
-75. [Raycast](https://raycast.com)
-76. RetryProvider
-77. [TalkAi](https://talkai.info)
-78. [Theb](https://beta.theb.ai)
-79. [ThebApi](https://theb.ai)
-80. [V50](https://p5.v50.ltd)
-81. [Vercel](https://sdk.vercel.ai)
-82. [Vitalentum](https://app.vitalentum.io)
-83. [Wewordle](https://wewordle.org)
-84. [Wuguokai](https://chat.wuguokai.xyz)
-85. [Ylokh](https://chat.ylokh.xyz)
-86. [You](https://you.com)
-87. [Yqcloud](https://chat9.yqcloud.top/)
- 
- </details>
-
 </details>
 
 ## Prerequisites
@@ -510,6 +372,54 @@ Utilize the `--disable-conversation` flag in the console to achieve the same fun
 
 > [!CAUTION]
 > **Bard** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the class. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
+
+### Image Generation
+
+This has been made possible with [pollination.ai](https://pollination.ai).
+```sh
+$ pytgpt imager "<prompt>"
+# e.g pytgpt imager "Coding bot"
+```
+
+<details>
+
+<summary>
+Developers
+</summary>
+
+```python
+from pytgpt.imager import Imager
+
+img = Imager()
+
+generated_img = img.generate('Coding bot') # [bytes]
+
+img.save(generated_img)
+```
+
+<details>
+
+<summary>
+Download Multiple Images
+</summary>
+
+```python
+
+from pytgpt.imager import Imager
+
+img = Imager()
+
+img_generator = img.generate('Coding bot', amount=3, stream=True)
+
+img.save(img_generator)
+
+# RAM friendly
+```
+
+</details>
+
+
+</details>
 
 ### Advanced Usage of Placeholders
 

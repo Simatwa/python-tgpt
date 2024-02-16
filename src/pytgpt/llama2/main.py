@@ -151,7 +151,7 @@ class LLAMA2(Provider):
             ):
                 try:
                     if bool(value.strip()):
-                        message_load += value + "\n" 
+                        message_load += value + "\n"
                         resp: dict = dict(text=message_load)
                         yield value if raw else resp
                         self.last_response.update(resp)
