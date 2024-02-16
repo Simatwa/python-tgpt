@@ -416,3 +416,9 @@ For instance:
 - patch: Exclude selenium dependents providers from test. [#33](https://github.com/Simatwa/python-tgpt/issues/33)
 - patch: Show more gpt4free models.
 - added: Test logging flag.
+
+## v0.5.2
+
+**What's new?**
+
+- fix: llama2. #34
