@@ -375,7 +375,7 @@ Utilize the `--disable-conversation` flag in the console to achieve the same fun
 
 ### Image Generation
 
-This has been made possible by [pollination.ai](https://pollination.ai).
+This has been made possible by [pollinations.ai](https://pollination.ai).
 ```sh
 $ pytgpt imager "<prompt>"
 # e.g pytgpt imager "Coding bot"
