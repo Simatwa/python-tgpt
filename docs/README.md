@@ -41,10 +41,8 @@ python-tgpt
 ```
 
 ```python
-# CLI
-from pytgpt.console import main
-main()
-"""
+>>> from pytgpt.console import main
+>>> main()
 Welcome to AI Chat in terminal. Type 'help' or 'h' for usage info.
 Submit any bug at https://github.com/Simatwa/python-tgpt/issues/new
 ╭─[Smartwa@pyTGPT](phind)~[🕒04:05:55-💻00:00:00-⚡0.0s]
@@ -499,7 +497,8 @@ print(resp)
 
 </details>
 
-**Note**: Commencing from [v0.1.0](https://github.com/Simatwa/python-tgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
+> [!IMPORTANT]
+> Commencing from [v0.1.0](https://github.com/Simatwa/python-tgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
 
 You can still disable the mode:
 
@@ -509,7 +508,7 @@ bot = koboldai.KOBOLDAI(is_conversation=False)
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
 
-> [!WARNING]
+> [!CAUTION]
 > **Bard** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the class. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
 
 ### Advanced Usage of Placeholders
@@ -524,13 +523,13 @@ The `generate` functionality has been enhanced starting from *v0.3.0* to enable 
 This feature is particularly beneficial for intricate operations. For example:
 
 ```bash
-$ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise commit message from it, aligning with my commit message history: {{copied}}" -p fakeopen --shell --new
+$ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise commit message from it, aligning with my commit message history: {{copied}}" --shell --new
 ```
 > In this illustration, `{{stream}}` denotes the result of the `$ git diff` operation, while `{{copied}}` signifies the content copied from the output of the `$ git log` command.
 
 ### Introducing RawDog
 
-RawDog is a masterpiece feature that exploits the versatile capabilities of Python to command and control your system as per your needs. You can literally do anything with it, since it generates and executes python codes, driven by **your prompts**! To have a bite of *rawdog* simply append the flag `--rawdog` *shortcut* `-rd` in *generate/interactive* mode. This introduces a never seen-before feature in the *tgpt ecosystem*. Thanks to [AbanteAI/rawdog](https://github.com/AbanteAI/rawdog) for the idea.
+RawDog is a masterpiece feature that exploits the versatile capabilities of Python to command and control your system as per your needs. You can literally do anything with it, since it generates and executes python codes, driven by **your prompts**! To have a bite of *rawdog* simply append the flag `--rawdog` *shortform* `-rd` in *generate/interactive* mode. This introduces a never seen-before feature in the *tgpt ecosystem*. Thanks to [AbanteAI/rawdog](https://github.com/AbanteAI/rawdog) for the idea.
 
 This can be useful in some ways. For instance :
 
@@ -544,10 +543,6 @@ This can be useful in some ways. For instance :
    <img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/Figure_1.png?raw=true" width='60%'>
    </p>
 
-<details>
-
-<summary>
-
 ## Passing Environment Variables
 
 Pytgpt **v0.4.6** introduces a convention way of taking variables from the environment.
@@ -555,17 +550,21 @@ To achieve that, set the environment variables in your operating system or scrip
 
 For example, for the option `--provider`, you would set an environment variable `PYTGPT_PROVIDER` to provide a default value for that option. Same case applies to boolean flags such as `--rawdog` whose environment variable will be `PYTGPT_RAWDOG` with value being either `true/false`. Finally, `--awesome-prompt` will take the environment variable `PYTGPT_AWESOME_PROMPT`.
 
+> [!NOTE]
+> This is **NOT** limited to any command
+
 The environment variables can be overridden by explicitly declaring new value.
 
 > [!TIP]
 > Save the variables in a `.env` file in your current directory or export the them in your `.zshrc` file.
 
-> [!NOTE]
-> This is not limited to any command.
-
 ## Dynamic Provider
 
 Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
+
+<details>
+
+<summary>
 
 For more usage info run `$ pytgpt --help`
 
@@ -595,4 +594,3 @@ Commands:
 
 1. [x] [tgpt](https://github.com/aandrew-me/tgpt)
 2. [x] [gpt4free](https://github.com/xtekky/gpt4free)
-3. [x] You
