@@ -50,7 +50,7 @@ Submit any bug at https://github.com/Simatwa/python-tgpt/issues/new
 """
 ```
 
-This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key as well generating images.
+This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key and generating images as well.
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available, fostering a smoother AI interaction experience.
 
