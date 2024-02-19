@@ -433,6 +433,41 @@ class Updates:
 class RawDog:
     """Generate and auto-execute Python scripts in the cli"""
 
+    examples = """\
+EXAMPLES:
+
+1. User: Kill the process running on port 3000
+
+LLM:
+```python
+import os
+os.system("kill $(lsof -t -i:3000)")
+print("Process killed")
+```
+
+2. User: Summarize my essay
+
+LLM:
+```python
+import glob
+files = glob.glob("*essay*.*")
+with open(files[0], "r") as f:
+    print(f.read())
+```
+CONTINUE
+
+User:
+LAST SCRIPT OUTPUT:
+John Smith
+Essay 2021-09-01
+...
+
+LLM:
+```python
+print("The essay is about...")
+```
+"""
+
     # Idea borrowed from https://github.com/AbanteAI/rawdog
 
     def __init__(
@@ -523,6 +558,8 @@ Please follow these conventions carefully:
 - When looking through files, use git as available to skip files, and skip hidden files (.env, .git, etc) by default.
 - You can plot anything with matplotlib.
 - ALWAYS Return your SCRIPT inside of a single pair of ``` delimiters. Only the console output of the first such SCRIPT is visible to the user, so make sure that it's complete and don't bother returning anything else.
+
+{self.examples}
 
 Current system : {platform.system()}
 Python version : {self.python_version}
