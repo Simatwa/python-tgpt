@@ -428,3 +428,10 @@ For instance:
 **What's new?**
 
 - added: Support for image generation.
+
+
+## v0.5.4
+
+**What's new?**
+
+- fix: Gemini (bard) provider.

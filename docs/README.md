@@ -80,7 +80,7 @@ These are simply the hosts of the LLMs, which include:
 3. [OpenGPTs](https://opengpts-example-vz4y4ooboq-uc.a.run.app/)
 4. [OpenAI](https://chat.openai.com) *(API key required)*
 5. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
-6. [Bard](https://github.com/acheong08/bard) - **Google** *(Session ID required)*
+6. [Gemini](https://github.com/Simatwa/bard) - **Google** *(Session ID required)*
 9. [Phind](https://www.phind.com) - *default*
 10. [Llama2](https://www.llama2.ai)
 11. [Blackboxai](https://www.blackbox.ai)

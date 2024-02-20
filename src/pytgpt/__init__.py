@@ -15,7 +15,7 @@ tgpt_providers = [
     "openai",
     "opengpt",
     "koboldai",
-    "bard",
+    "gemini",
     "phind",
     "llama2",
     "blackboxai",

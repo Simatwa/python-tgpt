@@ -13,14 +13,14 @@ logging.getLogger("httpx").setLevel(logging.ERROR)
 warnings.simplefilter("ignore", category=UserWarning)
 
 
-class BARD(Provider):
+class GEMINI(Provider):
     def __init__(
         self,
         cookie_file: str,
         proxy: dict = {},
         timeout: int = 30,
     ):
-        """Initializes BARD
+        """Initializes GEMINI
 
         Args:
             cookie_file (str): Path to `bard.google.com.cookies.json` file
@@ -40,7 +40,7 @@ class BARD(Provider):
             for entry in entries:
                 if entry["name"] == "__Secure-1PSID":
                     self.session_auth1 = entry["value"]
-                elif entry["name"] == "__Secure-1PAPISID":
+                elif entry["name"] == "__Secure-1PSIDTS":
                     self.session_auth2 = entry["value"]
 
             assert all(

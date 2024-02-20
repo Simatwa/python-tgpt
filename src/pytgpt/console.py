@@ -488,14 +488,14 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
-            elif provider == "bard":
-                from pytgpt.bard import BARD
+            elif provider == "gemini":
+                from pytgpt.gemini import GEMINI
 
                 assert auth, (
-                    "Path to bard.google.com.cookie.json file is required. "
+                    "Path to gemini.google.com.cookies.json file is required. "
                     "Use the flag `--key` or `-k`"
                 )
-                self.bot = BARD(
+                self.bot = GEMINI(
                     cookie_file=auth,
                     proxy=proxies,
                     timeout=timeout,
@@ -609,7 +609,7 @@ class Main(cmd.Cmd):
 
             elif provider == "poe":
                 assert auth, (
-                    "Path to poe.com.cookie.json file or 'p-b' cookie-value is required. "
+                    "Path to poe.com.cookies.json file or 'p-b' cookie-value is required. "
                     "Use the flag `--key` or `-k`"
                 )
                 from pytgpt.poe import POE, default_model
