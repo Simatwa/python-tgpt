@@ -429,9 +429,9 @@ For instance:
 
 - added: Support for image generation.
 
-
 ## v0.5.4
 
 **What's new?**
 
 - fix: Gemini (bard) provider.
+- patch: Dependencies.
