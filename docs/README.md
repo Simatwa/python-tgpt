@@ -41,13 +41,10 @@ python-tgpt
 ```
 
 ```python
->>> from pytgpt.console import main
->>> main()
-Welcome to AI Chat in terminal. Type 'help' or 'h' for usage info.
-Submit any bug at https://github.com/Simatwa/python-tgpt/issues/new
-╭─[Smartwa@pyTGPT](phind)~[🕒04:05:55-💻00:00:00-⚡0.0s]
-╰─>
-"""
+from pytgpt.imager import Imager
+img = Imager()
+generated_images = img.generate(prompt="Cyberpunk", amount=3, stream=True)
+img.save(generated_images)
 ```
 
 This project enables seamless interaction with over **45 free LLM providers** without requiring an API Key and generating images as well.
@@ -437,6 +434,25 @@ $ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise com
 ```
 > In this illustration, `{{stream}}` denotes the result of the `$ git diff` operation, while `{{copied}}` signifies the content copied from the output of the `$ git log` command.
 
+### Awesome Prompts
+
+[These prompts](https://github.com/Simatwa/gpt-cli/blob/main/assets/all-acts.pdf?raw=True) are designed to guide the AI's behavior or responses in a particular direction, encouraging it to exhibit certain characteristics or behaviors. The  term "awesome-prompt" is not a formal term in AI or machine learning literature, but it encapsulates the idea of crafting prompts that are effective in achieving desired outcomes. Let's say you want it to behave like a *Linux Terminal*, *PHP Interpreter*, or just to [**JAIL BREAK.**](https://gist.github.com/coolaj86/6f4f7b30129b0251f61fa7baaa881516)
+
+Instances :
+
+```sh
+$ pytgpt interactve --awesome-prompt "Linux Terminal"
+# Act like a Linux Terminal
+
+$ pytgpt interactive -ap DAN
+# Jailbreak
+```
+
+> [!NOTE]
+> Awesome prompts are alternative to `--intro`.
+> Run `$ pytgpt awesome whole` to list available prompts (*200+*).
+> Run `$ pytgpt awesome --help` for more info.
+
 ### Introducing RawDog
 
 RawDog is a masterpiece feature that exploits the versatile capabilities of Python to command and control your system as per your needs. You can literally do anything with it, since it generates and executes python codes, driven by **your prompts**! To have a bite of *rawdog* simply append the flag `--rawdog` *shortform* `-rd` in *generate/interactive* mode. This introduces a never seen-before feature in the *tgpt ecosystem*. Thanks to [AbanteAI/rawdog](https://github.com/AbanteAI/rawdog) for the idea.
@@ -473,7 +489,6 @@ The environment variables can be overridden by explicitly declaring new value.
 
 Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
 
-
 <details>
 
 <summary>
@@ -493,6 +508,7 @@ Commands:
   awesome      Perform CRUD operations on awesome-prompts
   generate     Generate a quick response with AI
   gpt4free     Discover gpt4free models, providers etc
+  imager       Generate images with pollinations.ai
   interactive  Chat with AI interactively (Default)
   utils        Utility endpoint for pytgpt
   webchatgpt   Reverse Engineered ChatGPT Web-Version

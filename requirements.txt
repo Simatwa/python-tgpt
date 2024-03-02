@@ -5,9 +5,9 @@ clipman==3.1.0
 pyperclip==1.8.2
 appdirs==1.4.4
 webchatgpt==0.2.9
-GoogleBard1>=2.1.2
+GoogleBard1>=2.1.4
 colorama==0.4.6
-g4f>=0.2.1.6
+g4f>=0.2.2.6
 pyyaml==6.0.1
 matplotlib
 gpt4all==2.2.0

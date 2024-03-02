@@ -10,7 +10,7 @@ INSTALL_REQUIRE = [
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
     "webchatgpt==0.2.9",
-    "GoogleBard1>=2.1.2",
+    "GoogleBard1>=2.1.4",
     "poe-api-wrapper==1.3.6",
 ]
 
@@ -20,13 +20,13 @@ cli_reqs = [
     "clipman==3.1.0",
     "pyperclip==1.8.2",
     "colorama==0.4.6",
-    "g4f>=0.2.1.6",
+    "g4f>=0.2.2.6",
     "python-dotenv==1.0.0",
 ]
 
 EXTRA_REQUIRE = {
     "cli": cli_reqs,
-    "all": ["g4f[all]>=0.2.1.0", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
+    "all": ["g4f[all]>=0.2.2.6", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
 }
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"

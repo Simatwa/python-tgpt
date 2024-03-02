@@ -433,5 +433,5 @@ For instance:
 
 **What's new?**
 
-- fix: Gemini (bard) provider.
-- patch: Dependencies.
+- fix: Gemini (Bard) provider.
+- added: awesome prompts info.
