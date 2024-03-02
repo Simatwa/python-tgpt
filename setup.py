@@ -12,6 +12,7 @@ INSTALL_REQUIRE = [
     "webchatgpt==0.2.9",
     "GoogleBard1>=2.1.4",
     "poe-api-wrapper==1.3.6",
+    "brotli==1.1.0",
 ]
 
 cli_reqs = [
