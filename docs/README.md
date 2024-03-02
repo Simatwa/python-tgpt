@@ -228,7 +228,7 @@ for value in resp:
 ```
 
 > [!NOTE]
-> All providers have got a common class methods.
+> All providers have a common class methods.
 
 <details>
 
@@ -261,21 +261,6 @@ print(bot.chat("<Your-prompt>"))
 
 </details>
 
-
-<details>
-
-<summary>
-Fakeopen
-
-</summary>
-
-```python
-import pytgpt.fakeopen as fakeopen
-bot = fakeopen.FAKEOPEN()
-print(bot.chat("<Your-prompt>"))
-```
-
-</details>
 
 <details>
 
