@@ -23,7 +23,7 @@ default_models = {
     "chat_completion": "gpt-3.5-turbo",
 }
 
-default_provider = "Aura"
+default_provider = "You"
 
 
 class GPT4FREE(Provider):
