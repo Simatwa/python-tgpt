@@ -13,6 +13,7 @@ INSTALL_REQUIRE = [
     "GoogleBard1>=2.1.4",
     "poe-api-wrapper==1.3.6",
     "brotli==1.1.0",
+    "g4f>=0.2.4.1",
 ]
 
 cli_reqs = [
@@ -27,7 +28,7 @@ cli_reqs = [
 
 EXTRA_REQUIRE = {
     "cli": cli_reqs,
-    "all": ["g4f[all]>=0.2.2.6", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
+    "all": ["g4f[all]>=0.2.4.1", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
 }
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"
