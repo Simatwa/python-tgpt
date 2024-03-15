@@ -23,7 +23,7 @@ default_models = {
     "chat_completion": "gpt-3.5-turbo",
 }
 
-default_provider = "FreeGpt"
+default_provider = "Koala"
 
 
 class GPT4FREE(Provider):
@@ -47,7 +47,7 @@ class GPT4FREE(Provider):
         """Initialies GPT4FREE
 
         Args:
-            provider (str, optional): gpt4free based provider name. Defaults to FreeGpt.
+            provider (str, optional): gpt4free based provider name. Defaults to Koala.
             is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
             auth (str, optional): Authentication value for the provider incase it needs. Defaults to None.
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
