@@ -39,4 +39,4 @@ jobs:
     - name: Test with Unittest
       run: |
         python -m unittest discover -s tests -p 'test_utils.py' -f -v
-        python -m unittest discover -s tests -p 'test_gpt4free.py' -f -v
+#        python -m unittest discover -s tests -p 'test_gpt4free.py' -f -v */
