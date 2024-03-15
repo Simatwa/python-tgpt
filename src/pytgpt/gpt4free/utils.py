@@ -39,6 +39,7 @@ def is_working(provider: str) -> bool:
     assert isinstance(text, str)
     assert bool(text.strip())
     assert "</" not in text
+    assert ":" not in text
     assert len(text) > 2
     return True
 
@@ -126,6 +127,7 @@ class TestProviders:
             assert isinstance(text, str), "Non-string response returned"
             assert bool(text.strip()), "Empty string"
             assert "</" not in text, "Html code returned."
+            assert ":" not in text, "Json formatted response returned"
             assert len(text) > 2
         except Exception as e:
             pass

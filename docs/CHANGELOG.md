@@ -435,3 +435,12 @@ For instance:
 
 - fix: Gemini (Bard) provider.
 - added: awesome prompts info.
+
+## v0.5.5
+
+**What's new?**
+
+- patch: `FreeGpt` default g4f-based provider.
+- added: `g4f` made required dependency.
+- fix: `openai` response repetition. [#39](https://github.com/Simatwa/python-tgpt/issues/39)
+- Other minor fixes.

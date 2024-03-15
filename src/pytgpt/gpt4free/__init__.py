@@ -7,7 +7,7 @@ from .main import default_models
 from .main import completion_allowed_models
 
 __info__ = (
-    "Interact with various free models bundled by https://github.com/xtekky/gpt4free"
+    "Interact with various free ai providers bundled by https://github.com/xtekky/gpt4free"
 )
 
 all = [

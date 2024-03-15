@@ -22,7 +22,7 @@ cli_reqs = [
     "clipman==3.1.0",
     "pyperclip==1.8.2",
     "colorama==0.4.6",
-    "g4f>=0.2.2.6",
+    "g4f>=0.2.4.1",
     "python-dotenv==1.0.0",
 ]
 
@@ -40,7 +40,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.5.4",
+    version="0.5.5",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",

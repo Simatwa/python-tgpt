@@ -1158,7 +1158,7 @@ class ChatInteractive:
         "--top-k",
         help="Chance of topic being repeated",
         type=click.FLOAT,
-        default=-1,
+        default=0,
     )
     @click.option(
         "-k",
@@ -1431,7 +1431,7 @@ class ChatGenerate:
         "--top-k",
         help="Chance of topic being repeated",
         type=click.FLOAT,
-        default=-1,
+        default=0,
     )
     @click.option(
         "-k",
@@ -2103,7 +2103,7 @@ class Gpt4free:
         "-t",
         "--timeout",
         type=click.INT,
-        help="Provider response generation tiemout",
+        help="Provider's response generation timeout",
         default=20,
     )
     @click.option(
