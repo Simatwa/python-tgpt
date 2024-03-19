@@ -43,10 +43,8 @@ class OPENGPT:
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
-        self.assistant_id = "d50a5d6c-2598-437b-940e-e6918d19810c"
+        self.assistant_id = "bca37014-6f97-4f2b-8928-81ea8d478d88"
         self.authority = "opengpts-example-vz4y4ooboq-uc.a.run.app"
-
-        self.uuid = uuid4().__str__()
 
         self.headers = {
             "authority": self.authority,
@@ -54,7 +52,6 @@ class OPENGPT:
             "accept-language": "en-US,en;q=0.7",
             "cache-control": "no-cache",
             "content-type": "application/json",
-            "cookie": f"opengpts_user_id={self.uuid}",
             "origin": "https://opengpts-example-vz4y4ooboq-uc.a.run.app",
             "pragma": "no-cache",
             "referer": "https://opengpts-example-vz4y4ooboq-uc.a.run.app/",
@@ -138,6 +135,11 @@ class OPENGPT:
                 )
 
         session.headers.update(self.headers)
+        session.headers.update(
+            dict(
+                cookie=f"opengpts_user_id={uuid4().__str__()}",
+            )
+        )
         payload = {
             "input": [
                 {
