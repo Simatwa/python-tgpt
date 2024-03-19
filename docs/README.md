@@ -83,7 +83,7 @@ These are simply the hosts of the LLMs, which include:
 11. [Blackboxai](https://www.blackbox.ai)
 12. [gpt4all](https://gpt4all.io) *(Offline)*
 13. [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
-14. [Groq](https://console.groq.com/) *(API Key required)
+14. [Groq](https://console.groq.com/) *(API Key required)*
 
 
 <details>
