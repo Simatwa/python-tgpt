@@ -450,3 +450,10 @@ For instance:
 **What's New?**
 
 - added: Provider [Groq](https://console.groq.com/)
+
+
+## v0.5.7
+
+**What's New?**
+
+- fix: Provider `Opengpt`.
