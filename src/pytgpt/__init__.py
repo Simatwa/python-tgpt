@@ -23,6 +23,7 @@ tgpt_providers = [
     "webchatgpt",
     "g4fauto",
     "poe",
+    "groq",
 ]
 
 gpt4free_providers = [

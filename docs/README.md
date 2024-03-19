@@ -83,6 +83,7 @@ These are simply the hosts of the LLMs, which include:
 11. [Blackboxai](https://www.blackbox.ai)
 12. [gpt4all](https://gpt4all.io) *(Offline)*
 13. [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
+14. [Groq](https://console.groq.com/) *(API Key required)
 
 
 <details>
@@ -467,8 +468,8 @@ For example, for the option `--provider`, you would set an environment variable 
 The environment variables can be overridden by explicitly declaring new value.
 
 > [!TIP]
-> Save the variables in a `.env` file in your current directory or export the them in your `.zshrc` file.
-> To load previous conversations from a `.txt` file, use the `-fp` or `--filepath` flag. If no flag is passed, the default file will be used. To load context from a file without altering its content, use the `--retain-file` flag.
+> Save the variables in a `.env` file in your current directory or export them in your `.zshrc` file.
+> To load previous conversations from a `.txt` file, use the `-fp` or `--filepath` flag. If no flag is passed, the default one will be used. To load context from a file without altering its content, use the `--retain-file` flag.
 
 ## Dynamic Provider
 

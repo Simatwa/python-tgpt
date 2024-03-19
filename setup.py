@@ -13,7 +13,7 @@ INSTALL_REQUIRE = [
     "GoogleBard1>=2.1.4",
     "poe-api-wrapper==1.3.6",
     "brotli==1.1.0",
-    "g4f>=0.2.4.1",
+    "g4f>=0.2.5.7",
 ]
 
 cli_reqs = [
@@ -22,13 +22,13 @@ cli_reqs = [
     "clipman==3.1.0",
     "pyperclip==1.8.2",
     "colorama==0.4.6",
-    "g4f>=0.2.4.1",
+    "g4f>=0.2.5.7",
     "python-dotenv==1.0.0",
 ]
 
 EXTRA_REQUIRE = {
     "cli": cli_reqs,
-    "all": ["g4f[all]>=0.2.4.1", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
+    "all": ["g4f[all]>=0.2.5.7", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
 }
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"
@@ -40,7 +40,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.5.5",
+    version="0.5.6",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",

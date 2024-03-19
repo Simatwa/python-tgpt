@@ -444,3 +444,9 @@ For instance:
 - added: `g4f` made required dependency.
 - fix: `openai` response repetition. [#39](https://github.com/Simatwa/python-tgpt/issues/39)
 - Other minor fixes.
+
+## v0.5.6
+
+**What's New?**
+
+- added: Provider [Groq](https://console.groq.com/)
