@@ -83,7 +83,7 @@ These are simply the hosts of the LLMs, which include:
 11. [Blackboxai](https://www.blackbox.ai)
 12. [gpt4all](https://gpt4all.io) *(Offline)*
 13. [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
-14. [Groq](https://console.groq.com/) *(API Key required)*
+14. [Groq](https://console.groq.com/playground) *(API Key required)*
 
 
 <details>
@@ -227,9 +227,6 @@ for value in resp:
 {'completion': "I'm so excited to share with you the incredible experiences...", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
 """
 ```
-
-> [!NOTE]
-> All providers have a common class methods.
 
 <details>
 
