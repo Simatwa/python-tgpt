@@ -669,6 +669,22 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
+            elif provider == "perplexity":
+                from pytgpt.perplexity import PERPLEXITY
+
+                self.bot = PERPLEXITY(
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
+                    quiet=quiet,
+                )
+
             else:
                 raise NotImplementedError(
                     f"The provider `{provider}` is not yet implemented."

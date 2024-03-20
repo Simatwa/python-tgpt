@@ -24,6 +24,7 @@ tgpt_providers = [
     "g4fauto",
     "poe",
     "groq",
+    "perplexity",
 ]
 
 gpt4free_providers = [

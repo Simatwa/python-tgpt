@@ -147,8 +147,9 @@ class POE(Provider):
                 if raw:
                     yield dumps(response)
                 else:
-                    self.last_response.update(response)
                     yield response
+
+                self.last_response.update(response)
 
             self.conversation.update_chat_history(
                 prompt,

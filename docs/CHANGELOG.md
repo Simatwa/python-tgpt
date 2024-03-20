@@ -457,3 +457,9 @@ For instance:
 **What's New?**
 
 - fix: Provider `Opengpt`.
+
+## v0.5.8
+
+**What's New?**
+
+- added: Provider `perplexity`. Thanks to [https://github.com/HelpingAI/Helpingai_T2](HelpingAI/Helpingai_T2)
