@@ -103,7 +103,7 @@ These are simply the hosts of the LLMs, which include:
 
 ## Prerequisites
 
-- [x] [Python>=3.9](https://python.org) *(Optional)*
+- [x] [Python>=3.10](https://python.org) *(Optional)*
 
 ## Installation and Usage
 

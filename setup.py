@@ -65,7 +65,7 @@ setup(
     },
     install_requires=INSTALL_REQUIRE,
     extras_require=EXTRA_REQUIRE,
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     keywords=[
         "chatgpt",
         "gpt",

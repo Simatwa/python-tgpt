@@ -7,6 +7,9 @@ from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
 from Helpingai_T2 import Perplexity
 from typing import Any
+import logging
+
+logging.getLogger("websocket").setLevel(logging.ERROR)
 
 session = requests.Session()
 
@@ -116,7 +119,7 @@ class PERPLEXITY:
                 )
 
         def for_stream():
-            for response in Perplexity().generate_answer(prompt):
+            for response in Perplexity().generate_answer(conversation_prompt):
                 yield json.dumps(response) if raw else response
                 self.last_response.update(response)
 
@@ -177,7 +180,7 @@ class PERPLEXITY:
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        text_str: str = response.get("answer")
+        text_str: str = response.get("answer", "")
 
         def update_web_results(web_results: list) -> None:
             for index, results in enumerate(web_results, start=1):
@@ -185,9 +188,10 @@ class PERPLEXITY:
                     url=results.get("url"), snippet=results.get("snippet")
                 )
 
-        if "text" in response:
+        if response.get("text"):
             # last chunk
             target: dict[str, Any] = json.loads(response.get("text"))
+            text_str = target.get("answer")
             web_results: list[dict] = target.get("web_results")
             self.web_results.clear()
             update_web_results(web_results)
