@@ -299,7 +299,7 @@ phind
 </summary>
 
 ```python
-import pytgp.phind as phind
+import pytgpt.phind as phind
 bot = phind.PHIND()
 print(bot.chat("<Your-prompt>"))
 ```
