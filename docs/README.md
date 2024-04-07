@@ -91,7 +91,7 @@ These are simply the hosts of the LLMs, which include:
 
 <summary>
 
-41+ Other models proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
+41+ providers proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
 
 </summary>
 
