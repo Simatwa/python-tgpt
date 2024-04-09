@@ -1,6 +1,5 @@
 import re
 import json
-import yaml
 import requests
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation

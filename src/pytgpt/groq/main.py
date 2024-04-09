@@ -254,7 +254,7 @@ class GROQ(Provider):
 
 
 if __name__ == "__main__":
-    bot = GROQ("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")
+    bot = GROQ('grog api key')
 
     resp = bot.ask("coding", stream=True)
 
