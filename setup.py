@@ -6,7 +6,7 @@ from setuptools import find_packages
 
 
 INSTALL_REQUIRE = [
-    "requests==2.31.0",
+    "requests[socks]==2.31.0",
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
     "webchatgpt==0.2.9",
@@ -46,7 +46,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.6.0",
+    version="0.6.1",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",

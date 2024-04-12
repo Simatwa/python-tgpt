@@ -77,7 +77,7 @@ class ProviderResponse(BaseModel):
     text: Union[str, None] = None
     body: Union[dict, None] = None
     detail: Union[Any, None] = None
-    model: Union[str, None] = None
+    model: Union[str, None] = 'default'
 
     model_config = {
         "json_schema_extra": {
@@ -93,7 +93,7 @@ class ProviderResponse(BaseModel):
                         "choices": [
                             {
                                 "index": 0,
-                                "delta": {"content": "Hello"},
+                                "delta": {"content": "How can I help you today?"},
                                 "finish_reason": None,
                             }
                         ],
@@ -101,7 +101,7 @@ class ProviderResponse(BaseModel):
                         "model": None,
                     },
                     "detail": "TypeError: NetworkError when attempting to fetch resource.",
-                    "model": "meta/llama-2-70b-chat",
+                    "model": "default",
                 },
             ],
         },

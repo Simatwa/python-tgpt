@@ -468,4 +468,11 @@ For instance:
 
 **What's new?**
 
-- added : FastAPI.
+- added : [FastAPI.](https://python-tgpt.onrender.com/docs)
+- New extra - `api`
+
+## v0.6.1
+
+**What's new?**
+
+- patch : FastAPI
