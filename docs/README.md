@@ -55,7 +55,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 ### Features
 
 - 🐍 Python package
-- 🌐 FastAPI for web integration
+- [🌐 FastAPI for web integration](https://python-tgpt.onrender.com)
 - ⌨️ Command-line interface
 - 🧠 Multiple LLM providers - **45+**
 - 🌊 Stream and non-stream response
