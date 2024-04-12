@@ -30,6 +30,10 @@ class ServerStatus(BaseModel):
     is_alive: bool = True
     as_at: datetime
 
+@app.get('/', name='home', tags=['home'])
+async def home():
+    """Redirect to docs"""
+    return RedirectResponse('/docs')
 
 @app.get("/status", tags=["status"])
 async def server_status() -> ServerStatus:
