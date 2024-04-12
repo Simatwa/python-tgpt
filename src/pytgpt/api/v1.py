@@ -61,7 +61,7 @@ class UserPayload(BaseModel):
     whole: bool = False
     max_tokens: PositiveInt = 600
     timeout: PositiveInt = 30
-    proxy: Union[str, None] = None
+    proxy: Union[dict[str, str], None] = None
 
     model_config = {
         "json_schema_extra": {
@@ -72,7 +72,10 @@ class UserPayload(BaseModel):
                     "whole": False,
                     "max_tokens": 600,
                     "timeout": 30,
-                    "proxy": None,
+                    "proxy": {
+                        "http": "socks4://38.54.6.39:4000",
+                        "https": "socks4://38.54.6.39:4000",
+                    },
                 }
             ]
         }
@@ -144,8 +147,8 @@ class ImagePayload(BaseModel):
                     "prompt": "Mount Everest view from ISS",
                     "amount": 2,
                     "proxy": {
-                        "http": "socks4://192.168.80.2",
-                        "https": "socks4://192.168.80.2",
+                        "http": "socks4://54.248.238.110:80",
+                        "https": "socks4://54.248.238.110:80",
                     },
                     "timeout": 30,
                 },
@@ -180,8 +183,8 @@ class ImageBytesPayload(BaseModel):
                 {
                     "prompt": "Jay Z performing",
                     "proxy": {
-                        "http": "socks4://localhost:9002",
-                        "https": "socks4://localhost:9002",
+                        "http": "socks4://199.229.254.129:4145",
+                        "https": "socks4://199.229.254.129:4145",
                     },
                     "timeout": 30,
                 },
@@ -352,7 +355,7 @@ async def generate_image(payload: ImageBytesPayload, request: Request) -> Respon
 
     **Only one image is generated.**
 
-    *Ensure `proxy` value is correct otherwise make it `null`*
+    **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
     try:
         image_gen_obj = Imager(timeout=payload.timeout, proxies=payload.proxy)
@@ -384,7 +387,7 @@ async def redirect_image_generation(
 
     **Only one image is generated.**
 
-    *Ensure `proxy` value is correct otherwise make it `null`*
+    **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
     try:
         image_gen_obj = Imager(
