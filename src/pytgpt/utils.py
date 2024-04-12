@@ -10,13 +10,25 @@ import sys
 import click
 from rich.markdown import Markdown
 from rich.console import Console
+from pathlib import Path
+import os
+import shutil
 
 appdir = appdirs.AppDirs("pytgpt", "Smartwa")
 
 default_path = appdir.user_cache_dir
 
-if not os.path.exists(default_path):
-    os.makedirs(default_path)
+api_static_dir = Path(default_path) / "api"
+
+api_static_image_dir = api_static_dir / "images"
+
+if api_static_image_dir.exists():
+    # Remove static images
+    shutil.rmtree(api_static_image_dir, ignore_errors=True)
+
+os.makedirs(default_path, exist_ok=True)
+os.makedirs(api_static_dir.as_posix(), exist_ok=True)
+os.makedirs(api_static_image_dir.as_posix(), exist_ok=True)
 
 
 def run_system_command(

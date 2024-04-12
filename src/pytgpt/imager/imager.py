@@ -1,6 +1,6 @@
 import requests
 import os
-from typing import Generator
+from typing import Generator, Union
 from string import punctuation
 from random import choice
 
@@ -27,7 +27,7 @@ class Imager:
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0",
         }
         session.proxies = proxies
-        session.timeout = timeout
+        self.timeout = timeout
         self.__prompt: str = "AI-generated image - pytgpt"
 
     def generate(
@@ -61,7 +61,8 @@ class Imager:
         def for_stream():
             for _ in range(amount):
                 resp = session.get(
-                    url=self.image_gen_endpoint % dict(prompt=prompt + ads())
+                    url=self.image_gen_endpoint % dict(prompt=prompt + ads()),
+                    timeout=self.timeout,
                 )
                 resp.raise_for_status()
                 yield resp.content
@@ -77,19 +78,26 @@ class Imager:
         return for_stream() if stream else for_non_stream()
 
     def save(
-        self, response: list[bytes], name: str = None, dir: str = os.getcwd()
-    ) -> None:
+        self,
+        response: list[bytes],
+        name: str = None,
+        dir: str = os.getcwd(),
+        filenames_prefix: str = "",
+    ) -> list[str]:
         """Save generated images
 
         Args:
             response (list[bytes]|Generator): Response of Imager.generate
             name (str):  Filename for the images. Defaults to last prompt.
             dir (str, optional): Directory for saving images. Defaults to os.getcwd().
+            filenames_prefix (str, optional): String to be prefixed at each filename to be returned.
         """
         assert isinstance(
             response, (list, Generator)
         ), f"Response should be of {list} or {Generator} types"
         name = self.__prompt if name is None else name
+
+        filenames: list = []
 
         for count, image in enumerate(response):
 
@@ -100,8 +108,13 @@ class Imager:
             while os.path.isfile(complete_path()):
                 count += 1
 
-            with open(complete_path(), "wb") as fh:
+            absolute_path_to_file = complete_path()
+            filenames.append(filenames_prefix + os.path.split(absolute_path_to_file)[1])
+
+            with open(absolute_path_to_file, "wb") as fh:
                 fh.write(image)
+
+        return filenames
 
 
 if __name__ == "__main__":

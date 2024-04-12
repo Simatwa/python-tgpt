@@ -479,7 +479,6 @@ Version **0.4.6** also introduces dynamic provider called `g4fauto`, which repre
 > [!TIP]
 > To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`. 
 > `$ pytgpt api run` will start the REST-API. Access docs and redoc at */docs* and */redoc* respectively.
-> The API is up and running on https://python-tgpt.onrender.com - *(unreliable)*.
 
 <details>
 
@@ -508,6 +507,8 @@ Commands:
 ```
 
 </details>
+
+REST-API is up and running on https://python-tgpt.onrender.com - *(unreliable)*.
 
 ## [CHANGELOG](https://github.com/Simatwa/python-tgpt/blob/main/docs/CHANGELOG.md)
 

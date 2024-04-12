@@ -4,7 +4,9 @@ __all__ = [
 
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from pytgpt import __version__
+from pytgpt.utils import api_static_dir
 from pydantic import BaseModel
 from datetime import datetime
 from . import v1
@@ -12,7 +14,10 @@ from . import v1
 app = FastAPI(
     title="python-tgpt",
     summary="Interact with AI without API key",
-    description="For full documentation visit official repo at [Simatwa/python-tgpt](https://github.com/Simatwa/python-tgpt).",
+    description=(
+        "For **text** and **image** generation."
+        "Full documentation available at official repo : [Simatwa/python-tgpt](https://github.com/Simatwa/python-tgpt)."
+    ),
     version=__version__,
     contact={
         "name": "Smartwa",
@@ -30,10 +35,12 @@ class ServerStatus(BaseModel):
     is_alive: bool = True
     as_at: datetime
 
-@app.get('/',name='redirect-to-docs')
+
+@app.get("/", name="redirect-to-docs")
 async def home():
     """Redirect to docs"""
-    return RedirectResponse('/docs')
+    return RedirectResponse("/docs")
+
 
 @app.get("/status", tags=["status"])
 async def server_status() -> ServerStatus:
@@ -45,3 +52,5 @@ async def server_status() -> ServerStatus:
 
 
 app.include_router(v1.app, prefix="/v1", tags=["v1"])
+
+app.mount("/static", StaticFiles(directory=api_static_dir), name="static")

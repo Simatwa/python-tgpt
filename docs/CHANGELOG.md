@@ -475,4 +475,6 @@ For instance:
 
 **What's new?**
 
-- patch : FastAPI
+- added : FastAPI - Image generation
+- added : FastAPI - Providers endpoint.
+- patch : FastAPI - existing endpoints
