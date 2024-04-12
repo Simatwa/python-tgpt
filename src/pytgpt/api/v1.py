@@ -55,7 +55,6 @@ class UserPayload(BaseModel):
         }
     }
 
-
     @validator("provider")
     def validate_provider(provider: str) -> object:
         if provider not in supported_providers:
@@ -79,6 +78,34 @@ class ProviderResponse(BaseModel):
     body: Union[dict, None] = None
     detail: Union[Any, None] = None
     model: Union[str, None] = None
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "provider": "phind",
+                    "text": "How can I help you today?",
+                    "body": {
+                        "id": "chatcmpl-qnml7olyfeq5kw2r7pue",
+                        "object": "chat.completion.chunk",
+                        "created": 1712895194,
+                        "model": "trt-llm-phind-model-34b-8k-context",
+                        "choices": [
+                            {
+                                "index": 0,
+                                "delta": {"content": "Hello"},
+                                "finish_reason": None,
+                            }
+                        ],
+                        "detail": None,
+                        "model": None,
+                    },
+                    "detail": "TypeError: NetworkError when attempting to fetch resource.",
+                    "model": "meta/llama-2-70b-chat",
+                },
+            ],
+        },
+    }
 
 
 def init_provider(payload: UserPayload) -> object:
