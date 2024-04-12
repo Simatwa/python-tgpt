@@ -40,6 +40,22 @@ class UserPayload(BaseModel):
     timeout: PositiveInt = 30
     proxy: Union[str, None] = None
 
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "prompt": "Hello there",
+                    "provider": "phind",
+                    "whole": False,
+                    "max_tokens": 600,
+                    "timeout": 30,
+                    "proxy": None,
+                }
+            ]
+        }
+    }
+
+
     @validator("provider")
     def validate_provider(provider: str) -> object:
         if provider not in supported_providers:
