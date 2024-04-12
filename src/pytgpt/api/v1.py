@@ -34,7 +34,7 @@ app = APIRouter()
 class UserPayload(BaseModel):
     prompt: str
     provider: str = "phind"
-    is_conversation: bool = False
+    # is_conversation: bool = False
     whole: bool = False
     max_tokens: PositiveInt = 600
     timeout: PositiveInt = 30
@@ -67,7 +67,7 @@ class ProviderResponse(BaseModel):
 
 def init_provider(payload: UserPayload) -> object:
     return provider_map.get(payload.provider, GPT4FREE)(
-        is_conversation=payload.is_conversation,
+        is_conversation=False,  # payload.is_conversation,
         max_tokens=payload.max_tokens,
         timeout=payload.timeout,
         proxies=(
@@ -86,11 +86,10 @@ async def non_stream(payload: UserPayload) -> ProviderResponse:
 
     - `prompt` : User query.
     - `provider` : LLM provider name.
-    - `is_conversation` : Flag for chatting conversationally.
-    - `whole` : Include whole json formatted response as receiced from LLM provider.
+    - `whole` : Return whole response body instead of text only.
     - `max_tokens` : Maximum number of tokens to be generated upon completion.
     - `timeout` : Http request timeout.
-    - `proxy` : Http request proxies.
+    - `proxy` : Http request proxy.
     """
     try:
         provider_obj: LEO = init_provider(payload)
@@ -133,12 +132,11 @@ async def stream(payload: UserPayload) -> Any:
     """Stream back response as received.
 
     - `prompt` : User query.
-    - `provider` : LLM provider name. from
-    - `is_conversation` : Flag for chatting conversationally.
-    - `whole` : Include whole json formatted response as receiced from LLM provider.
+    - `provider` : LLM provider name.
+    - `whole` : Return whole response body instead of text only.
     - `max_tokens` : Maximum number of tokens to be generated upon completion.
     - `timeout` : Http request timeout.
-    - `proxy` : Http request proxies.
+    - `proxy` : Http request proxy.
     """
     return StreamingResponse(
         generate_streaming_response(payload),
