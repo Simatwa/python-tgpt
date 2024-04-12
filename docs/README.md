@@ -477,7 +477,9 @@ The environment variables can be overridden by explicitly declaring new value.
 Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
 
 > [!TIP]
-> To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`. `$ pytgpt api run` will start the REST-API. Access docs and redoc at */docs* and */redoc* respectively.
+> To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`. 
+> `$ pytgpt api run` will start the REST-API. Access docs and redoc at */docs* and */redoc* respectively.
+> The API is up and running on https://python-tgpt.onrender.com - *(unreliable)*.
 
 <details>
 
