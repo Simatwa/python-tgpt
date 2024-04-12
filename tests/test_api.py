@@ -103,7 +103,7 @@ class TestV1(unittest.TestCase):
                 "prompt": "Jay Z performing",
             },
         )
-        self.assertEqual(resp.status_code, status.HTTP_307_TEMPORARY_REDIRECT)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertIn("https://image.pollinations.ai/", resp.url)
 
 
