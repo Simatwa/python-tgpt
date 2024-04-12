@@ -1161,6 +1161,13 @@ class EntryGroup:
         """Perform CRUD operations on awesome-prompts"""
         pass
 
+    @staticmethod
+    @tgpt2_.group()
+    @click.help_option("-h", "--help")
+    def api():
+        """FastAPI control endpoint"""
+        pass
+
 
 class ChatInteractive:
     """Interactive command"""
@@ -2344,6 +2351,41 @@ class Utils:
             rich.print_json(data=update.latest())
 
 
+class API:
+    """API control endpoint"""
+
+    @staticmethod
+    @click.command(context_settings=this.context_settings)
+    @click.option(
+        "-p",
+        "--port",
+        type=click.INT,
+        default=8000,
+        help="Port for listening requests",
+    )
+    @click.option(
+        "-b",
+        "--bind",
+        default="127.0.0.1",
+        help="Address to serve from",
+    )
+    @click.option(
+        "-l",
+        "--log-level",
+        type=click.Choice(
+            ["debug", "info", "warning", "errror", "critical"],
+        ),
+        default="info",
+    )
+    @click.help_option("-h", "--help")
+    def run(port, bind, log_level):
+        """Launch FastAPI"""
+        import uvicorn
+        from pytgpt.api import app
+
+        uvicorn.run(app, host=bind, port=port, log_level=log_level)
+
+
 def make_commands():
     """Make pytgpt chained commands"""
     # webchatgpt
@@ -2376,6 +2418,9 @@ def make_commands():
 
     # Image generator
     EntryGroup.tgpt2_.add_command(ImageGen.generate_image, "imager")
+
+    # FastAPI
+    EntryGroup.api.add_command(API.run)
 
 
 # @this.handle_exception

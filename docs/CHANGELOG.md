@@ -462,4 +462,10 @@ For instance:
 
 **What's New?**
 
-- added: Provider `perplexity`. Thanks to [https://github.com/HelpingAI/Helpingai_T2](HelpingAI/Helpingai_T2)
+- added: Provider `perplexity`. Thanks to [HelpingAI/Helpingai_T2](https://github.com/HelpingAI/Helpingai_T2)
+
+## v0.6.0
+
+**What's new?**
+
+- added : FastAPI.

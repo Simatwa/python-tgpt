@@ -27,9 +27,14 @@ cli_reqs = [
     "python-dotenv==1.0.0",
 ]
 
+api = [
+    "fastapi[all]==0.110.1",
+]
+
 EXTRA_REQUIRE = {
     "cli": cli_reqs,
-    "all": ["g4f[all]>=0.2.6.1", "matplotlib", "gpt4all==2.2.0"] + cli_reqs,
+    "api": api,
+    "all": ["g4f[all]>=0.2.6.1", "matplotlib", "gpt4all==2.2.0"] + cli_reqs + api,
 }
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"
@@ -41,7 +46,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.5.8",
+    version="0.6.0",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",

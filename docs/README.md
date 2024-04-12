@@ -54,19 +54,20 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 
 ### Features
 
-- 🗨️ Enhanced conversational chat experience
-- 💾 Capability to save prompts and responses (Conversation)
-- 🔄 Ability to load previous conversations
-- ⌨️ Command-line interface
 - 🐍 Python package
+- 🌐 FastAPI for web integration
+- ⌨️ Command-line interface
+- 🧠 Multiple LLM providers - **45+**
 - 🌊 Stream and non-stream response
 - 🚀 Ready to use (No API key required)
-- ⛓️ Chained requests via proxy
-- 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
-- 🧠 Multiple LLM providers - **45+**
 - 🎯 Customizable script generation and execution
 - 🔌 Offline support for Large Language Models
 - 🎨 Image generation capabilities
+- ⛓️ Chained requests via proxy
+- 🗨️ Enhanced conversational chat experience
+- 💾 Capability to save prompts and responses (Conversation)
+- 🔄 Ability to load previous conversations
+- 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
 
 ## Providers
 
@@ -130,6 +131,8 @@ Alternatively, you can install non-binaries. *(Recommended)*
    ```sh
    pip install  --upgrade "python-tgpt[all]"
    ```
+
+> `pip install -U "python-tgt[api]"` will install REST API dependencies.
 
 ## Usage
 
@@ -474,7 +477,7 @@ The environment variables can be overridden by explicitly declaring new value.
 Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
 
 > [!TIP]
-> To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`
+> To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`. `$ pytgpt api run` will start the REST-API. Access docs and redoc at */docs* and */redoc* respectively.
 
 <details>
 
@@ -492,6 +495,7 @@ Options:
   -h, --help     Show this message and exit.
 
 Commands:
+  api          FastAPI control endpoint
   awesome      Perform CRUD operations on awesome-prompts
   generate     Generate a quick response with AI
   gpt4free     Discover gpt4free models, providers etc
