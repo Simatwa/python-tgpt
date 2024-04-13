@@ -166,7 +166,7 @@ class ImagePayload(BaseModel):
     def validate_amount(amount: int) -> PositiveInt:
         if amount > 10:
             raise HTTPException(
-                status=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Amount {amount} is out of range : 1-10",
             )
         return amount
