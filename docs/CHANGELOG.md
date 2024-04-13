@@ -478,3 +478,10 @@ For instance:
 - added : FastAPI - Image generation
 - added : FastAPI - Providers endpoint.
 - patch : FastAPI - existing endpoints
+
+## v0.6.2
+
+**What's new?**
+
+- patch : FastAPI - `/images` amount > 10 causing http status_code 500.
+- added : Hosted api health-status monitor.
