@@ -510,9 +510,9 @@ Commands:
 
 ### API Health Status
 
-| API | Status |
-|-----|--------------|
-| [On-render](https://python-tgpt.onrender.com)  | [cron-job](https://pqfzhmvz.status.cron-job.org/) |
+| No. | API | Status |
+|--------|-----|--------|
+| 1. | [On-render](https://python-tgpt.onrender.com)  | [cron-job](https://pqfzhmvz.status.cron-job.org/) |
 
 
 ## [CHANGELOG](https://github.com/Simatwa/python-tgpt/blob/main/docs/CHANGELOG.md)
