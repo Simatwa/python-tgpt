@@ -508,7 +508,12 @@ Commands:
 
 </details>
 
-REST-API is up and running on https://python-tgpt.onrender.com - *(unreliable)*.
+### API Health Status
+
+| API | Status |
+|-----|--------------|
+| [On-render](https://python-tgpt.onrender.com)  | [cron-job](https://pqfzhmvz.status.cron-job.org/) |
+
 
 ## [CHANGELOG](https://github.com/Simatwa/python-tgpt/blob/main/docs/CHANGELOG.md)
 
