@@ -6,6 +6,7 @@ from pydantic import BaseModel, validator, PositiveInt
 from typing import Union, Any, Generator
 from pytgpt import gpt4free_providers
 from uuid import uuid4
+from .utils import api_exception_handler
 
 # providers
 from pytgpt.leo import LEO
@@ -243,6 +244,7 @@ async def llm_providers() -> ProvidersModel:
 
 
 @app.post("/chat/nostream", name="no-stream")
+@api_exception_handler
 async def non_stream(payload: UserPayload) -> ProviderResponse:
     """No response streaming.
 
@@ -257,43 +259,29 @@ async def non_stream(payload: UserPayload) -> ProviderResponse:
 
     **NOTE** : Example values are modified for illustration purposes.
     """
-    try:
-        provider_obj: LEO = init_provider(payload)
-        ai_generated_text: str = provider_obj.chat(payload.prompt)
-        return ProviderResponse(
-            provider=payload.provider,
-            text=None if payload.whole else ai_generated_text,
-            body=provider_obj.last_response if payload.whole else None,
-        )
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
-        )
+    provider_obj: LEO = init_provider(payload)
+    ai_generated_text: str = provider_obj.chat(payload.prompt)
+    return ProviderResponse(
+        provider=payload.provider,
+        text=None if payload.whole else ai_generated_text,
+        body=provider_obj.last_response if payload.whole else None,
+    )
 
 
 def generate_streaming_response(payload: UserPayload) -> Generator:
+    provider_obj: LEO = init_provider(payload)
 
-    try:
-        provider_obj: LEO = init_provider(payload)
-
-        for text in provider_obj.chat(payload.prompt, stream=True):
-            response = ProviderResponse(
-                provider=payload.provider,
-                text=None if payload.whole else text,
-                body=provider_obj.last_response if payload.whole else None,
-            )
-            yield dumps(jsonable_encoder(response)) + "\n"
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=str(e),
+    for text in provider_obj.chat(payload.prompt, stream=True):
+        response = ProviderResponse(
+            provider=payload.provider,
+            text=None if payload.whole else text,
+            body=provider_obj.last_response if payload.whole else None,
         )
+        yield dumps(jsonable_encoder(response)) + "\n"
 
 
 @app.post("/chat/stream", name="stream", response_model=ProviderResponse)
+@api_exception_handler
 async def stream(payload: UserPayload) -> Any:
     """Stream back response as received.
 
@@ -304,9 +292,9 @@ async def stream(payload: UserPayload) -> Any:
     - `timeout` : Http request timeout.
     - `proxy` : Http request proxy.
 
-    *Ensure `proxy` value is correct otherwise make it `null`*
-
-    **NOTE** : Example values are modified for illustration purposes.
+    **NOTE** :
+       - *Example values are modified for illustration purposes.*
+       - *Ensure `proxy` value is correct otherwise make it `null`*
     """
     return StreamingResponse(
         generate_streaming_response(payload),
@@ -315,6 +303,7 @@ async def stream(payload: UserPayload) -> Any:
 
 
 @app.post("/image", name="prompt-to-image")
+@api_exception_handler
 async def generate_image(payload: ImagePayload, request: Request) -> ImageResponse:
     """Generate images from prompt
 
@@ -323,29 +312,24 @@ async def generate_image(payload: ImagePayload, request: Request) -> ImageRespon
     - `timeout` : Http request timeout.
     - `proxy` : Http request proxies.
 
-    *Ensure `proxy` value is correct otherwise make it `null`*
+    **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
-    try:
-        host = f"{request.url.scheme}://{request.url.netloc}"
-        image_gen_obj = Imager(timeout=payload.timeout, proxies=payload.proxy)
-        image_generator = image_gen_obj.generate(
-            prompt=payload.prompt, amount=payload.amount, stream=True
-        )
-        image_urls = image_gen_obj.save(
-            image_generator,
-            name=uuid4().__str__(),
-            dir=api_static_image_dir,
-            filenames_prefix=f"{host}/static/images/",
-        )
-        return ImageResponse(urls=image_urls)
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
-        )
+    host = f"{request.url.scheme}://{request.url.netloc}"
+    image_gen_obj = Imager(timeout=payload.timeout, proxies=payload.proxy)
+    image_generator = image_gen_obj.generate(
+        prompt=payload.prompt, amount=payload.amount, stream=True
+    )
+    image_urls = image_gen_obj.save(
+        image_generator,
+        name=uuid4().__str__(),
+        dir=api_static_image_dir,
+        filenames_prefix=f"{host}/static/images/",
+    )
+    return ImageResponse(urls=image_urls)
 
 
 @app.post("/image/bytes", name="prompt-to-image (bytes)")
+@api_exception_handler
 async def generate_image(payload: ImageBytesPayload, request: Request) -> Response:
     """Generate images from prompt and return raw bytes
 
@@ -357,25 +341,20 @@ async def generate_image(payload: ImageBytesPayload, request: Request) -> Respon
 
     **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
-    try:
-        image_gen_obj = Imager(timeout=payload.timeout, proxies=payload.proxy)
-        image_list = image_gen_obj.generate(prompt=payload.prompt)
-        response = Response(
-            image_list[0],
-            media_type="image/jpeg",
-        )
-        response.headers["Content-Disposition"] = (
-            f"attachment; filename={payload.prompt[:25]+'...' if len(payload.prompt)>25 else payload.prompt}.jpeg"
-        )
-        return response
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
-        )
+    image_gen_obj = Imager(timeout=payload.timeout, proxies=payload.proxy)
+    image_list = image_gen_obj.generate(prompt=payload.prompt)
+    response = Response(
+        image_list[0],
+        media_type="image/jpeg",
+    )
+    response.headers["Content-Disposition"] = (
+        f"attachment; filename={payload.prompt[:25]+'...' if len(payload.prompt)>25 else payload.prompt}.jpeg"
+    )
+    return response
 
 
 @app.get("/image/bytes", name="prompt-to-image (bytes)")
+@api_exception_handler
 async def redirect_image_generation(
     prompt: str, proxy: Union[str, None] = None, timeout: int = 30
 ):
@@ -389,27 +368,20 @@ async def redirect_image_generation(
 
     **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
-    try:
-        image_gen_obj = Imager(
-            timeout=timeout, proxies={"https": proxy} if proxy else {}
-        )
-        image_list = image_gen_obj.generate(prompt=prompt)
-        response = Response(
-            image_list[0],
-            media_type="image/jpeg",
-        )
-        response.headers["Content-Disposition"] = (
-            f"attachment; filename={prompt[:25]+'...' if len(prompt)>25 else prompt}.jpeg"
-        )
-        return response
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
-        )
+    image_gen_obj = Imager(timeout=timeout, proxies={"https": proxy} if proxy else {})
+    image_list = image_gen_obj.generate(prompt=prompt)
+    response = Response(
+        image_list[0],
+        media_type="image/jpeg",
+    )
+    response.headers["Content-Disposition"] = (
+        f"attachment; filename={prompt[:25]+'...' if len(prompt)>25 else prompt}.jpeg"
+    )
+    return response
 
 
 @app.get("/image/bytes/redirect", name="prompt-to-image (bytes - redirect) ")
+@api_exception_handler
 async def redirect_image_generation(prompt: str):
     """Redirect image generation request to [pollinations.ai](https://pollinations.ai)"""
     return RedirectResponse(
