@@ -2394,6 +2394,33 @@ class API:
 
         uvicorn.run(app, host=bind, port=port, log_level=log_level)
 
+    @staticmethod
+    @click.command(context_settings=this.context_settings)
+    @click.argument("content", required=True, type=click.Choice(["images"]))
+    @click.option("-y", "--yes", is_flag=True, help="Okay to all confirmation prompts")
+    @click.help_option("-h", "--help")
+    def clear(content: str, yes: bool):
+        """Clear api's static contents"""
+        from pytgpt.utils import api_static_image_dir
+        from pathlib import Path
+        import shutil
+
+        static_contents_map: dict[str, Path] = {
+            "images": api_static_image_dir,
+        }
+        content_path: Path = static_contents_map[content]
+        if not yes:
+            yess: bool = click.confirm(
+                f"Are you sure to clear {content} '{content_path.as_posix()}'"
+            )
+            if not yess:
+                return
+        else:
+            pass
+        total_entries = len(os.listdir(content_path))
+        shutil.rmtree(content_path)
+        click.secho(f"{content.title()} cleared ({total_entries})", fg="yellow")
+
 
 def make_commands():
     """Make pytgpt chained commands"""
@@ -2430,6 +2457,7 @@ def make_commands():
 
     # FastAPI
     EntryGroup.api.add_command(API.run)
+    EntryGroup.api.add_command(API.clear)
 
 
 # @this.handle_exception
