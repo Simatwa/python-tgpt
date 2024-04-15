@@ -2396,17 +2396,18 @@ class API:
 
     @staticmethod
     @click.command(context_settings=this.context_settings)
-    @click.argument("content", required=True, type=click.Choice(["images"]))
+    @click.argument("content", required=True, type=click.Choice(["images", "all"]))
     @click.option("-y", "--yes", is_flag=True, help="Okay to all confirmation prompts")
     @click.help_option("-h", "--help")
     def clear(content: str, yes: bool):
-        """Clear api's static contents"""
-        from pytgpt.utils import api_static_image_dir
+        """Delete api's static contents"""
+        from pytgpt.utils import api_static_image_dir, api_static_dir
         from pathlib import Path
         import shutil
 
         static_contents_map: dict[str, Path] = {
             "images": api_static_image_dir,
+            "all": api_static_dir,
         }
         content_path: Path = static_contents_map[content]
         if not yes:
