@@ -9,7 +9,7 @@ INSTALL_REQUIRE = [
     "requests[socks]==2.31.0",
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
-    "webchatgpt==0.2.9",
+    "webchatgpt==0.3.0",
     "GoogleBard1>=2.1.4",
     "poe-api-wrapper==1.3.6",
     "brotli==1.1.0",

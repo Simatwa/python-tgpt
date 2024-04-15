@@ -4,7 +4,7 @@ rich==13.3.4
 clipman==3.1.0
 pyperclip==1.8.2
 appdirs==1.4.4
-webchatgpt==0.2.9
+webchatgpt==0.3.0
 GoogleBard1>=2.1.4
 colorama==0.4.6
 g4f>=0.2.6.1
