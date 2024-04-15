@@ -485,3 +485,13 @@ For instance:
 
 - patch : FastAPI - `/images` amount > 10 causing http status_code 500.
 - added : Hosted api health-status monitor.
+
+## v0.6.3
+
+**What's new?**
+
+- added : API static contents - `clear` command.
+   * `$ pytgpt api clear images`
+- patch : Streaming redirected outputs. 
+   * `pytgpt generate --raw "Write a short story" > shortstory.txt` #43
+- other minor updates
