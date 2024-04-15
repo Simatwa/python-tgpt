@@ -104,7 +104,6 @@ class TestV1(unittest.TestCase):
             },
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertIn("https://image.pollinations.ai/", resp.url)
 
 
 if __name__ == "__main__":

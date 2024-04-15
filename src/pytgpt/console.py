@@ -1037,7 +1037,7 @@ class Main(cmd.Cmd):
         self.default(self.bot.get_message(self.bot.last_response))
 
     @busy_bar.run()
-    def default(self, line, exit_on_error: bool = False):
+    def default(self, line, exit_on_error: bool = False, normal_stdout: bool = False):
         """Chat with LLM"""
         if not bool(line):
             return
@@ -1070,6 +1070,15 @@ class Main(cmd.Cmd):
 
                 busy_bar.start_spinning()
                 generated_response = generate_response()
+
+                if normal_stdout:
+                    # Resolves : https://github.com/Simatwa/python-tgpt/issues/42
+                    cached_response: str = ""
+                    for response in generated_response:
+                        cached_response = response
+                        pass
+                    print(cached_response)
+                    return
 
                 if self.quiet:
                     busy_bar.stop_spinning()
@@ -1760,7 +1769,7 @@ class ChatGenerate:
         bot.prettify = prettify
         bot.vertical_overflow = vertical_overflow
         bot.disable_stream = whole
-        bot.default(prompt, True)
+        bot.default(prompt, True, normal_stdout=(sys.stdout.isatty() == False))
 
 
 class Awesome:
