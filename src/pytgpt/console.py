@@ -1071,13 +1071,18 @@ class Main(cmd.Cmd):
                 busy_bar.start_spinning()
                 generated_response = generate_response()
 
-                if normal_stdout:
-                    # Resolves : https://github.com/Simatwa/python-tgpt/issues/42
+                if normal_stdout or not self.prettify and not self.disable_stream:
+                    # Resolves : https://github.com/Simatwa/python-tgpt/issues/42 & 43
                     cached_response: str = ""
+                    if not normal_stdout:
+                        busy_bar.stop_spinning()
                     for response in generated_response:
+                        offset = len(cached_response)
+                        print(response[offset:], end="")
                         cached_response = response
-                        pass
-                    print(cached_response)
+                    if not normal_stdout:
+                        # Interactive prompt
+                        print("")
                     return
 
                 if self.quiet:
