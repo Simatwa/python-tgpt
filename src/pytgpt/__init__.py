@@ -26,6 +26,7 @@ tgpt_providers = [
     "poe",
     "groq",
     "perplexity",
+    "yepchat",
 ]
 
 gpt4free_providers = [

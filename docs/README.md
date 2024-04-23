@@ -86,6 +86,7 @@ These are simply the hosts of the LLMs, which include:
 13. [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
 14. [Groq](https://console.groq.com/playground) *(API Key required)*
 15. [Perplexity](https://www.perplexity.ai)
+16. [YepChat](https://yep.com)
 
 
 <details>

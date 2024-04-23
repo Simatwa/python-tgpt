@@ -16,6 +16,7 @@ from pytgpt.phind import PHIND
 from pytgpt.llama2 import LLAMA2
 from pytgpt.blackboxai import BLACKBOXAI
 from pytgpt.perplexity import PERPLEXITY
+from pytgpt.yepchat import YEPCHAT
 from pytgpt.gpt4free import GPT4FREE
 from pytgpt.auto import AUTO
 from pytgpt.imager import Imager
@@ -29,6 +30,7 @@ provider_map = {
     "llama2": LLAMA2,
     "blackboxai": BLACKBOXAI,
     "perplexity": PERPLEXITY,
+    "yepchat": YEPCHAT,
     "auto": AUTO,
 }
 

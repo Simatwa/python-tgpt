@@ -569,6 +569,26 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
+            elif provider == "yepchat":
+                from pytgpt.yepchat import main as yepchat
+
+                self.bot = yepchat.YEPCHAT(
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    presence_penalty=top_p,
+                    frequency_penalty=top_k,
+                    top_p=top_p,
+                    model=getOr(model, yepchat.model),
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
+                )
+
             elif provider == "gpt4all":
                 assert auth, (
                     "Path to LLM (.gguf or .bin) file is required. "

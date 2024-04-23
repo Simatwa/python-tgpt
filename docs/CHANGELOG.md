@@ -502,3 +502,9 @@ For instance:
 
 - feat : Dynamic provider - `auto` : *Working provider overally*.
 - Other minor feats.
+
+## v0.6.5
+
+**What's new?**
+
+- feat: New provider - [YepChat](https://yep.com)

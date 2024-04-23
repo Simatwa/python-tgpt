@@ -8,5 +8,6 @@ class TestAuto(base.llmBase):
         self.bot = AUTO()
         self.prompt = base.prompt
 
+
 if __name__ == "__main__":
     unittest.main()
