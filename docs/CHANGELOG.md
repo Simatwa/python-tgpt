@@ -501,3 +501,4 @@ For instance:
 **What's new?**
 
 - feat : Dynamic provider - `auto` : *Working provider overally*.
+- Other minor feats.

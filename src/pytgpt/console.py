@@ -403,7 +403,7 @@ class Main(cmd.Cmd):
                 test = TestProviders(quiet=quiet, timeout=timeout)
                 g4fauto = test.best if ignore_working else test.auto
                 if isinstance(g4fauto, str):
-                    provider = "g4fauto+" + g4fauto
+                    provider = "g4f-" + g4fauto
                     from pytgpt.gpt4free import GPT4FREE
 
                     self.bot = GPT4FREE(
@@ -726,6 +726,13 @@ class Main(cmd.Cmd):
         self.__end_time = time.time()
 
     @property
+    def get_provider(self):
+        if self.provider == "auto" and self.bot.provider_name is not None:
+            return self.bot.provider_name
+        else:
+            return self.provider
+
+    @property
     def prompt(self):
         current_time = datetime.datetime.now().strftime("%H:%M:%S")
 
@@ -740,7 +747,7 @@ class Main(cmd.Cmd):
         if not self.disable_coloring:
             cmd_prompt = (
                 f"╭─[`{Fore.CYAN}{getpass.getuser().capitalize()}@pyTGPT]`"
-                f"(`{Fore.MAGENTA}{self.provider})`"
+                f"(`{Fore.MAGENTA}{self.get_provider})`"
                 f"~[`{Fore.LIGHTWHITE_EX}🕒{Fore.BLUE}{current_time}-`"
                 f"{Fore.LIGHTWHITE_EX}💻{Fore.RED}{find_range(self.__init_time, time.time(), True)}-`"
                 f"{Fore.LIGHTWHITE_EX}⚡{Fore.YELLOW}{find_range(self.__start_time, self.__end_time)}s]`"
@@ -753,7 +760,7 @@ class Main(cmd.Cmd):
 
         else:
             return (
-                f"╭─[{getpass.getuser().capitalize()}@pyTGPT]({self.provider})"
+                f"╭─[{getpass.getuser().capitalize()}@pyTGPT]({self.get_provider})"
                 f"~[🕒{current_time}"
                 f"-💻{find_range(self.__init_time, time.time(), True)}"
                 f"-⚡{find_range(self.__start_time, self.__end_time)}s]"

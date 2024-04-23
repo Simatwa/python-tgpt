@@ -17,6 +17,7 @@ from pytgpt.llama2 import LLAMA2
 from pytgpt.blackboxai import BLACKBOXAI
 from pytgpt.perplexity import PERPLEXITY
 from pytgpt.gpt4free import GPT4FREE
+from pytgpt.auto import AUTO
 from pytgpt.imager import Imager
 from pytgpt.utils import api_static_image_dir
 
@@ -28,6 +29,7 @@ provider_map = {
     "llama2": LLAMA2,
     "blackboxai": BLACKBOXAI,
     "perplexity": PERPLEXITY,
+    "auto": AUTO,
 }
 
 supported_providers = list(provider_map.keys()) + gpt4free_providers
@@ -57,7 +59,7 @@ class ProvidersModel(BaseModel):
 
 class UserPayload(BaseModel):
     prompt: str
-    provider: str = "phind"
+    provider: str = "auto"
     # is_conversation: bool = False
     whole: bool = False
     max_tokens: PositiveInt = 600
@@ -69,7 +71,7 @@ class UserPayload(BaseModel):
             "examples": [
                 {
                     "prompt": "Hello there",
-                    "provider": "phind",
+                    "provider": "auto",
                     "whole": False,
                     "max_tokens": 600,
                     "timeout": 30,
@@ -262,8 +264,12 @@ async def non_stream(payload: UserPayload) -> ProviderResponse:
     provider_obj: LEO = init_provider(payload)
     ai_generated_text: str = provider_obj.chat(payload.prompt)
     return ProviderResponse(
-        provider=payload.provider,
-        text=None if payload.whole else ai_generated_text,
+        provider=(
+            provider_obj.provider_name
+            if payload.provider == "auto"
+            else payload.provider
+        ),
+        text=ai_generated_text,
         body=provider_obj.last_response if payload.whole else None,
     )
 
@@ -273,8 +279,12 @@ def generate_streaming_response(payload: UserPayload) -> Generator:
 
     for text in provider_obj.chat(payload.prompt, stream=True):
         response = ProviderResponse(
-            provider=payload.provider,
-            text=None if payload.whole else text,
+            provider=(
+                provider_obj.provider_name
+                if payload.provider == "auto"
+                else payload.provider
+            ),
+            text=text,
             body=provider_obj.last_response if payload.whole else None,
         )
         yield dumps(jsonable_encoder(response)) + "\n"

@@ -55,7 +55,7 @@ class AUTO:
         self.provider: Union[
             OPENGPT, KOBOLDAI, PHIND, LLAMA2, BLACKBOXAI, PERPLEXITY, GPT4FREE
         ] = None
-        self.provider_name: str
+        self.provider_name: str = None
         self.is_conversation = is_conversation
         self.max_tokens = max_tokens
         self.timeout = timeout
@@ -107,7 +107,7 @@ class AUTO:
         for provider_name, provider_obj in provider_map.items():
             # continue
             try:
-                self.provider_name = provider_name
+                self.provider_name = f"tgpt-{provider_name}"
                 self.provider = provider_obj(
                     is_conversation=self.is_conversation,
                     max_tokens=self.max_tokens,
@@ -140,7 +140,7 @@ class AUTO:
             run=run_new_test
         ):
             try:
-                self.provider_name = f"GPT4FREE-{provider_info['name']}"
+                self.provider_name = f"g4f-{provider_info['name']}"
                 self.provider = GPT4FREE(
                     provider=provider_info["name"],
                     is_conversation=self.is_conversation,
