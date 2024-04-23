@@ -510,3 +510,4 @@ For instance:
 - feat: New text provider - [YepChat](https://yep.com)
 - feat: New image provider [Prodia](prodia.com)
 - feat: Speech synthesise responses. `--talk-to-me` shortform  `-ttm`
+- feat: Speech synthesise - **FastAPI** - `/audio`

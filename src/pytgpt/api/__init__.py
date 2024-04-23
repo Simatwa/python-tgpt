@@ -15,8 +15,11 @@ app = FastAPI(
     title="python-tgpt",
     summary="Interact with AI without API key",
     description=(
-        "For **text** and **image** generation."
-        "Full documentation available at official repo : [Simatwa/python-tgpt](https://github.com/Simatwa/python-tgpt)."
+        "For **text** generation, **text-to-image** and **text-to-audio** conversions."
+        "\n\n"
+        "Access redoc at [/redoc](/redoc) endpoint."
+        "\n\n"
+        "Full documentation is available at official repo : [Simatwa/python-tgpt](https://github.com/Simatwa/python-tgpt)."
     ),
     version=__version__,
     contact={
