@@ -505,8 +505,8 @@ $ pytgpt api run
 This command starts the RESTful API server, enabling you to interact with the service programmatically.
 
 For accessing the documentation and redoc, navigate to the following paths in your web browser:
-- Documentation: `*/docs*`
-- ReDoc: `*/redoc*`
+- Documentation: `*/docs`
+- ReDoc: `*/redoc`
 
 ## Speech Synthesis
 
