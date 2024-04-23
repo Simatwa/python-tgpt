@@ -31,3 +31,6 @@ If applicable, add screenshots or code snippets to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.
+
+**Workaround**
+Is there a way of achieving the desired action without encountering the error? Describe.
