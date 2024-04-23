@@ -484,13 +484,49 @@ The environment variables can be overridden by explicitly declaring new value.
 > Save the variables in a `.env` file in your current directory or export them in your `~/.zshrc` file.
 > To load previous conversations from a `.txt` file, use the `-fp` or `--filepath` flag. If no flag is passed, the default one will be used. To load context from a file without altering its content, use the `--retain-file` flag.
 
-## Dynamic Provider
+## Dynamic Provider & Further Interfaces
 
 Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
 
+<<<<<<< HEAD
 > [!TIP]
 > To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`.
 > `$ pytgpt api run` will start the REST-API. Access docs and redoc at */docs* and */redoc* respectively.
+=======
+To launch the web interface for g4f-based providers, execute the following command in your terminal:
+
+```bash
+$ pytgpt gpt4free gui
+```
+
+This command initializes the Web-user interface for interacting with g4f-based providers.
+
+To start the REST-API:
+
+```bash
+$ pytgpt api run
+```
+
+This command starts the RESTful API server, enabling you to interact with the service programmatically.
+
+For accessing the documentation and redoc, navigate to the following paths in your web browser:
+- Documentation: `*/docs*`
+- ReDoc: `*/redoc*`
+
+## Speech Synthesis
+
+To enable speech synthesis of responses, ensure you have either the [VLC player](https://www.videolan.org/vlc/index.html) installed on your system or, if you are a [Termux](https://termux.org) user, the [Termux:API](https://wiki.termux.com/wiki/Termux:API) package.
+
+To activate speech synthesis, use the `--talk-to-me` flag or its shorthand `-ttm` when running your commands. For example:
+```bash
+$ pytgpt generate "Generate an ogre story" --talk-to-me
+```
+or
+```bash
+$ pytgpt interactive -ttm
+```
+This flag instructs the system to audiolize the ai responses and then play them, enhancing the user experience by providing auditory feedback.
+>>>>>>> main
 
 > To speech synthesise the responses just ensure you have [vlc player]() in your system or [termux-api](https://wiki.termux.com/wiki/Termux:API) for the case of [Termux](https://termux.org) users.
 > Use the flag `--talk-to-me`, shortform `-ttm`.

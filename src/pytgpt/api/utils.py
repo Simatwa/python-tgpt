@@ -23,12 +23,12 @@ def api_exception_handler(func: Callable):
         except (ProxyError, InvalidProxyURL, SSLError) as e:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Proxy related error. {get_exception_string(e)}",
+                detail=dict(message=f"Proxy related error. {get_exception_string(e)}"),
             )
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=get_exception_string(e),
+                detail=dict(message=get_exception_string(e)),
             )
 
     return decorator

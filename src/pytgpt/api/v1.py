@@ -21,6 +21,7 @@ from pytgpt.gpt4free import GPT4FREE
 from pytgpt.auto import AUTO
 from pytgpt.imager import Imager
 from pytgpt.imager import Prodia
+from pytgpt.utils import Audio
 from pytgpt.utils import api_static_image_dir
 
 provider_map = {
@@ -62,7 +63,7 @@ class ProvidersModel(BaseModel):
     }
 
 
-class UserPayload(BaseModel):
+class TextGenerationPayload(BaseModel):
     prompt: str
     provider: str = "auto"
     # is_conversation: bool = False
@@ -94,7 +95,9 @@ class UserPayload(BaseModel):
         if provider not in supported_providers:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Provider '{provider}' is not one of [{', '.join(supported_providers)}]",
+                detail=dict(
+                    message=f"Provider '{provider}' is not one of [{', '.join(supported_providers)}]",
+                ),
             )
         return provider
 
@@ -177,7 +180,9 @@ class ImagePayload(BaseModel):
         if amount > 10:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Amount {amount} is out of range : 1-10",
+                detail=dict(
+                    message=f"Amount {amount} is out of range : 1-10",
+                ),
             )
         return amount
 
@@ -186,7 +191,9 @@ class ImagePayload(BaseModel):
         if provider not in image_providers:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Image provider '{provider}' is not one of [{', '.join(list(image_providers.keys()))}]",
+                detail=dict(
+                    message=f"Image provider '{provider}' is not one of [{', '.join(list(image_providers.keys()))}]",
+                ),
             )
         return "default" if provider is None else provider
 
@@ -219,7 +226,9 @@ class ImageBytesPayload(BaseModel):
         if provider not in image_providers:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Image provider '{provider}' is not one of [{', '.join(list(image_providers.keys()))}]",
+                detail=dict(
+                    message=f"Image provider '{provider}' is not one of [{', '.join(list(image_providers.keys()))}]",
+                ),
             )
         return "default" if provider is None else provider
 
@@ -249,7 +258,54 @@ class ImageResponse(BaseModel):
     }
 
 
-def init_provider(payload: UserPayload) -> object:
+class TextToAudioPayload(BaseModel):
+    message: str
+    voice: Union[str, None] = "Brian"
+    proxy: Union[dict[str, str], None] = None
+    timeout: int = 30
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "message": "There is a place for people like you.",
+                "voice": "Brian",
+                "proxy": {
+                    "http": "socks4://199.229.254.129:4145",
+                    "https": "socks4://199.229.254.129:4145",
+                },
+                "timeout": 30,
+            }
+        }
+    }
+
+    @validator("voice")
+    def validate_voice(voice) -> str:
+        if not voice in Audio.all_voices:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=dict(
+                    message=f"Voice '{voice}' is not one of '[{', '.join(Audio.all_voices)}]"
+                ),
+            )
+        return "Brian" if not voice else voice
+
+
+class TextToAudioResponse(BaseModel):
+    """
+    - `url` : Link to generated audio file.
+    """
+
+    url: str
+
+    model_config = {
+        "json_schema_extra": {
+            "example": {
+                "url": " http://localhost:8000/static/audios/f9d4233f-9b78-4d87-bc27-5d2ab928f673.mp3",
+            }
+        }
+    }
+
+
+def init_provider(payload: TextGenerationPayload) -> object:
     return provider_map.get(payload.provider, GPT4FREE)(
         is_conversation=False,  # payload.is_conversation,
         max_tokens=payload.max_tokens,
@@ -274,7 +330,7 @@ async def llm_providers() -> ProvidersModel:
 
 @app.post("/chat/nostream", name="no-stream")
 @api_exception_handler
-async def non_stream(payload: UserPayload) -> ProviderResponse:
+async def non_stream(payload: TextGenerationPayload) -> ProviderResponse:
     """No response streaming.
 
     - `prompt` : User query.
@@ -301,7 +357,7 @@ async def non_stream(payload: UserPayload) -> ProviderResponse:
     )
 
 
-def generate_streaming_response(payload: UserPayload) -> Generator:
+def generate_streaming_response(payload: TextGenerationPayload) -> Generator:
     provider_obj: LEO = init_provider(payload)
 
     for text in provider_obj.chat(payload.prompt, stream=True):
@@ -319,7 +375,7 @@ def generate_streaming_response(payload: UserPayload) -> Generator:
 
 @app.post("/chat/stream", name="stream", response_model=ProviderResponse)
 @api_exception_handler
-async def stream(payload: UserPayload) -> Any:
+async def stream(payload: TextGenerationPayload) -> Any:
     """Stream back response as received.
 
     - `prompt` : User query.
@@ -435,4 +491,62 @@ async def redirect_image_generation(prompt: str):
     """Redirect image generation request to [pollinations.ai](https://pollinations.ai)"""
     return RedirectResponse(
         f"https://image.pollinations.ai/prompt/{prompt}",
+    )
+
+
+@app.post("/audio", name="text-to-audio")
+@api_exception_handler
+async def text_to_audio(
+    payload: TextToAudioPayload, request: Request
+) -> TextToAudioResponse:
+    """Vocalize text
+
+    - `message` : Text to be synthesised.
+    - `voice` :  The voice to use for speech synthesis.
+    - `timeout` : Http request timeout in seconds.
+    - `proxy` : Http request proxy.
+
+    **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
+    """
+    host = f"{request.url.scheme}://{request.url.netloc}"
+    filename = uuid4().__str__() + ".mp3"
+    Audio.text_to_audio(
+        message=payload.message,
+        voice=payload.voice,
+        proxies=payload.proxy,
+        timeout=payload.timeout,
+        save_to=Audio.cache_dir.joinpath(filename).as_posix(),
+    )
+    return TextToAudioResponse(url=f"{host}/static/audios/" + filename)
+
+
+@app.get("/audio", name="text-to-audio (bytes)")
+@api_exception_handler
+async def text_to_audio_bytes(
+    message: str,
+    voice: str = "Brian",
+    timeout: int = 30,
+    proxy: Union[str, None] = None,
+):
+    """Return raw audio
+
+    - `message` : Text to be synthesised.
+    - `voice` :  The voice to use for speech synthesis.
+    - `timeout` : Http request timeout in seconds.
+    - `proxy` : Http request proxy.
+
+    **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
+    """
+    image_bytes = Audio.text_to_audio(
+        message=message,
+        voice=voice if voice in Audio.all_voices else "Brian",
+        proxies={"https": proxy} if proxy else {},
+        timeout=timeout,
+    )
+    return Response(
+        content=image_bytes,
+        media_type="audio/mpeg",
+        headers={
+            "Content-Disposition": f"attachment; filename={uuid4().__str__()}.mp3"
+        },
     )

@@ -890,6 +890,8 @@ class Audio:
         cls,
         message: str,
         voice: str = "Brian",
+        proxies: dict[str, str] = {},
+        timeout: int = 30,
         save_to: Union[Path, str] = None,
         auto: bool = False,
     ) -> Union[str, bytes]:
@@ -899,6 +901,8 @@ class Audio:
         Parameters:
             message (str): The text to convert to speech
             voice (str, optional): The voice to use for speech synthesis. Defaults to "Brian".
+            proxies (dict, optional): Http request proxies. Default to {}.
+            timeout (int, optional): Http request timeout. Defaults to 30.
             save_to (bool, optional): Path to save the audio file. Defaults to None.
             auto (bool, optional): Generate filename for the contents based on `message` and save to `cls.cache_dir`. Defaults to False.
 
@@ -912,7 +916,9 @@ class Audio:
         url: str = (
             f"https://api.streamelements.com/kappa/v2/speech?voice={voice}&text={{{message}}}"
         )
-        resp = requests.get(url=url, headers=cls.headers, stream=True)
+        resp = requests.get(
+            url=url, headers=cls.headers, stream=True, proxies=proxies, timeout=timeout
+        )
         if not resp.ok:
             raise Exception(
                 f"Failed to perform the operation - ({resp.status_code}, {resp.reason}) - {resp.text}"
