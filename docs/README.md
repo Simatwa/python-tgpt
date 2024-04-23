@@ -488,10 +488,13 @@ The environment variables can be overridden by explicitly declaring new value.
 
 Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
 
+<<<<<<< HEAD
 > [!TIP]
 > To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`.
 > `$ pytgpt api run` will start the REST-API. Access docs and redoc at */docs* and */redoc* respectively.
 =======
+=======
+>>>>>>> master
 To launch the web interface for g4f-based providers, execute the following command in your terminal:
 
 ```bash
@@ -509,8 +512,8 @@ $ pytgpt api run
 This command starts the RESTful API server, enabling you to interact with the service programmatically.
 
 For accessing the documentation and redoc, navigate to the following paths in your web browser:
-- Documentation: `*/docs*`
-- ReDoc: `*/redoc*`
+- Documentation: `*/docs`
+- ReDoc: `*/redoc`
 
 ## Speech Synthesis
 
