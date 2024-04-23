@@ -15,6 +15,7 @@ INSTALL_REQUIRE = [
     "brotli==1.1.0",
     "g4f>=0.2.6.1",
     "Helpingai-T2==0.3",
+    "python-vlc>=3.0.20",
 ]
 
 cli_reqs = [

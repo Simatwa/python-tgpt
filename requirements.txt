@@ -16,3 +16,4 @@ python-dotenv==1.0.0
 brotli==1.1.0
 Helpingai-T2==0.3
 fastapi[all]==0.110.1
+python-vlc>=3.0.20
