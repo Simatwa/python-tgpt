@@ -495,3 +495,9 @@ For instance:
 - patch : Streaming redirected outputs. 
    * `pytgpt generate --raw "Write a short story" > shortstory.txt` #43
 - other minor updates
+
+## v0.6.4
+
+**What's new?**
+
+- feat : Dynamic provider - `auto` : *Working provider overally*.

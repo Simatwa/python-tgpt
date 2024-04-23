@@ -79,7 +79,7 @@ These are simply the hosts of the LLMs, which include:
 4. [OpenAI](https://chat.openai.com) *(API key required)*
 5. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
 6. [Gemini](https://github.com/Simatwa/bard) - **Google** *(Session ID required)*
-9. [Phind](https://www.phind.com) - *default*
+9. [Phind](https://www.phind.com)
 10. [Llama2](https://www.llama2.ai)
 11. [Blackboxai](https://www.blackbox.ai)
 12. [gpt4all](https://gpt4all.io) *(Offline)*
@@ -235,6 +235,21 @@ for value in resp:
 <details>
 
 <summary>
+Auto - *(selects any working provider)*
+
+</summary>
+
+```python
+import pytgpt.auto import auto
+bot = auto.AUTO()
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+<details>
+
+<summary>
 Openai
 
 </summary>
@@ -282,21 +297,6 @@ print(bot.chat("<Your-prompt>"))
 <details>
 
 <summary>
-Bard
-
-</summary>
-
-```python
-import pytgpt.bard as bard
-bot = bard.BARD('<Path-to-bard.google.com.cookies.json>')
-print(bot.chat("<Your-prompt>"))
-```
-
-</details>
-
-<details>
-
-<summary>
 phind
 
 </summary>
@@ -318,7 +318,7 @@ Gpt4free providers
 
 ```python
 import pytgpt.gpt4free as gpt4free
-bot = gpt4free.GPT4FREE(provider="Aura")
+bot = gpt4free.GPT4FREE(provider="Koala")
 print(bot.chat("<Your-prompt>"))
 ```
 

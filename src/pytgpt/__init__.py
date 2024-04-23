@@ -11,6 +11,7 @@ __author__ = "Smartwa"
 __repo__ = "https://github.com/Simatwa/python-tgpt"
 
 tgpt_providers = [
+    "auto",
     "leo",
     "openai",
     "opengpt",

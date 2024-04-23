@@ -60,7 +60,7 @@ class this:
 
     rich_code_themes = ["monokai", "paraiso-dark", "igor", "vs", "fruity", "xcode"]
 
-    default_provider = "phind"
+    default_provider = "auto"
 
     getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
@@ -382,7 +382,22 @@ class Main(cmd.Cmd):
                 intro = self.RawDog.intro_prompt
                 getpass.getuser = lambda: "RawDog"
 
-            if provider == "g4fauto":
+            if provider == "auto":
+                from pytgpt.auto import AUTO
+
+                self.bot = AUTO(
+                    is_conversation=disable_conversation,
+                    max_tokens=max_tokens,
+                    timeout=timeout,
+                    intro=intro,
+                    filepath=filepath,
+                    update_file=update_file,
+                    proxies=proxies,
+                    history_offset=history_offset,
+                    act=awesome_prompt,
+                )
+
+            elif provider == "g4fauto":
                 from pytgpt.gpt4free.utils import TestProviders
 
                 test = TestProviders(quiet=quiet, timeout=timeout)
