@@ -403,6 +403,17 @@ img.save(img_generator)
 
 </details>
 
+#### Using **Prodia** provider
+
+```python
+from pytgpt.imager import Prodia
+
+img = Prodia()
+
+img_generator = img.generate('Coding bot', amount=3, stream=True)
+
+img.save(img_generator)
+```
 
 </details>
 

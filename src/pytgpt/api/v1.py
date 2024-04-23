@@ -20,6 +20,7 @@ from pytgpt.yepchat import YEPCHAT
 from pytgpt.gpt4free import GPT4FREE
 from pytgpt.auto import AUTO
 from pytgpt.imager import Imager
+from pytgpt.imager import Prodia
 from pytgpt.utils import api_static_image_dir
 
 provider_map = {
@@ -33,6 +34,8 @@ provider_map = {
     "yepchat": YEPCHAT,
     "auto": AUTO,
 }
+
+image_providers = {"default": Imager, "prodia": Prodia}
 
 supported_providers = list(provider_map.keys()) + gpt4free_providers
 
@@ -144,18 +147,20 @@ class ImagePayload(BaseModel):
     amount: PositiveInt = 1
     proxy: Union[dict[str, str], None] = None
     timeout: PositiveInt = 30
+    provider: Union[str, None] = None
 
     model_config = {
         "json_schema_extra": {
             "examples": [
                 {
-                    "prompt": "Mount Everest view from ISS",
+                    "prompt": "Sunset view from ISS",
                     "amount": 2,
                     "proxy": {
                         "http": "socks4://54.248.238.110:80",
                         "https": "socks4://54.248.238.110:80",
                     },
                     "timeout": 30,
+                    "provider": "default",
                 },
                 {
                     "prompt": "Developed Nairobi in 3050",
@@ -176,27 +181,47 @@ class ImagePayload(BaseModel):
             )
         return amount
 
+    @validator("provider")
+    def validate_provider(provider: Union[str, None]) -> str:
+        if provider not in image_providers:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Image provider '{provider}' is not one of [{', '.join(list(image_providers.keys()))}]",
+            )
+        return "default" if provider is None else provider
+
 
 class ImageBytesPayload(BaseModel):
     prompt: str
     proxy: Union[dict[str, str], None] = None
     timeout: PositiveInt = 30
+    provider: Union[str, None] = None
 
     model_config = {
         "json_schema_extra": {
             "examples": [
                 {
-                    "prompt": "Jay Z performing",
+                    "prompt": "Alan Walker performing",
                     "proxy": {
                         "http": "socks4://199.229.254.129:4145",
                         "https": "socks4://199.229.254.129:4145",
                     },
                     "timeout": 30,
+                    "provider": "default",
                 },
                 {"prompt": "Developed Nairobi in 3050", "proxy": None, "timeout": 30},
             ]
         }
     }
+
+    @validator("provider")
+    def validate_provider(provider: Union[str, None]) -> str:
+        if provider not in image_providers:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Image provider '{provider}' is not one of [{', '.join(list(image_providers.keys()))}]",
+            )
+        return "default" if provider is None else provider
 
 
 class ImageBytesResponse(BaseModel):
@@ -323,11 +348,14 @@ async def generate_image(payload: ImagePayload, request: Request) -> ImageRespon
     - `amount` : Images to be generated. Maximum of 10.
     - `timeout` : Http request timeout.
     - `proxy` : Http request proxies.
+    - `provider` : Image provider name ie. *[default, prodia]*
 
     **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
     host = f"{request.url.scheme}://{request.url.netloc}"
-    image_gen_obj = Imager(timeout=payload.timeout, proxies=payload.proxy)
+    image_gen_obj = image_providers.get(payload.provider)(
+        timeout=payload.timeout, proxies=payload.proxy
+    )
     image_generator = image_gen_obj.generate(
         prompt=payload.prompt, amount=payload.amount, stream=True
     )
@@ -348,46 +376,55 @@ async def generate_image(payload: ImageBytesPayload, request: Request) -> Respon
     - `prompt` : Image description
     - `timeout` : Http request timeout.
     - `proxy` : Http request proxies.
+    - `provider` : Image provider name ie. *[default, prodia]*
 
     **Only one image is generated.**
 
     **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
-    image_gen_obj = Imager(timeout=payload.timeout, proxies=payload.proxy)
+    image_gen_obj = image_providers.get(payload.provider)(
+        timeout=payload.timeout, proxies=payload.proxy
+    )
     image_list = image_gen_obj.generate(prompt=payload.prompt)
     response = Response(
         image_list[0],
-        media_type="image/jpeg",
+        media_type=f"image/{image_gen_obj.image_extension}",
     )
     response.headers["Content-Disposition"] = (
-        f"attachment; filename={payload.prompt[:25]+'...' if len(payload.prompt)>25 else payload.prompt}.jpeg"
+        f"attachment; filename={payload.prompt[:25]+'...' if len(payload.prompt)>25 else payload.prompt}.{image_gen_obj.image_extension}"
     )
     return response
 
 
 @app.get("/image/bytes", name="prompt-to-image (bytes)")
 @api_exception_handler
-async def redirect_image_generation(
-    prompt: str, proxy: Union[str, None] = None, timeout: int = 30
+async def generate_image_return_bytes(
+    prompt: str,
+    proxy: Union[str, None] = None,
+    timeout: int = 30,
+    provider: str = "default",
 ):
     """Generate images from prompt and return raw bytes
 
     - `prompt` : Image description
     - `timeout` : Http request timeout.
     - `proxy` : Http request proxies.
+    - `provider` : Image provider name ie. *[default, prodia]*
 
     **Only one image is generated.**
 
     **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
-    image_gen_obj = Imager(timeout=timeout, proxies={"https": proxy} if proxy else {})
+    image_gen_obj = image_providers.get(provider, "default")(
+        timeout=timeout, proxies={"https": proxy} if proxy else {}
+    )
     image_list = image_gen_obj.generate(prompt=prompt)
     response = Response(
         image_list[0],
-        media_type="image/jpeg",
+        media_type=f"image/{image_gen_obj.image_extension}",
     )
     response.headers["Content-Disposition"] = (
-        f"attachment; filename={prompt[:25]+'...' if len(prompt)>25 else prompt}.jpeg"
+        f"attachment; filename={prompt[:25]+'...' if len(prompt)>25 else prompt}.{image_gen_obj.image_extension}"
     )
     return response
 

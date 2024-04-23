@@ -30,6 +30,7 @@ from pytgpt.utils import default_path
 from pytgpt.utils import AwesomePrompts
 from pytgpt.utils import RawDog
 from pytgpt.imager import Imager
+from pytgpt.imager import Prodia
 from WebChatGPT.console import chat as webchatgpt
 from colorama import Fore
 from colorama import init as init_colorama
@@ -65,6 +66,8 @@ class this:
     getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
 
     context_settings = dict(auto_envvar_prefix="PYTGPT")
+
+    image_providers_map: dict[str, object] = {"default": Imager, "prodia": Prodia}
 
     """Console utils"""
 
@@ -2293,6 +2296,15 @@ class ImageGen:
     @click.command(context_settings=this.context_settings)
     @click.argument("prompt")
     @click.option(
+        "-p",
+        "--provider",
+        help="Provider name for image generation",
+        type=click.Choice(
+            list(this.image_providers_map.keys()),
+        ),
+        default="default",
+    )
+    @click.option(
         "-d",
         "--directory",
         type=click.Path(exists=True),
@@ -2313,7 +2325,7 @@ class ImageGen:
         type=click.IntRange(5, 300),
         help="Http request timeout in seconds",
     )
-    @click.option("-p", "--proxy", help="Http request proxy")
+    @click.option("-pr", "--proxy", help="Http request proxy")
     @click.option(
         "-nd",
         "--no-additives",
@@ -2323,16 +2335,17 @@ class ImageGen:
     @click.option("-q", "--quiet", is_flag=True, help="Suppress progress bar")
     @click.help_option("-h", "--help")
     def generate_image(
-        prompt, directory, amount, name, timeout, proxy, no_additives, quiet
+        prompt, provider, directory, amount, name, timeout, proxy, no_additives, quiet
     ):
         """Generate images with pollinations.ai"""
+        provider_obj = this.image_providers_map.get(provider)
         with Progress() as progress:
             task = progress.add_task(
                 f"[cyan]Generating ...[{amount}]",
                 total=amount,
                 visible=quiet == False,
             )
-            imager = Imager(timeout=timeout, proxies=proxy if proxy else {})
+            imager = provider_obj(timeout=timeout, proxies=proxy if proxy else {})
             for image in imager.generate(
                 prompt=prompt,
                 amount=amount,

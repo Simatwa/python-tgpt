@@ -507,4 +507,5 @@ For instance:
 
 **What's new?**
 
-- feat: New provider - [YepChat](https://yep.com)
+- feat: New text provider - [YepChat](https://yep.com)
+- feat: New image provider [Prodia](prodia.com)

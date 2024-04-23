@@ -171,3 +171,4 @@ make-*.py
 assets/deb/DEBIAN/control
 assets/deb/usr/share/applications/pytgpt.desktop
 *.jpeg
+*.png
