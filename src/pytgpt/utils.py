@@ -981,9 +981,9 @@ class Audio:
         def play_using_termux_media_player():
             # check if media-player is installed
             run_system_command(
-                "which termux-media-player",
+                "termux-media-player --help",
                 exit_on_error=True,
-                help="Install termux-media-player package in order to play audio files.\n pkg update && pkg install termux-media-player",
+                help="Install termux-api package in order to play audio files.\n apt update && apt install termux-api",
             )
             try:
                 run_system_command(f'termux-media-player play "{path_to_audio_file}"')
