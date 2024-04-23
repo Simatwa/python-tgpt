@@ -488,7 +488,6 @@ The environment variables can be overridden by explicitly declaring new value.
 
 Version **0.4.6** also introduces dynamic provider called `g4fauto`, which represents the fastest working g4f-based provider.
 
-<<<<<<< HEAD
 > [!TIP]
 > To launch web interface for g4f-based providers simply run `$ pytgpt gpt4free gui`.
 > `$ pytgpt api run` will start the REST-API. Access docs and redoc at */docs* and */redoc* respectively.
@@ -526,12 +525,11 @@ or
 $ pytgpt interactive -ttm
 ```
 This flag instructs the system to audiolize the ai responses and then play them, enhancing the user experience by providing auditory feedback.
->>>>>>> main
 
 > To speech synthesise the responses just ensure you have [vlc player]() in your system or [termux-api](https://wiki.termux.com/wiki/Termux:API) for the case of [Termux](https://termux.org) users.
 > Use the flag `--talk-to-me`, shortform `-ttm`.
 
-Version **0.6.4** introduces another dynamic provider, `auto`,  which denotes the working provider **overally**. This relieves you the workload of manually checking a working provider each time you fire up pytgpt.
+Version **0.6.4** introduces another dynamic provider, `auto`, which denotes the working provider **overall**. This relieves you of the workload of manually checking a working provider each time you fire up pytgpt.
 
 <details>
 
