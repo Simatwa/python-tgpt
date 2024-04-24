@@ -511,3 +511,10 @@ For instance:
 - feat: New image provider [Prodia](prodia.com)
 - feat: Speech synthesise responses. `--talk-to-me` shortform  `-ttm`
 - feat: Speech synthesise - **FastAPI** - `/audio`
+
+## v0.6.6
+
+**What's new?**
+
+- feat: Minor mods
+- addon: Telegram-bot - [pytgpt-bot](https://github.com/Simatwa/pytgpt-bot)
