@@ -185,9 +185,10 @@ class Conversation:
                 # Presume intro prompt is part of the file content
                 self.chat_history = file_contents
 
-    def __trim_chat_history(self, chat_history: str) -> str:
+    def __trim_chat_history(self, chat_history: str, intro: str = None) -> str:
         """Ensures the len(prompt) and max_tokens_to_sample is not > 4096"""
-        len_of_intro = len(self.intro)
+        intro = self.intro if intro is None else intro
+        len_of_intro = len(intro)
         len_of_chat_history = len(chat_history)
         total = (
             self.max_tokens_to_sample + len_of_intro + len_of_chat_history
@@ -196,24 +197,25 @@ class Conversation:
             truncate_at = (total - self.history_offset) + self.prompt_allowance
             # Remove head of total (n) of chat_history
             new_chat_history = chat_history[truncate_at:]
-            self.chat_history = self.intro + "\n... " + new_chat_history
+            self.chat_history = intro + "\n... " + new_chat_history
             # print(len(self.chat_history))
             return self.chat_history
         # print(len(chat_history))
         return chat_history
 
-    def gen_complete_prompt(self, prompt: str) -> str:
+    def gen_complete_prompt(self, prompt: str, intro: str = None) -> str:
         """Generates a kinda like incomplete conversation
 
         Args:
-            prompt (str): _description_
+            prompt (str): Chat prompt
+            intro (str): Override class' intro. Defaults to None.
 
         Returns:
             str: Updated incomplete chat_history
         """
         if self.status:
             resp = self.chat_history + self.history_format % dict(user=prompt, llm="")
-            return self.__trim_chat_history(resp)
+            return self.__trim_chat_history(resp, intro)
 
         return prompt
 
