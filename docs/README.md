@@ -51,7 +51,6 @@ This project enables seamless interaction with over **45 free LLM providers** wi
 
 The name *python-tgpt* draws inspiration from its parent project [tgpt](https://github.com/aandrew-me/tgpt), which operates on [Golang](https://go.dev/). Through this Python adaptation, users can effortlessly engage with a number of free LLMs available, fostering a smoother AI interaction experience.
 
-
 ### Features
 
 - 🐍 Python package
@@ -63,11 +62,13 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🎯 Customizable script generation and execution
 - 🔌 Offline support for Large Language Models
 - 🎨 Image generation capabilities
+- 🎤 Text-to-audio conversion capabilities
 - ⛓️ Chained requests via proxy
 - 🗨️ Enhanced conversational chat experience
 - 💾 Capability to save prompts and responses (Conversation)
 - 🔄 Ability to load previous conversations
 - 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
+
 
 ## Providers
 
