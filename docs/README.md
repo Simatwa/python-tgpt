@@ -344,6 +344,8 @@ print(resp)
 
 </details>
 
+</details>
+
 > [!IMPORTANT]
 > Commencing from [v0.1.0](https://github.com/Simatwa/python-tgpt/releases/), the default mode of interaction is conversational. This mode enhances the interactive experience, offering better control over the chat history. By associating previous prompts and responses, it tailors conversations for a more engaging experience.
 
