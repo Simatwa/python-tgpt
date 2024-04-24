@@ -299,7 +299,7 @@ class TextToAudioResponse(BaseModel):
     model_config = {
         "json_schema_extra": {
             "example": {
-                "url": " http://localhost:8000/static/audios/f9d4233f-9b78-4d87-bc27-5d2ab928f673.mp3",
+                "url": "http://localhost:8000/static/audios/f9d4233f-9b78-4d87-bc27-5d2ab928f673.mp3",
             }
         }
     }

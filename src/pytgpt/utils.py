@@ -11,7 +11,6 @@ import click
 from rich.markdown import Markdown
 from rich.console import Console
 from pathlib import Path
-import os
 from typing import Union
 from typing import NoReturn
 import requests
