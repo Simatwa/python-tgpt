@@ -70,6 +70,8 @@ class this:
 
     image_providers_map: dict[str, object] = {"default": Imager, "prodia": Prodia}
 
+    talk_to_me_voice = "en-US-Wavenet-C"
+
     """Console utils"""
 
     @staticmethod
@@ -1093,6 +1095,17 @@ class Main(cmd.Cmd):
         self.default(self.bot.get_message(self.bot.last_response))
 
     @busy_bar.run()
+    def do_new_intro(self, line):
+        """Set new chat intro"""
+        print("Current intro:")
+        click.secho(f"{self.bot.conversation.intro}", fg="cyan")
+        if not line:
+            line = click.prompt("Enter new chat intro")
+        self.bot.conversation.intro = line
+        print("New chat intro set successfully:")
+        click.secho(f"{line}", fg="green")
+
+    @busy_bar.run()
     def default(self, line, exit_on_error: bool = False, normal_stdout: bool = False):
         """Chat with LLM"""
         if not bool(line):
@@ -1464,7 +1477,7 @@ class ChatInteractive:
         help="The voice to use for speech synthesis",
         type=click.Choice(Audio.all_voices),
         metavar="|".join(Audio.all_voices[:8]),
-        default="Brian",
+        default=this.talk_to_me_voice,
     )
     @click.help_option("-h", "--help")
     def interactive(
@@ -1764,7 +1777,7 @@ class ChatGenerate:
         help="The voice to use for speech synthesis",
         type=click.Choice(Audio.all_voices),
         metavar="|".join(Audio.all_voices[:8]),
-        default="Brian",
+        default=this.talk_to_me_voice,
     )
     @click.help_option("-h", "--help")
     def generate(

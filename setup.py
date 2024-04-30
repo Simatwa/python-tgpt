@@ -14,7 +14,7 @@ INSTALL_REQUIRE = [
     "poe-api-wrapper==1.3.6",
     "brotli==1.1.0",
     "g4f>=0.2.6.1",
-    "Helpingai-T2==0.3",
+    "git+https://github.com/Simatwa/Helpingai_T2@main",
     "python-vlc>=3.0.20",
 ]
 
@@ -47,7 +47,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.6.8",
+    version="0.6.9",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -92,6 +92,8 @@ setup(
         "gpt4all-cli",
         "gptcli",
         "poe-api",
+        "perplexity",
+        "gpt4free",
     ],
     long_description=Path.open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

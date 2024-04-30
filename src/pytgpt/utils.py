@@ -152,7 +152,7 @@ class Conversation:
         """
         self.status = status
         self.max_tokens_to_sample = max_tokens
-        self.chat_history = self.intro
+        self.chat_history = ""
         self.history_format = "\nUser : %(user)s\nLLM :%(llm)s"
         self.file = filepath
         self.update_file = update_file
@@ -181,13 +181,13 @@ class Conversation:
         else:
             logging.debug(f"Loading conversation from '{filepath}'")
             with open(filepath) as fh:
-                file_contents = fh.read()
-                # Presume intro prompt is part of the file content
-                self.chat_history = file_contents
+                file_contents = fh.readlines()
+                if file_contents:
+                    self.intro = file_contents[0]  # Presume first line is the intro.
+                    self.chat_history = "\n".join(file_contents[1:])
 
-    def __trim_chat_history(self, chat_history: str, intro: str = None) -> str:
+    def __trim_chat_history(self, chat_history: str, intro: str) -> str:
         """Ensures the len(prompt) and max_tokens_to_sample is not > 4096"""
-        intro = self.intro if intro is None else intro
         len_of_intro = len(intro)
         len_of_chat_history = len(chat_history)
         total = (
@@ -196,12 +196,11 @@ class Conversation:
         if total > self.history_offset:
             truncate_at = (total - self.history_offset) + self.prompt_allowance
             # Remove head of total (n) of chat_history
-            new_chat_history = chat_history[truncate_at:]
-            self.chat_history = intro + "\n... " + new_chat_history
+            trimmed_chat_history = chat_history[truncate_at:]
+            return "... " + trimmed_chat_history
             # print(len(self.chat_history))
         else:
-            self.chat_history = intro + chat_history
-        return self.chat_history
+            return chat_history
 
     def gen_complete_prompt(self, prompt: str, intro: str = None) -> str:
         """Generates a kinda like incomplete conversation
@@ -214,8 +213,11 @@ class Conversation:
             str: Updated incomplete chat_history
         """
         if self.status:
-            resp = self.chat_history + self.history_format % dict(user=prompt, llm="")
-            return self.__trim_chat_history(resp, intro)
+            intro = self.intro if intro is None else intro
+            incomplete_chat_history = self.chat_history + self.history_format % dict(
+                user=prompt, llm=""
+            )
+            return intro + self.__trim_chat_history(incomplete_chat_history, intro)
 
         return prompt
 
@@ -233,8 +235,12 @@ class Conversation:
             return
         new_history = self.history_format % dict(user=prompt, llm=response)
         if self.file and self.update_file:
-            with open(self.file, "a") as fh:
-                fh.write(new_history)
+            if os.path.exists(self.file):
+                with open(self.file, "w") as fh:
+                    fh.write(self.intro + "\n" + new_history)
+            else:
+                with open(self.file, "a") as fh:
+                    fh.write(new_history)
         self.chat_history += new_history
 
 

@@ -526,8 +526,18 @@ For instance:
 - feat: Override chat intro.
 - Other minor fixes.
 
-## v0.6.7
+## v0.6.8
 
 **What's new?**
 
 - fix: Failure to include intro in chat history - from `v0.6.6`
+
+## v0.6.9
+
+**What's new?**
+
+- fix: Improper incomplete chat history generation.
+- feat: Load intro from chat history file. *(first line)*
+- feat: Set new `intro` on the fly. *(console)*
+- feat: `en-US-Wavenet-C` - default voice for speech synthesis.
+- fix: Perplexity AI raising `json.decoder.JSONDecodeError`
