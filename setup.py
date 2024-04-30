@@ -14,7 +14,7 @@ INSTALL_REQUIRE = [
     "poe-api-wrapper==1.3.6",
     "brotli==1.1.0",
     "g4f>=0.2.6.1",
-    "git+https://github.com/Simatwa/Helpingai_T2@main",
+    "Helpingai_T2-fork==0.3.2",
     "python-vlc>=3.0.20",
 ]
 
