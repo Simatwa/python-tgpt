@@ -265,7 +265,7 @@ class AwesomePrompts:
         if raise_not_found:
             raise KeyError(f"Zero awesome prompt found with key - `{key}`")
 
-    def get_acts(self):
+    def get_acts(self) -> dict:
         """Retrieves all awesome-prompts"""
         with open(self.awesome_prompt_path) as fh:
             prompt_dict = json.load(fh)

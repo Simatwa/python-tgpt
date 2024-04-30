@@ -111,6 +111,9 @@ class GPT4FREE(Provider):
         self.proxy = None if not proxies else list(proxies.values())[0]
         self.__chat_class = g4f.ChatCompletion if chat_completion else g4f.Completion
 
+    def __str__(self):
+        return f"GPTFREE(provider={self.provider})"
+
     def ask(
         self,
         prompt: str,
