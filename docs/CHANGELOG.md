@@ -518,3 +518,10 @@ For instance:
 
 - feat: Minor mods
 - addon: Telegram-bot - [pytgpt-bot](https://github.com/Simatwa/pytgpt-bot)
+
+## v0.6.7
+
+**What's new?**
+
+- feat: Override chat intro.
+- Other minor fixes.
