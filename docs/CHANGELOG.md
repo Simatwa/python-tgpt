@@ -525,3 +525,9 @@ For instance:
 
 - feat: Override chat intro.
 - Other minor fixes.
+
+## v0.6.7
+
+**What's new?**
+
+- fix: Failure to include intro in chat history - from `v0.6.6`

@@ -199,9 +199,9 @@ class Conversation:
             new_chat_history = chat_history[truncate_at:]
             self.chat_history = intro + "\n... " + new_chat_history
             # print(len(self.chat_history))
-            return self.chat_history
-        # print(len(chat_history))
-        return chat_history
+        else:
+            self.chat_history = intro + chat_history
+        return self.chat_history
 
     def gen_complete_prompt(self, prompt: str, intro: str = None) -> str:
         """Generates a kinda like incomplete conversation

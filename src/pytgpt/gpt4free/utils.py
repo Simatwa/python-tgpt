@@ -151,7 +151,9 @@ class TestProviders:
         # Create a progress bar
         total = len(self.working_providers)
         with Progress() as progress:
-            self.__log(20, f"Testing {total} providers : {', '.join(self.working_providers)}")
+            self.__log(
+                20, f"Testing {total} providers : {', '.join(self.working_providers)}"
+            )
             task = progress.add_task(
                 f"[cyan]Testing...[{self.test_at_once}]",
                 total=total,
