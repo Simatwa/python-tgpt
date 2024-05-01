@@ -1266,6 +1266,13 @@ class EntryGroup:
         """FastAPI control endpoint"""
         pass
 
+    @staticmethod
+    @tgpt2_.group()
+    @click.help_option("-h", "--help")
+    def bot():
+        """Telegram bot interface control"""
+        pass
+
 
 class ChatInteractive:
     """Interactive command"""
@@ -2601,6 +2608,13 @@ def make_commands():
     # FastAPI
     EntryGroup.api.add_command(API.run)
     EntryGroup.api.add_command(API.clear)
+    try:
+        import pytgpt_bot.cli as bot
+
+        EntryGroup.bot.add_command(bot.run)
+        EntryGroup.bot.add_command(bot.clear)
+    except ImportError:
+        pass
 
 
 # @this.handle_exception

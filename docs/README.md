@@ -67,7 +67,8 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🗨️ Enhanced conversational chat experience
 - 💾 Capability to save prompts and responses (Conversation)
 - 🔄 Ability to load previous conversations
-- 🤖 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
+- 🚀 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
+- 🤖 [Telegram bot](https://t.me/pytgpt_bot) - interface
 
 
 ## Providers
@@ -534,6 +535,16 @@ Version **0.6.4** introduces another dynamic provider, `auto`, which denotes the
 
 If you're not satisfied with the existing interfaces, [pytgpt-bot](https://github.com/Simatwa/pytgpt-bot) could be the solution you're seeking. This bot is designed to enhance your experience by offering a wide range of functionalities. Whether you're interested in engaging in AI-driven conversations, creating images and audio from text, or exploring other innovative features, [pytgpt-bot is equipped to meet your needs.](https://github.com/Simatwa/pytgpt-bot)
 
+The bot is maintained as a separate project so you just have to execute a command get it installed :
+
+```
+$ pip install pytgpt-bot
+```
+
+Usage : `pytgpt bot run <bot-api-token>`
+
+Or you can simply interact with the one running now as [@pytgpt-bot](https://t.me/pytgpt_bot)
+
 <details>
 
 <summary>
@@ -552,6 +563,7 @@ Options:
 Commands:
   api          FastAPI control endpoint
   awesome      Perform CRUD operations on awesome-prompts
+  bot          Telegram bot interface control
   generate     Generate a quick response with AI
   gpt4free     Discover gpt4free models, providers etc
   imager       Generate images with pollinations.ai
