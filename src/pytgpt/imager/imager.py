@@ -8,7 +8,7 @@ from random import randint
 
 
 class AsyncImager:
-    """Asynchronous class of Imager (default provider)"""
+    """Asynchronous implementation of Imager (default provider)"""
 
     def __init__(
         self,
@@ -133,7 +133,7 @@ class AsyncImager:
 
 class AsyncProdia(AsyncImager):
     """
-    Asynchronous class of Prodia.
+    Asynchronous implementation of Prodia.
     This class provides methods for generating images based on prompts.
     """
 
