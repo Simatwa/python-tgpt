@@ -19,8 +19,8 @@ from pytgpt.perplexity import PERPLEXITY
 from pytgpt.yepchat import YEPCHAT
 from pytgpt.gpt4free import GPT4FREE
 from pytgpt.auto import AUTO
-from pytgpt.imager import Imager
-from pytgpt.imager import Prodia
+from pytgpt.imager import AsyncImager
+from pytgpt.imager import AsyncProdia
 from pytgpt.utils import Audio
 from pytgpt.utils import api_static_image_dir
 
@@ -36,7 +36,7 @@ provider_map = {
     "auto": AUTO,
 }
 
-image_providers = {"default": Imager, "prodia": Prodia}
+image_providers = {"default": AsyncImager, "prodia": AsyncProdia}
 
 supported_providers = list(provider_map.keys()) + gpt4free_providers
 
@@ -260,14 +260,14 @@ class ImageResponse(BaseModel):
 
 class TextToAudioPayload(BaseModel):
     message: str
-    voice: Union[str, None] = "Brian"
+    voice: Union[str, None] = "en-US-Wavenet-C"
     proxy: Union[dict[str, str], None] = None
     timeout: int = 30
     model_config = {
         "json_schema_extra": {
             "example": {
                 "message": "There is a place for people like you.",
-                "voice": "Brian",
+                "voice": "en-US-Wavenet-C",
                 "proxy": {
                     "http": "socks4://199.229.254.129:4145",
                     "https": "socks4://199.229.254.129:4145",
@@ -286,7 +286,7 @@ class TextToAudioPayload(BaseModel):
                     message=f"Voice '{voice}' is not one of '[{', '.join(Audio.all_voices)}]"
                 ),
             )
-        return "Brian" if not voice else voice
+        return "en-US-Wavenet-C" if not voice else voice
 
 
 class TextToAudioResponse(BaseModel):
@@ -412,10 +412,10 @@ async def generate_image(payload: ImagePayload, request: Request) -> ImageRespon
     image_gen_obj = image_providers.get(payload.provider)(
         timeout=payload.timeout, proxies=payload.proxy
     )
-    image_generator = image_gen_obj.generate(
+    image_generator = await image_gen_obj.generate(
         prompt=payload.prompt, amount=payload.amount, stream=True
     )
-    image_urls = image_gen_obj.save(
+    image_urls = await image_gen_obj.save(
         image_generator,
         name=uuid4().__str__(),
         dir=api_static_image_dir,
@@ -441,7 +441,7 @@ async def generate_image(payload: ImageBytesPayload, request: Request) -> Respon
     image_gen_obj = image_providers.get(payload.provider)(
         timeout=payload.timeout, proxies=payload.proxy
     )
-    image_list = image_gen_obj.generate(prompt=payload.prompt)
+    image_list = await image_gen_obj.generate(prompt=payload.prompt)
     response = Response(
         image_list[0],
         media_type=f"image/{image_gen_obj.image_extension}",
@@ -474,7 +474,7 @@ async def generate_image_return_bytes(
     image_gen_obj = image_providers.get(provider, "default")(
         timeout=timeout, proxies={"https": proxy} if proxy else {}
     )
-    image_list = image_gen_obj.generate(prompt=prompt)
+    image_list = await image_gen_obj.generate(prompt=prompt)
     response = Response(
         image_list[0],
         media_type=f"image/{image_gen_obj.image_extension}",
@@ -510,7 +510,7 @@ async def text_to_audio(
     """
     host = f"{request.url.scheme}://{request.url.netloc}"
     filename = uuid4().__str__() + ".mp3"
-    Audio.text_to_audio(
+    await Audio.async_text_to_audio(
         message=payload.message,
         voice=payload.voice,
         proxies=payload.proxy,
@@ -524,7 +524,7 @@ async def text_to_audio(
 @api_exception_handler
 async def text_to_audio_bytes(
     message: str,
-    voice: str = "Brian",
+    voice: str = "en-US-Wavenet-C",
     timeout: int = 30,
     proxy: Union[str, None] = None,
 ):
@@ -537,9 +537,9 @@ async def text_to_audio_bytes(
 
     **NOTE** : *Ensure `proxy` value is correct otherwise make it `null`*
     """
-    image_bytes = Audio.text_to_audio(
+    image_bytes = await Audio.async_text_to_audio(
         message=message,
-        voice=voice if voice in Audio.all_voices else "Brian",
+        voice=voice if voice in Audio.all_voices else "en-US-Wavenet-C",
         proxies={"https": proxy} if proxy else {},
         timeout=timeout,
     )

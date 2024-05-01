@@ -10,9 +10,6 @@ from json import dumps
 from loguru import logger
 import logging
 
-logging.getLogger("httpx").setLevel(logging.ERROR)
-logging.getLogger("websocket").setLevel(logging.ERROR)
-
 logger.remove()
 
 default_model = "Assistant"

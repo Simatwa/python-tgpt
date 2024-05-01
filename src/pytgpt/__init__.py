@@ -1,6 +1,7 @@
 from .utils import appdir
 import g4f
 from importlib import metadata
+import logging
 
 try:
     __version__ = metadata.version("python-tgpt")
@@ -39,3 +40,6 @@ __all__ = [
     "appdir",
     "imager",
 ] + available_providers
+
+logging.getLogger("httpx").setLevel(logging.ERROR)
+logging.getLogger("websocket").setLevel(logging.ERROR)

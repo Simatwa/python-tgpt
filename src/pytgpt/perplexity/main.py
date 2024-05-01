@@ -9,8 +9,6 @@ from Helpingai_T2 import Perplexity
 from typing import Any
 import logging
 
-logging.getLogger("websocket").setLevel(logging.ERROR)
-
 session = requests.Session()
 
 

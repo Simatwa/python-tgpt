@@ -898,7 +898,7 @@ class Audio:
     async def async_text_to_audio(
         cls,
         message: str,
-        voice: str = "Brian",
+        voice: str = "en-US-Wavenet-C",
         proxies: dict[str, str] = {},
         timeout: int = 30,
         save_to: Union[Path, str] = None,
@@ -910,7 +910,7 @@ class Audio:
 
         Parameters:
             message (str): The text to convert to speech
-            voice (str, optional): The voice to use for speech synthesis. Defaults to "Brian".
+            voice (str, optional): The voice to use for speech synthesis. Defaults to "en-US-Wavenet-C".
             proxies (dict, optional): Http request proxies. Default to {}.
             timeout (int, optional): Http request timeout. Defaults to 30.
             save_to (bool, optional): Path to save the audio file. Defaults to None.
@@ -969,7 +969,7 @@ class Audio:
     def text_to_audio(
         cls,
         message: str,
-        voice: str = "Brian",
+        voice: str = "en-US-Wavenet-C",
         proxies: dict[str, str] = {},
         timeout: int = 30,
         save_to: Union[Path, str] = None,
@@ -980,7 +980,7 @@ class Audio:
 
         Parameters:
             message (str): The text to convert to speech
-            voice (str, optional): The voice to use for speech synthesis. Defaults to "Brian".
+            voice (str, optional): The voice to use for speech synthesis. Defaults to "en-US-Wavenet-C".
             proxies (dict, optional): Http request proxies. Default to {}.
             timeout (int, optional): Http request timeout. Defaults to 30.
             save_to (bool, optional): Path to save the audio file. Defaults to None.
