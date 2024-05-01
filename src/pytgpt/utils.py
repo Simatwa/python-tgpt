@@ -15,6 +15,8 @@ from typing import Union
 from typing import NoReturn
 import requests
 import vlc
+import httpx
+import asyncio
 from time import sleep as wait
 
 appdir = appdirs.AppDirs("pytgpt", "Smartwa")
@@ -893,7 +895,7 @@ class Audio:
     ]
 
     @classmethod
-    def text_to_audio(
+    async def async_text_to_audio(
         cls,
         message: str,
         voice: str = "Brian",
@@ -903,6 +905,7 @@ class Audio:
         auto: bool = False,
     ) -> Union[str, bytes]:
         """
+        Asynchronous implementation of text_to_audio.
         Text to speech using StreamElements API
 
         Parameters:
@@ -920,15 +923,16 @@ class Audio:
             voice in cls.all_voices
         ), f"Voice '{voice}' not one of [{', '.join(cls.all_voices)}]"
         # Base URL for provider API
+        session = httpx.AsyncClient(
+            headers=cls.headers, proxies=proxies, timeout=timeout
+        )
         url: str = (
             f"https://api.streamelements.com/kappa/v2/speech?voice={voice}&text={{{message}}}"
         )
-        resp = requests.get(
-            url=url, headers=cls.headers, stream=True, proxies=proxies, timeout=timeout
-        )
-        if not resp.ok:
+        resp = await session.get(url)
+        if not resp.is_success:
             raise Exception(
-                f"Failed to perform the operation - ({resp.status_code}, {resp.reason}) - {resp.text}"
+                f"Failed to perform the operation - ({resp.status_code}, {resp.reason_phrase}) - {resp.text}"
             )
 
         def sanitize_filename(path):
@@ -957,11 +961,44 @@ class Audio:
                 save_to += ".mp3"
 
             with open(save_to, "wb") as fh:
-                for chunk in resp.iter_content(chunk_size=512):
-                    fh.write(chunk)
+                fh.write(resp.content)
+            return save_to
         else:
             return resp.content
-        return save_to
+
+    def text_to_audio(
+        cls,
+        message: str,
+        voice: str = "Brian",
+        proxies: dict[str, str] = {},
+        timeout: int = 30,
+        save_to: Union[Path, str] = None,
+        auto: bool = False,
+    ) -> Union[str, bytes]:
+        """
+        Text to speech using StreamElements API
+
+        Parameters:
+            message (str): The text to convert to speech
+            voice (str, optional): The voice to use for speech synthesis. Defaults to "Brian".
+            proxies (dict, optional): Http request proxies. Default to {}.
+            timeout (int, optional): Http request timeout. Defaults to 30.
+            save_to (bool, optional): Path to save the audio file. Defaults to None.
+            auto (bool, optional): Generate filename for the contents based on `message` and save to `cls.cache_dir`. Defaults to False.
+
+        Returns:
+            result (Union[str, bytes]): Path to saved contents or audio content.
+        """
+        return asyncio.get_event_loop().run_until_complete(
+            cls.async_text_to_audio(
+                message=message,
+                voice=voice,
+                proxies=proxies,
+                timeout=timeout,
+                save_to=save_to,
+                auto=auto,
+            )
+        )
 
     @staticmethod
     def play(path_to_audio_file: Union[Path, str]) -> NoReturn:

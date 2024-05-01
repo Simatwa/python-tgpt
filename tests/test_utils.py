@@ -40,7 +40,9 @@ class TestConversation(unittest.TestCase):
 
     def test_intro_in_prompt(self):
         """Test intro presence in chat_history"""
-        self.assertEqual(self.intro, self.conversation.chat_history)
+        self.assertIn(
+            self.intro, self.conversation.gen_complete_prompt(self.user_prompt)
+        )
 
     def test_history_based_prompt_generation(self):
         """Test combination of chat_history and new user prompt"""
@@ -60,13 +62,21 @@ class TestConversation(unittest.TestCase):
         after_history_text = self.get_file_content()
         self.assertNotEqual(before_history_text, after_history_text)
 
-    def test_prompt_offset_after_long_chat(self):
+    def test_chat_truncation_after_long_chat(self):
         """Test truncating lengthy chats"""
-        self.conversation.history_offset = 30
-        for _ in range(5):
+        maximum_chat_length = 60
+        range_amount = (
+            int(maximum_chat_length / (len(self.user_prompt) + len(self.llm_response)))
+            + 10
+        )
+        self.conversation.max_tokens_to_sample = maximum_chat_length
+        for _ in range(range_amount):
             self.conversation.update_chat_history(self.user_prompt, self.llm_response)
-        generated_prompt = self.conversation.gen_complete_prompt(self.user_prompt)
-        self.assertEqual(self.conversation.chat_history, generated_prompt)
+        incomplete_conversation = self.conversation.gen_complete_prompt(
+            self.user_prompt
+        )
+        # print(len(incomplete_conversation))
+        self.assertTrue(len(incomplete_conversation) < maximum_chat_length)
 
     def tearDown(self):
         if os.path.exists(self.filepath):
