@@ -7,7 +7,7 @@ appdirs==1.4.4
 webchatgpt==0.3.0
 GoogleBard1>=2.1.4
 colorama==0.4.6
-g4f>=0.2.6.1
+g4f>=0.3.0.8
 pyyaml==6.0.1
 matplotlib
 gpt4all==2.2.0
