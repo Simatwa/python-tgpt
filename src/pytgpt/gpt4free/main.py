@@ -4,6 +4,7 @@ from pytgpt.utils import AwesomePrompts
 from pytgpt.base import Provider, AsyncProvider
 from pytgpt import available_providers
 import g4f
+import pytgpt.exceptions as exceptions
 from typing import AsyncGenerator
 
 g4f.debug.version_check = False

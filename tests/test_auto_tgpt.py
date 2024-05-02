@@ -12,7 +12,7 @@ class TestAuto(base.llmBase):
 
 class TestAsyncAuto(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncAUTO()
         self.prompt = base.prompt
 

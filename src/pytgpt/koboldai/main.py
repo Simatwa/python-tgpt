@@ -1,6 +1,7 @@
 import requests
 import json
 import httpx
+import pytgpt.exceptions as exceptions
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
@@ -122,8 +123,8 @@ class KOBOLDAI(Provider):
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
             if not response.ok:
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                raise exceptions.FailedToGenerateResponseError(
+                    f"Failed to generate response - ({response.status_code}, {response.reason})"
                 )
 
             message_load = ""
@@ -309,8 +310,8 @@ class AsyncKOBOLDAI(AsyncProvider):
                 "POST", self.chat_endpoint, json=payload, timeout=self.timeout
             ) as response:
                 if not response.is_success:
-                    raise Exception(
-                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                    raise exceptions.FailedToGenerateResponseError(
+                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                     )
 
                 message_load = ""

@@ -321,7 +321,7 @@ class AsyncAUTO(AsyncProvider):
         }
 
         # tgpt-based providers
-        for provider_name, provider_obj in self.async_provider_map.items():
+        for provider_name, provider_obj in async_provider_map.items():
             if provider_name in self.exclude:
                 continue
             try:

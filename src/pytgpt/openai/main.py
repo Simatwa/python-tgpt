@@ -1,6 +1,7 @@
 import requests
 import json
 import httpx
+import pytgpt.exceptions as exceptions
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
@@ -136,7 +137,7 @@ class OPENAI(Provider):
                     conversation_prompt if conversationally else prompt
                 )
             else:
-                raise Exception(
+                raise exceptions.FailedToGenerateResponseError(
                     f"Optimizer is not one of {self.__available_optimizers}"
                 )
         session.headers.update(self.headers)
@@ -155,7 +156,7 @@ class OPENAI(Provider):
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
             if not response.ok:
-                raise Exception(
+                raise exceptions.FailedToGenerateResponseError(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
 
@@ -189,7 +190,7 @@ class OPENAI(Provider):
                 not response.ok
                 or not response.headers.get("Content-Type", "") == "application/json"
             ):
-                raise Exception(
+                raise exceptions.FailedToGenerateResponseError(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
             resp = response.json()
@@ -398,7 +399,7 @@ class AsyncOPENAI(AsyncProvider):
             ) as response:
                 if not response.is_success:
                     raise Exception(
-                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                     )
 
                 message_load = ""
@@ -432,7 +433,7 @@ class AsyncOPENAI(AsyncProvider):
                 or not response.headers.get("Content-Type", "") == "application/json"
             ):
                 raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                    f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                 )
             resp = response.json()
             self.last_response.update(resp)

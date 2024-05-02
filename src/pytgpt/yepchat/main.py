@@ -5,6 +5,7 @@ from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
 from pytgpt.utils import sanitize_stream
+import pytgpt.exceptions as exceptions
 from pytgpt.base import Provider, AsyncProvider
 
 session = requests.Session()
@@ -150,7 +151,7 @@ class YEPCHAT(Provider):
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
             if not response.ok:
-                raise Exception(
+                raise exceptions.FailedToGenerateResponseError(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
 
@@ -375,7 +376,7 @@ class AsyncYEPCHAT(AsyncProvider):
                 "POST", self.chat_endpoint, json=payload, timeout=self.timeout
             ) as response:
                 if not response.is_success:
-                    raise Exception(
+                    raise exceptions.FailedToGenerateResponseError(
                         f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
                     )
 

@@ -6,6 +6,7 @@ from uuid import uuid4
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
+import pytgpt.exceptions as exceptions
 from pytgpt.base import Provider, AsyncProvider
 from typing import AsyncGenerator
 
@@ -133,7 +134,7 @@ class OPENGPT(Provider):
                     conversation_prompt if conversationally else prompt
                 )
             else:
-                raise Exception(
+                raise exceptions.FailedToGenerateResponseError(
                     f"Optimizer is not one of {self.__available_optimizers}"
                 )
 
@@ -165,8 +166,8 @@ class OPENGPT(Provider):
                 or not response.headers.get("Content-Type")
                 == "text/event-stream; charset=utf-8"
             ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                raise exceptions.FailedToGenerateResponseError(
+                    f"Failed to generate response - ({response.status_code}, {response.reason})"
                 )
 
             for value in response.iter_lines(
@@ -395,7 +396,7 @@ class AsyncOPENGPT(AsyncProvider):
                     or not response.headers.get("Content-Type")
                     == "text/event-stream; charset=utf-8"
                 ):
-                    raise Exception(
+                    raise exceptions.FailedToGenerateResponseError(
                         f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
                     )
 

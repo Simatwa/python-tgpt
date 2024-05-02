@@ -11,23 +11,23 @@ from pytgpt.gpt4free import AsyncGPT4FREE
 
 mapper: dict[str, object] = {
     "phind": AsyncPHIND,
-    "yepchat": AsyncYEPCHAT,
     "opengpt": AsyncOPENGPT,
-    "openai": AsyncOPENAI,
-    "llama2": AsyncLLAMA2,
-    "leo": AsyncLEO,
     "koboldai": AsyncKOBOLDAI,
-    "groq": AsyncGROQ,
-    "gpt4free": AsyncGPT4FREE,
     "blackboxai": AsyncBLACKBOXAI,
+    "gpt4free": AsyncGPT4FREE,
+    "llama2": AsyncLLAMA2,
+    "yepchat": AsyncYEPCHAT,
+    "leo": AsyncLEO,
+    "groq": AsyncGROQ,
+    "openai": AsyncOPENAI,
 }
 
 tgpt_mapper: dict[str, object] = {
     "phind": AsyncPHIND,
-    "yepchat": AsyncYEPCHAT,
     "opengpt": AsyncOPENGPT,
-    "llama2": AsyncLLAMA2,
     "koboldai": AsyncKOBOLDAI,
     # "gpt4free": AsyncGPT4FREE,
     "blackboxai": AsyncBLACKBOXAI,
+    "llama2": AsyncLLAMA2,
+    "yepchat": AsyncYEPCHAT,
 }

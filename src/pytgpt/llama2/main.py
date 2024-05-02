@@ -1,6 +1,7 @@
 import requests
 import json
 import httpx
+import pytgpt.exceptions as exceptions
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
@@ -141,8 +142,8 @@ class LLAMA2(Provider):
                 or not response.headers.get("Content-Type")
                 == "text/plain; charset=utf-8"
             ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                raise exceptions.FailedToGenerateResponseError(
+                    f"Failed to generate response - ({response.status_code}, {response.reason})"
                 )
 
             message_load: str = ""
@@ -348,8 +349,8 @@ class AsyncLLAMA2(AsyncProvider):
                     or not response.headers.get("Content-Type")
                     == "text/plain; charset=utf-8"
                 ):
-                    raise Exception(
-                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                    raise exceptions.FailedToGenerateResponseError(
+                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                     )
                 message_load: str = ""
                 async for value in response.aiter_lines():

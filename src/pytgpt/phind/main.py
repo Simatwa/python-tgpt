@@ -7,6 +7,7 @@ from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
 from pytgpt.base import Provider, AsyncProvider
+import pytgpt.exceptions as exceptions
 from typing import AsyncGenerator
 
 session = requests.Session()
@@ -147,7 +148,7 @@ class PHIND(Provider):
                 or not response.headers.get("Content-Type")
                 == "text/event-stream; charset=utf-8"
             ):
-                raise Exception(
+                raise exceptions.FailedToGenerateResponseError(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
             streaming_text = ""
@@ -391,8 +392,8 @@ class AsyncPHIND(AsyncProvider):
                     or not response.headers.get("Content-Type")
                     == "text/event-stream; charset=utf-8"
                 ):
-                    raise Exception(
-                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                    raise exceptions.FailedToGenerateResponseError(
+                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                     )
                 streaming_text = ""
                 async for value in response.aiter_lines():

@@ -1,6 +1,7 @@
 import requests
 import httpx
 import json
+import pytgpt.exceptions as exceptions
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
@@ -157,8 +158,8 @@ class LEO(Provider):
                 or not response.headers.get("Content-Type")
                 == "text/event-stream; charset=utf-8"
             ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                raise exceptions.FailedToGenerateResponseError(
+                    f"Failed to generate response - ({response.status_code}, {response.reason})"
                 )
 
             for value in response.iter_lines(
@@ -371,8 +372,8 @@ class AsyncLEO(AsyncProvider):
                     or not response.headers.get("Content-Type")
                     == "text/event-stream; charset=utf-8"
                 ):
-                    raise Exception(
-                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                    raise exceptions.FailedToGenerateResponseError(
+                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                     )
                 async for value in response.aiter_lines():
                     try:

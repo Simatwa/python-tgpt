@@ -1,6 +1,7 @@
 import requests
 import httpx
 import json
+import pytgpt.exceptions as exceptions
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
@@ -159,8 +160,8 @@ class GROQ(Provider):
                 self.chat_endpoint, json=payload, stream=True, timeout=self.timeout
             )
             if not response.ok:
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                raise exceptions.FailedToGenerateResponseError(
+                    f"Failed to generate response - ({response.status_code}, {response.reason})"
                 )
 
             message_load = ""
@@ -190,8 +191,8 @@ class GROQ(Provider):
                 self.chat_endpoint, json=payload, stream=False, timeout=self.timeout
             )
             if not response.ok:
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
+                raise exceptions.FailedToGenerateResponseError(
+                    f"Failed to generate response - ({response.status_code}, {response.reason})"
                 )
             resp = response.json()
             self.last_response.update(resp)
@@ -401,7 +402,7 @@ class AsyncGROQ(AsyncProvider):
             ) as response:
                 if not response.is_success:
                     raise Exception(
-                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                        f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                     )
 
                 message_load = ""
@@ -431,7 +432,7 @@ class AsyncGROQ(AsyncProvider):
             )
             if not response.is_success:
                 raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
+                    f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                 )
             resp = response.json()
             self.last_response.update(resp)
