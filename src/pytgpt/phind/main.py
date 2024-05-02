@@ -7,6 +7,7 @@ from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
 from pytgpt.base import Provider, AsyncProvider
+from typing import AsyncGenerator
 
 session = requests.Session()
 
@@ -327,7 +328,7 @@ class AsyncPHIND(AsyncProvider):
         optimizer: str = None,
         conversationally: bool = False,
         synchronous_generator=False,
-    ) -> dict:
+    ) -> dict | AsyncGenerator[dict]:
         """Asynchronously Chat with AI
 
         Args:
@@ -337,7 +338,7 @@ class AsyncPHIND(AsyncProvider):
             optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
-           dict : {}
+           dict|AsyncGenerator[dict] : ai content.
         ```json
         {
             "id": "chatcmpl-r0wujizf2i2xb60mjiwt",
@@ -430,7 +431,7 @@ class AsyncPHIND(AsyncProvider):
         stream: bool = False,
         optimizer: str = None,
         conversationally: bool = False,
-    ) -> str:
+    ) -> str | AsyncGenerator[str]:
         """Generate response `str`
         Args:
             prompt (str): Prompt to be send.
@@ -438,7 +439,7 @@ class AsyncPHIND(AsyncProvider):
             optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
-            str: Response generated
+            str|AsyncGenerator[str]: Response generated
         """
 
         async def for_stream():

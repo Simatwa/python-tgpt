@@ -1,5 +1,5 @@
 from .main import GPT4FREE
-
+from .main import AsyncGPT4FREE
 from .main import working_providers
 
 from .main import default_models
@@ -10,6 +10,7 @@ __info__ = "Interact with various free ai providers bundled by https://github.co
 
 all = [
     "GPT4FREE",
+    "AsyncGPT4FREE",
     "working_providers",
     "default_models",
     "completion_allowed_models",

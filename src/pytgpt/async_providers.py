@@ -6,6 +6,7 @@ from pytgpt.llama2 import AsyncLLAMA2
 from pytgpt.leo import AsyncLEO
 from pytgpt.koboldai import AsyncKOBOLDAI
 from pytgpt.groq import AsyncGROQ
+from pytgpt.gpt4free import AsyncGPT4FREE
 
 mapper: dict[str, object] = {
     "phind": AsyncPHIND,
@@ -16,6 +17,7 @@ mapper: dict[str, object] = {
     "leo": AsyncLEO,
     "koboldai": AsyncKOBOLDAI,
     "groq": AsyncGROQ,
+    "gpt4free": AsyncGPT4FREE,
 }
 
 tgpt_mapper: dict[str, object] = {
@@ -24,4 +26,5 @@ tgpt_mapper: dict[str, object] = {
     "opengpt": AsyncOPENGPT,
     "llama2": AsyncLLAMA2,
     "koboldai": AsyncKOBOLDAI,
+    "gpt4free": AsyncGPT4FREE,
 }
