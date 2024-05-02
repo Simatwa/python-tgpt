@@ -12,7 +12,7 @@ class TestGpt4free(base.llmBase):
 
 class TestAsyncGpt4free(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncGPT4FREE()
         self.prompt = base.prompt
 

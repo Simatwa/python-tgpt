@@ -177,22 +177,9 @@ class LEO(Provider):
             )
 
         def for_non_stream():
-            response = session.post(
-                self.chat_endpoint, json=payload, stream=False, timeout=self.timeout
-            )
-            if (
-                not response.ok
-                or not response.headers.get("Content-Type", "") == "application/json"
-            ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
-                )
-            resp = response.json()
-            self.last_response.update(resp)
-            self.conversation.update_chat_history(
-                prompt, self.get_message(self.last_response)
-            )
-            return resp
+            for _ in for_stream():
+                pass
+            return self.last_response
 
         return for_stream() if stream else for_non_stream()
 
@@ -400,25 +387,9 @@ class AsyncLEO(AsyncProvider):
             )
 
         async def for_non_stream():
-            response = httpx.post(
-                self.chat_endpoint,
-                json=payload,
-                timeout=self.timeout,
-                headers=self.headers,
-            )
-            if (
-                not response.is_success
-                or not response.headers.get("Content-Type", "") == "application/json"
-            ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason_phrase}) - {response.text}"
-                )
-            resp = response.json()
-            self.last_response.update(resp)
-            self.conversation.update_chat_history(
-                prompt, self.get_message(self.last_response)
-            )
-            return resp
+            async for _ in for_stream():
+                pass
+            return self.last_response
 
         return for_stream() if stream else await for_non_stream()
 
@@ -440,7 +411,7 @@ class AsyncLEO(AsyncProvider):
         """
 
         async def for_stream():
-            async_ask = self.ask(
+            async_ask = await self.ask(
                 prompt, True, optimizer=optimizer, conversationally=conversationally
             )
             async for response in async_ask:

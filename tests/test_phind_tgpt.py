@@ -12,7 +12,7 @@ class TestPhind(base.llmBase):
 
 class TestAsyncPhind(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncPHIND()
         self.prompt = base.prompt
 

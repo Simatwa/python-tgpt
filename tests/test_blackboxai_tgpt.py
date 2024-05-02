@@ -11,6 +11,7 @@ class TestBlackboxai(base.llmBase):
 
 
 class TestAsyncBlackboxai(base.AsyncProviderBase):
+
     def setUp(self):
         self.bot = AsyncBLACKBOXAI()
         self.prompt = base.prompt

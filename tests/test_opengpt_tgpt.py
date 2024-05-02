@@ -12,7 +12,7 @@ class TestOpengpt(base.llmBase):
 
 class TestAsyncOpenai(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncOPENGPT()
         self.prompt = base.prompt
 

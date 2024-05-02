@@ -12,7 +12,7 @@ class TestKoboldai(base.llmBase):
 
 class TestAsyncKoboldai(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncKOBOLDAI()
         self.prompt = base.prompt
 

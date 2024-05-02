@@ -12,7 +12,7 @@ class TestLlama2(base.llmBase):
 
 class TestAsyncLlama2(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncLLAMA2()
         self.prompt = base.prompt
 

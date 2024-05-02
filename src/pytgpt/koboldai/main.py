@@ -317,7 +317,7 @@ class AsyncKOBOLDAI(AsyncProvider):
                 async for value in response.aiter_lines():
                     try:
                         resp = sanitize_stream(value)
-                        message_load += self.get_message(resp)
+                        message_load += await self.get_message(resp)
                         resp["token"] = message_load
                         self.last_response.update(resp)
                         yield value if raw else resp

@@ -385,7 +385,7 @@ class AsyncBLACKBOXAI(AsyncProvider):
         """
 
         async def for_stream():
-            async_ask = self.ask(
+            async_ask = await self.ask(
                 prompt, True, optimizer=optimizer, conversationally=conversationally
             )
             async for response in async_ask:

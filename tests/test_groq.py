@@ -13,7 +13,7 @@ class TestGroq(base.llmBase):
 
 class TestAsyncGroq(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncGROQ(getenv("GROQ_API_KEY"))
         self.prompt = base.prompt
 

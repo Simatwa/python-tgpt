@@ -12,7 +12,7 @@ class TestLeo(base.llmBase):
 
 class TestAsyncLeo(base.AsyncProviderBase):
 
-    async def setUp(self):
+    def setUp(self):
         self.bot = AsyncLEO()
         self.prompt = base.prompt
 
