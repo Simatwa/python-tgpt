@@ -35,6 +35,26 @@ os.makedirs(api_static_image_dir.as_posix(), exist_ok=True)
 os.makedirs(api_static_audio_dir.as_posix(), exist_ok=True)
 
 
+def sanitize_stream(
+    chunk: str, intro_value: str = "data:", to_json: bool = True
+) -> str | dict:
+    """Remove streaming flags
+
+    Args:
+        chunk (str): Streamig chunk.
+        intro_value (str, optional): streaming flag. Defaults to "data:".
+        to_json (bool, optional). Return chunk as dictionary. Defaults to True.
+
+    Returns:
+        str: Sanitized streaming value.
+    """
+
+    if chunk.startswith(intro_value):
+        chunk = chunk[len(intro_value) :]
+
+    return json.loads(chunk) if to_json else chunk
+
+
 def run_system_command(
     command: str,
     exit_on_error: bool = True,

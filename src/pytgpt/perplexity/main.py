@@ -1,18 +1,17 @@
-import re
 import json
 import yaml
 import requests
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
+from pytgpt.base import Provider
 from Helpingai_T2 import Perplexity
 from typing import Any
-import logging
 
 session = requests.Session()
 
 
-class PERPLEXITY:
+class PERPLEXITY(Provider):
     def __init__(
         self,
         is_conversation: bool = True,
