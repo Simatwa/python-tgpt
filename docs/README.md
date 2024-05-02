@@ -69,6 +69,7 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🔄 Ability to load previous conversations
 - 🚀 Pass [awesome-chatgpt prompts](https://github.com/f/awesome-chatgpt-prompts) easily
 - 🤖 [Telegram bot](https://t.me/pytgpt_bot) - interface
+- 🔄 Asynchronous support for all major operations.
 
 
 ## Providers
@@ -326,6 +327,54 @@ print(bot.chat("<Your-prompt>"))
 ```
 
 </details>
+
+### Asynchronous
+
+**Version 0.7.0** introduces asynchronous implementation to almost all providers except a few such as *perplexity & gemini*, which relies on other libraries which lacks such implementation.
+
+To make it easier, you just have to prefix `Async` to the common synchronous class name. For instance `OPENGPT` will be accessed as `AsyncOPENGPT`:
+
+#### Streaming Whole ai response.
+
+```python
+import asyncio
+from pytgpt.phind import AsyncPHIND
+
+async def main():
+    async_ask = await AsyncPHIND(False).ask(
+        "Critique that python is cool.",
+        stream=True
+    )
+    async for streaming_response in async_ask:
+        print(
+            streaming_response
+        )
+
+asyncio.run(
+    main()
+)
+```
+
+#### Streaming just the text
+
+```python
+import asyncio
+from pytgpt.phind import AsyncPHIND
+
+async def main():
+    async_ask = await AsyncPHIND(False).chat(
+        "Critique that python is cool.",
+        stream=True
+    )
+    async for streaming_text in async_ask:
+        print(
+            streaming_text
+        )
+
+asyncio.run(
+    main()
+)
+```
 
 </details>
 

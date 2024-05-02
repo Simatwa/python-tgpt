@@ -541,3 +541,13 @@ For instance:
 - feat: Set new `intro` on the fly. *(console)*
 - feat: `en-US-Wavenet-C` - default voice for speech synthesis.
 - fix: Perplexity AI raising `json.decoder.JSONDecodeError`
+
+## v0.7.0
+
+**What's new?**
+
+> [!NOTE]
+> This is a remarkable milestone. We have to do it in style.
+
+- feat: **Asynchronous** implementation to all providers except a few.
+- feat: **Asynchronus** implementation to all `FastAPI` endpoints.

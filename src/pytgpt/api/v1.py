@@ -9,32 +9,15 @@ from uuid import uuid4
 from .utils import api_exception_handler
 
 # providers
-from pytgpt.leo import LEO
-from pytgpt.opengpt import OPENGPT
-from pytgpt.koboldai import KOBOLDAI
-from pytgpt.phind import PHIND
-from pytgpt.llama2 import LLAMA2
-from pytgpt.blackboxai import BLACKBOXAI
-from pytgpt.perplexity import PERPLEXITY
-from pytgpt.yepchat import YEPCHAT
-from pytgpt.gpt4free import GPT4FREE
-from pytgpt.auto import AUTO
+from pytgpt.gpt4free import AsyncGPT4FREE
+from pytgpt.auto import AsyncAUTO
 from pytgpt.imager import AsyncImager
 from pytgpt.imager import AsyncProdia
 from pytgpt.utils import Audio
+from pytgpt.async_providers import tgpt_mapper as provider_map
 from pytgpt.utils import api_static_image_dir
 
-provider_map = {
-    "leo": LEO,
-    "opengpt": OPENGPT,
-    "koboldai": KOBOLDAI,
-    "phind": PHIND,
-    "llama2": LLAMA2,
-    "blackboxai": BLACKBOXAI,
-    "perplexity": PERPLEXITY,
-    "yepchat": YEPCHAT,
-    "auto": AUTO,
-}
+provider_map.update({"auto": AsyncAUTO})
 
 image_providers = {"default": AsyncImager, "prodia": AsyncProdia}
 
@@ -51,11 +34,15 @@ class ProvidersModel(BaseModel):
         "json_schema_extra": {
             "examples": [
                 {
-                    "tgpt": ["phind", "opengpt", "koboldai"],
+                    "tgpt": [
+                        "phind",
+                        "opengpt",
+                        "koboldai",
+                    ],
                     "g4f": [
                         "Koala",
-                        "FreeGPT",
-                        "You",
+                        "Blackbox",
+                        "FreeChatgpt",
                     ],
                 }
             ]
@@ -150,7 +137,7 @@ class ImagePayload(BaseModel):
     amount: PositiveInt = 1
     proxy: Union[dict[str, str], None] = None
     timeout: PositiveInt = 30
-    provider: Union[str, None] = None
+    provider: Union[str, None] = "default"
 
     model_config = {
         "json_schema_extra": {
@@ -188,7 +175,8 @@ class ImagePayload(BaseModel):
 
     @validator("provider")
     def validate_provider(provider: Union[str, None]) -> str:
-        if provider not in image_providers:
+
+        if provider is not None and not provider in image_providers:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=dict(
@@ -202,7 +190,7 @@ class ImageBytesPayload(BaseModel):
     prompt: str
     proxy: Union[dict[str, str], None] = None
     timeout: PositiveInt = 30
-    provider: Union[str, None] = None
+    provider: Union[str, None] = "default"
 
     model_config = {
         "json_schema_extra": {
@@ -223,7 +211,7 @@ class ImageBytesPayload(BaseModel):
 
     @validator("provider")
     def validate_provider(provider: Union[str, None]) -> str:
-        if provider not in image_providers:
+        if provider is not None and not provider in image_providers:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=dict(
@@ -306,7 +294,7 @@ class TextToAudioResponse(BaseModel):
 
 
 def init_provider(payload: TextGenerationPayload) -> object:
-    return provider_map.get(payload.provider, GPT4FREE)(
+    return provider_map.get(payload.provider, AsyncAUTO)(
         is_conversation=False,  # payload.is_conversation,
         max_tokens=payload.max_tokens,
         timeout=payload.timeout,
@@ -344,8 +332,8 @@ async def non_stream(payload: TextGenerationPayload) -> ProviderResponse:
 
     **NOTE** : Example values are modified for illustration purposes.
     """
-    provider_obj: LEO = init_provider(payload)
-    ai_generated_text: str = provider_obj.chat(payload.prompt)
+    provider_obj: AsyncGPT4FREE = init_provider(payload)
+    ai_generated_text: str = await provider_obj.chat(payload.prompt)
     return ProviderResponse(
         provider=(
             provider_obj.provider_name
@@ -357,10 +345,10 @@ async def non_stream(payload: TextGenerationPayload) -> ProviderResponse:
     )
 
 
-def generate_streaming_response(payload: TextGenerationPayload) -> Generator:
-    provider_obj: LEO = init_provider(payload)
-
-    for text in provider_obj.chat(payload.prompt, stream=True):
+async def generate_streaming_response(payload: TextGenerationPayload) -> Generator:
+    provider_obj = init_provider(payload)
+    async_chat = await provider_obj.chat(payload.prompt, stream=True)
+    async for text in async_chat:
         response = ProviderResponse(
             provider=(
                 provider_obj.provider_name
