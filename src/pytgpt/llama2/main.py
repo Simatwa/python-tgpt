@@ -300,7 +300,7 @@ class AsyncLLAMA2(AsyncProvider):
         raw: bool = False,
         optimizer: str = None,
         conversationally: bool = False,
-    ) -> dict | AsyncGenerator[dict]:
+    ) -> dict | AsyncGenerator:
         """Chat with AI asynchronously.
 
         Args:
@@ -378,7 +378,7 @@ class AsyncLLAMA2(AsyncProvider):
         stream: bool = False,
         optimizer: str = None,
         conversationally: bool = False,
-    ) -> str | AsyncGenerator[str]:
+    ) -> str | AsyncGenerator:
         """Generate response `str` asynchronously.
         Args:
             prompt (str): Prompt to be send.
@@ -386,7 +386,7 @@ class AsyncLLAMA2(AsyncProvider):
             optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
-            str|AsyncGenerator[str]: Response generated
+            str|AsyncGenerator: Response generated
         """
 
         async def for_stream():

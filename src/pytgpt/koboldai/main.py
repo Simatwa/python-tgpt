@@ -270,7 +270,7 @@ class AsyncKOBOLDAI(AsyncProvider):
         raw: bool = False,
         optimizer: str = None,
         conversationally: bool = False,
-    ) -> dict | AsyncGenerator[dict]:
+    ) -> dict | AsyncGenerator:
         """Chat with AI asynchronously.
 
         Args:
@@ -280,7 +280,7 @@ class AsyncKOBOLDAI(AsyncProvider):
             optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
-           dict|AsyncGenerator[dict] : ai content
+           dict|AsyncGenerator : ai content
         ```json
         {
            "token" : "How may I assist you today?"
@@ -342,7 +342,7 @@ class AsyncKOBOLDAI(AsyncProvider):
         stream: bool = False,
         optimizer: str = None,
         conversationally: bool = False,
-    ) -> str | AsyncGenerator[str]:
+    ) -> str | AsyncGenerator:
         """Generate response `str` asynchronously.
         Args:
             prompt (str): Prompt to be send.

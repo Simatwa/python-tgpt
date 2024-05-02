@@ -334,7 +334,7 @@ class AsyncGPT4FREE(AsyncProvider):
         raw: bool = False,
         optimizer: str = None,
         conversationally: bool = False,
-    ) -> dict | AsyncGenerator[dict]:
+    ) -> dict | AsyncGenerator:
         """Chat with AI asynchronously.
 
         Args:
@@ -344,7 +344,7 @@ class AsyncGPT4FREE(AsyncProvider):
             optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
-           dict|AsyncGenerator[dict] : ai content
+           dict|AsyncGenerator : ai content
         ```json
         {
           "text" : "How may I help you today?"
@@ -404,7 +404,7 @@ class AsyncGPT4FREE(AsyncProvider):
         stream: bool = False,
         optimizer: str = None,
         conversationally: bool = False,
-    ) -> dict | AsyncGenerator[str]:
+    ) -> dict | AsyncGenerator:
         """Generate response `str` asynchronously.
         Args:
             prompt (str): Prompt to be send.
@@ -412,7 +412,7 @@ class AsyncGPT4FREE(AsyncProvider):
             optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
-            str|AsyncGenerator[str]: Response generated
+            str|AsyncGenerator: Response generated
         """
 
         async def for_stream():
