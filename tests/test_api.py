@@ -52,7 +52,7 @@ class TestV1(unittest.TestCase):
             },
         )
         resp_dict = resp.json()
-        self.assertEqual(resp_dict["text"], None)
+        self.assertIsNotNone(resp_dict["text"])
         self.assertIsInstance(resp_dict["body"], dict)
 
     def test_text_stream(self):

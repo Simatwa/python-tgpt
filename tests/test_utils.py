@@ -3,6 +3,7 @@ import os
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
+from pytgpt.utils import Audio
 
 
 class TestOptimizers(unittest.TestCase):
@@ -62,20 +63,19 @@ class TestConversation(unittest.TestCase):
         after_history_text = self.get_file_content()
         self.assertNotEqual(before_history_text, after_history_text)
 
-    def test_chat_truncation_after_long_chat(self):
+    def test_chat_history_offset(self):
         """Test truncating lengthy chats"""
-        maximum_chat_length = 60
+        maximum_chat_length = 400
         range_amount = (
             int(maximum_chat_length / (len(self.user_prompt) + len(self.llm_response)))
             + 10
         )
-        self.conversation.max_tokens_to_sample = maximum_chat_length
+        self.conversation.history_offset = maximum_chat_length
         for _ in range(range_amount):
             self.conversation.update_chat_history(self.user_prompt, self.llm_response)
         incomplete_conversation = self.conversation.gen_complete_prompt(
             self.user_prompt
         )
-        # print(len(incomplete_conversation))
         self.assertTrue(len(incomplete_conversation) < maximum_chat_length)
 
     def tearDown(self):
@@ -120,6 +120,28 @@ class TestAwesomePrompt(unittest.TestCase):
             self.awesome.get_act(
                 "Som ranDom sTrInG here", default=None, raise_not_found=True
             )
+
+
+class TestAudio(unittest.TestCase):
+    """Text to speech synthesis"""
+
+    def setUp(self):
+        self.audio_generator = Audio()
+        self.text = "This is a speech synthesis test"
+
+    def test_text_to_audio(self):
+        """Speech synthesis"""
+        voice_bytes = self.audio_generator.text_to_audio(
+            self.text,
+        )
+        self.assertIs(type(voice_bytes), bytes)
+
+    def test_text_to_audio_save_to(self):
+        """Save speech to a file"""
+        saved_to = self.audio_generator.text_to_audio(self.text, auto=True)
+        self.assertIsInstance(saved_to, str)
+        self.assertTrue(os.path.exists(saved_to))
+        os.remove(saved_to)
 
 
 if __name__ == "__main__":
