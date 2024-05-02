@@ -986,6 +986,7 @@ class Audio:
         else:
             return resp.content
 
+    @classmethod
     def text_to_audio(
         cls,
         message: str,

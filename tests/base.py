@@ -2,7 +2,7 @@ import unittest
 import types
 import os
 
-prompt = "This is a prompt"
+prompt = "This is a test prompt"
 
 
 class llmBase(unittest.TestCase):
@@ -56,6 +56,61 @@ class llmBase(unittest.TestCase):
     def test_last_response(self):
         """Last response availability"""
         self.bot.chat(self.prompt)
+        self.assertIsInstance(self.bot.last_response, dict)
+
+
+class AsyncProviderBase(unittest.TestCase):
+
+    async def setUp(self):
+        """Override this"""
+        self.bot = None
+        self.prompt = prompt
+
+    async def test_ask_non_stream(self):
+        """Ask non-stream"""
+        resp = await self.bot.ask(self.prompt)
+        self.assertIsInstance(resp, dict)
+
+    async def test_ask_stream(self):
+        """Ask stream"""
+        resp = await self.bot.ask(self.prompt, stream=True)
+        self.assertIsInstance(resp, types.AsyncGeneratorType)
+        async for value in resp:
+            self.assertIsInstance(value, dict)
+
+    async def test_ask_stream_raw(self):
+        """Ask stream raw"""
+        resp = await self.bot.ask(self.prompt, True, True)
+        self.assertIsInstance(resp, types.AsyncGeneratorType)
+
+        async for value in resp:
+            self.assertIsInstance(value, str)
+
+    async def test_get_message(self):
+        """Response retrieval"""
+        resp = await self.bot.ask(self.prompt)
+        self.assertIsInstance(await self.bot.get_message(resp), str)
+
+    async def test_chat_non_stream(self):
+        """Chat non-stream"""
+        resp = await self.bot.chat(self.prompt)
+        self.assertIs(type(resp), str, f"{resp} is not str")
+
+    async def test_chat_stream(self):
+        """Chat stream"""
+        resp = await self.bot.chat(self.prompt, stream=True)
+        self.assertIsInstance(resp, types.AsyncGeneratorType)
+        async for value in resp:
+            self.assertIsInstance(value, str)
+
+    async def test_optimizer_usage(self):
+        """Code optimization"""
+        resp = await self.bot.chat(self.prompt, optimizer="code")
+        self.assertIsInstance(resp, str)
+
+    async def test_last_response(self):
+        """Last response availability"""
+        await self.bot.chat(self.prompt)
         self.assertIsInstance(self.bot.last_response, dict)
 
 

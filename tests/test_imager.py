@@ -22,5 +22,12 @@ class TestImager(unittest.TestCase):
         self.assertIsInstance(generator, Generator)
 
 
+class TestProdia(TestImager):
+    def setUp(self):
+        self.imager = imager.Prodia()
+        self.prompt: str = "hello world"
+
+
+# Tests for AsyncImager and AsyncProdia to be implemented
 if __name__ == "__main__":
     unittest.main()

@@ -41,6 +41,7 @@ class AUTO(Provider):
         proxies: dict = {},
         history_offset: int = 10250,
         act: str = None,
+        exclude: list[str] = [],
     ):
         """Instantiates AUTO
 
@@ -54,6 +55,7 @@ class AUTO(Provider):
             proxies (dict, optional): Http request proxies. Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
+            exclude(list[str], optional): List of providers to be excluded. Defaults to [].
         """
         self.provider: Union[
             OPENGPT, KOBOLDAI, PHIND, LLAMA2, BLACKBOXAI, PERPLEXITY, GPT4FREE
@@ -68,6 +70,7 @@ class AUTO(Provider):
         self.proxies = proxies
         self.history_offset = history_offset
         self.act = act
+        self.exclude = exclude
 
     @property
     def last_response(self) -> dict[str, Any]:
@@ -109,6 +112,8 @@ class AUTO(Provider):
         # tgpt-based providers
         for provider_name, provider_obj in provider_map.items():
             # continue
+            if provider_name in self.exclude:
+                continue
             try:
                 self.provider_name = f"tgpt-{provider_name}"
                 self.provider = provider_obj(
@@ -142,6 +147,8 @@ class AUTO(Provider):
         for provider_info in TestProviders(timeout=self.timeout).get_results(
             run=run_new_test
         ):
+            if provider_info["name"] in self.exclude:
+                continue
             try:
                 self.provider_name = f"g4f-{provider_info['name']}"
                 self.provider = GPT4FREE(
@@ -228,7 +235,7 @@ class AUTO(Provider):
         return self.provider.get_message(response)
 
 
-class AsyncAUTO:
+class AsyncAUTO(AsyncProvider):
     def __init__(
         self,
         is_conversation: bool = True,
@@ -240,6 +247,7 @@ class AsyncAUTO:
         proxies: dict = {},
         history_offset: int = 10250,
         act: str = None,
+        exclude: list[str] = [],
     ):
         """Instantiates AsyncAUTO
 
@@ -253,6 +261,7 @@ class AsyncAUTO:
             proxies (dict, optional): Http request proxies. Defaults to {}.
             history_offset (int, optional): Limit conversation history to this number of last texts. Defaults to 10250.
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
+            exclude(list[str], optional): List of providers to be excluded. Defaults to [].
         """
         self.provider: Union[
             AsyncOPENGPT,
@@ -272,6 +281,7 @@ class AsyncAUTO:
         self.proxies = proxies
         self.history_offset = history_offset
         self.act = act
+        self.exclude = exclude
 
     @property
     def last_response(self) -> dict[str, Any]:
@@ -311,8 +321,9 @@ class AsyncAUTO:
         }
 
         # tgpt-based providers
-        for provider_name, provider_obj in async_provider_map.items():
-            # continue
+        for provider_name, provider_obj in self.async_provider_map.items():
+            if provider_name in self.exclude:
+                continue
             try:
                 self.provider_name = f"tgpt-{provider_name}"
                 self.provider = provider_obj(
@@ -347,6 +358,8 @@ class AsyncAUTO:
         for provider_info in TestProviders(timeout=self.timeout).get_results(
             run=run_new_test
         ):
+            if provider_info["name"] in self.exclude:
+                continue
             try:
                 self.provider_name = f"g4f-{provider_info['name']}"
                 self.provider = AsyncGPT4FREE(
