@@ -8,12 +8,12 @@
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml"><img src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-test.yml/badge.svg" alt="Python Test"/></a>
 -->
 <a href="https://github.com/Simatwa/python-tgpt/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/static/v1?logo=GPL&color=Blue&message=MIT&label=License"/></a>
-<a href="#"><img alt="Python version" src="https://img.shields.io/pypi/pyversions/python-tgpt"/></a>
+<a href=""><img alt="Python version" src="https://img.shields.io/pypi/pyversions/python-tgpt"/></a>
 <a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/pypi/v/python-tgpt?color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/badge/code%20style-black-000000.svg"/></a>
-<a href="#"><img alt="Website status" src="https://img.shields.io/website?url=https://python-tgpt.onrender.com"/></a>
+<a href="https://python-tgpt.onrender.com"><img alt="Website status" src="https://img.shields.io/website?url=https://python-tgpt.onrender.com"/></a>
 <a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img alt="Python Package flow" src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg?branch=master"/></a>
-<a href="#"><img alt="coverage" src="https://img.shields.io/static/v1?logo=Coverage&label=Coverage&message=90%&color=yellowgreen"/></a>
+<a href=""><img alt="coverage" src="https://img.shields.io/static/v1?logo=Coverage&label=Coverage&message=90%&color=yellowgreen"/></a>
 <a href="https://pepy.tech/project/tgpt2"><img src="https://static.pepy.tech/personalized-badge/tgpt2?period=total&units=international_system&left_color=grey&right_color=green&left_text=Downloads" alt="Downloads"></a>
 <a href="https://pepy.tech/project/python-tgpt"><img src="https://static.pepy.tech/personalized-badge/python-tgpt?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Downloads"></a>
 <a href="https://github.com/Simatwa/python-tgpt/releases/latest"><img src="https://img.shields.io/github/downloads/Simatwa/python-tgpt/total?label=Asset%20Downloads&color=success" alt="Downloads"></img></a>
@@ -578,13 +578,13 @@ $ pytgpt interactive -ttm
 ```
 This flag instructs the system to audiolize the ai responses and then play them, enhancing the user experience by providing auditory feedback.
 
-Version **0.6.4** introduces another dynamic provider, `auto`, which denotes the working provider **overall**. This relieves you of the workload of manually checking a working provider each time you fire up pytgpt.
+Version **0.6.4** introduces another dynamic provider, `auto`, which denotes the working provider **overall**. This relieves you of the workload of manually checking a working provider each time you fire up pytgpt. However, `auto` as a provider does not work so well with streaming responses, so probably you would need to sacrifice performance for the sake of reliability.
 
 ## [Telegram Bot](https://github.com/Simatwa/pytgpt-bot)
 
 If you're not satisfied with the existing interfaces, [pytgpt-bot](https://github.com/Simatwa/pytgpt-bot) could be the solution you're seeking. This bot is designed to enhance your experience by offering a wide range of functionalities. Whether you're interested in engaging in AI-driven conversations, creating images and audio from text, or exploring other innovative features, [pytgpt-bot is equipped to meet your needs.](https://github.com/Simatwa/pytgpt-bot)
 
-The bot is maintained as a separate project so you just have to execute a command get it installed :
+The bot is maintained as a separate project so you just have to execute a command to get it installed :
 
 ```
 $ pip install pytgpt-bot
