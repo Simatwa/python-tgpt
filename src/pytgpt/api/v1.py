@@ -293,8 +293,8 @@ class TextToAudioResponse(BaseModel):
     }
 
 
-def init_provider(payload: TextGenerationPayload) -> object:
-    return provider_map.get(payload.provider, AsyncAUTO)(
+async def init_provider(payload: TextGenerationPayload) -> object:
+    return provider_map.get(payload.provider, AsyncGPT4FREE)(
         is_conversation=False,  # payload.is_conversation,
         max_tokens=payload.max_tokens,
         timeout=payload.timeout,
@@ -332,7 +332,7 @@ async def non_stream(payload: TextGenerationPayload) -> ProviderResponse:
 
     **NOTE** : Example values are modified for illustration purposes.
     """
-    provider_obj: AsyncGPT4FREE = init_provider(payload)
+    provider_obj: AsyncGPT4FREE = await init_provider(payload)
     ai_generated_text: str = await provider_obj.chat(payload.prompt)
     return ProviderResponse(
         provider=(
@@ -346,7 +346,7 @@ async def non_stream(payload: TextGenerationPayload) -> ProviderResponse:
 
 
 async def generate_streaming_response(payload: TextGenerationPayload) -> Generator:
-    provider_obj = init_provider(payload)
+    provider_obj = await init_provider(payload)
     async_chat = await provider_obj.chat(payload.prompt, stream=True)
     async for text in async_chat:
         response = ProviderResponse(
