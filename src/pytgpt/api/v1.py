@@ -482,7 +482,7 @@ async def redirect_image_generation(prompt: str):
     )
 
 
-@app.post("/audio", name="text-to-audio")
+@app.post("/voice", name="text-to-voice")
 @api_exception_handler
 async def text_to_audio(
     payload: TextToAudioPayload, request: Request
@@ -508,7 +508,7 @@ async def text_to_audio(
     return TextToAudioResponse(url=f"{host}/static/audios/" + filename)
 
 
-@app.get("/audio", name="text-to-audio (bytes)")
+@app.get("/voice", name="text-to-voice (bytes)")
 @api_exception_handler
 async def text_to_audio_bytes(
     message: str,

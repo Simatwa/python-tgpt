@@ -551,3 +551,11 @@ For instance:
 
 - feat: **Asynchronous** implementation to all providers except a few.
 - feat: **Asynchronus** implementation to all `FastAPI` endpoints.
+
+
+## v0.7.1
+
+**What's new?**
+
+- fix: Failure to support g4f providers - `FastApi`
+- feat: Rename `/audio` endpoints to `/voice` - `FastAPI`
