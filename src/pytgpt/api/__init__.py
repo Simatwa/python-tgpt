@@ -19,7 +19,7 @@ app = FastAPI(
         "\n\n"
         "Access redoc at [/redoc](/redoc) endpoint."
         "\n\n"
-        "Full documentation is available at official repo : [Simatwa/python-tgpt](https://github.com/Simatwa/python-tgpt)."
+        "Other documentation is available at official repo : [Simatwa/python-tgpt](https://github.com/Simatwa/python-tgpt)."
     ),
     version=__version__,
     contact={
