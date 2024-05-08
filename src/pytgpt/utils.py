@@ -1049,18 +1049,18 @@ class Audio:
 
         def play_using_termux_media_player():
             # check if media-player is installed
-            help_message :str = "Install termux-api package in order to play audio files.\n apt update && apt install termux-api"
+            help_message: str = (
+                "Install termux-api package in order to play audio files.\n apt update && apt install termux-api"
+            )
             check = run_system_command(
                 "termux-media-player --help",
                 exit_on_error=False,
                 stdout_error=False,
-                help=help_message
+                help=help_message,
             )[1]
 
             if check.returncode == 127:
-                raise Exception(
-                    help_message
-                )
+                raise Exception(help_message)
             try:
                 run_system_command(f'termux-media-player play "{path_to_audio_file}"')
                 while (
