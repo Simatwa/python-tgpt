@@ -306,7 +306,6 @@ class AwesomePrompts:
         """
         resp = {}
         if not self.__is_prompt_updated:
-            import requests
 
             logging.info("Downloading & updating awesome prompts")
             response = requests.get(self.awesome_prompt_url)
@@ -438,8 +437,6 @@ class Updates:
         Returns:
             bool|dict: version str or whole dict info
         """
-        import requests
-
         data = requests.get(self.url).json()
         if whole:
             return data
