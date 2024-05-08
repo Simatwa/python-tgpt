@@ -17,6 +17,7 @@ import requests
 import vlc
 import httpx
 import asyncio
+import urllib.parse
 from time import sleep as wait
 
 appdir = appdirs.AppDirs("pytgpt", "Smartwa")
@@ -944,7 +945,7 @@ class Audio:
             headers=cls.headers, proxies=proxies, timeout=timeout
         )
         url: str = (
-            f"https://api.streamelements.com/kappa/v2/speech?voice={voice}&text={{{message}}}"
+            f"https://api.streamelements.com/kappa/v2/speech?voice={voice}&text={{{urllib.parse.quote(message)}}}"
         )
         resp = await session.get(url)
         if not resp.is_success:
@@ -1048,16 +1049,17 @@ class Audio:
 
         def play_using_termux_media_player():
             # check if media-player is installed
+            help_message :str = "Install termux-api package in order to play audio files.\n apt update && apt install termux-api"
             check = run_system_command(
                 "termux-media-player --help",
                 exit_on_error=False,
                 stdout_error=False,
-                help="Install termux-api package in order to play audio files.\n apt update && apt install termux-api",
+                help=help_message
             )[1]
 
             if check.returncode == 127:
                 raise Exception(
-                    "Install termux-api package in order to play audio files.\n apt update && apt install termux-api"
+                    help_message
                 )
             try:
                 run_system_command(f'termux-media-player play "{path_to_audio_file}"')
