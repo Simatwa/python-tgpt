@@ -480,7 +480,7 @@ The `generate` functionality has been enhanced starting from *v0.3.0* to enable 
 This feature is particularly beneficial for intricate operations. For example:
 
 ```bash
-$ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise commit message from it, aligning with my commit message history: {{copied}}" --shell --new
+$ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise commit message from it, aligning with my commit message history: {{copied}}" --new
 ```
 > In this illustration, `{{stream}}` denotes the result of the `$ git diff` operation, while `{{copied}}` signifies the content copied from the output of the `$ git log` command.
 
