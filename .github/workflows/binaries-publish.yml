@@ -34,9 +34,10 @@ jobs:
         python-version: '3.11'
     - name: Install dependencies and python-tgpt
       run: |
-        python -m pip install --upgrade pip pyinstaller pillow g4f[all]
+        python -m pip install --upgrade pip pyinstaller pillow
         python -m pip install -r requirements.txt
         python -m pip install .
+        python -m pip install g4f[all]==0.2.6.1
     - name: Build executable
       run: |
         pyinstaller main.py --onefile --exclude pandas --distpath dist --workpath build --log-level INFO --exclude numpy --exclude matplotlib --exclude PyQt5 --exclude PyQt6 --exclude share --contents-directory . --icon assets/logo.png --noconfirm --name ${{ matrix.artifact_name }}

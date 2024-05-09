@@ -37,6 +37,7 @@ jobs:
         python -m pip install --upgrade pip pyinstaller pillow
         python -m pip install -r requirements.txt
         python -m pip install .
+        python -m pip install g4f==0.2.6.1
     - name: Build executable
       run: |
         pyinstaller main.py --onefile --exclude pandas --distpath dist1 --workpath build1 --log-level INFO --exclude numpy --exclude matplotlib --exclude PyQt5 --exclude PyQt6 --exclude share --contents-directory . --icon assets/logo.png --noconfirm --name ${{ matrix.artifact_name }}

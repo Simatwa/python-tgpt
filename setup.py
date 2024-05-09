@@ -13,7 +13,7 @@ INSTALL_REQUIRE = [
     "GoogleBard1>=2.1.4",
     "poe-api-wrapper==1.3.6",
     "brotli==1.1.0",
-    "g4f>=0.3.0.8",
+    "g4f>=0.2.6.1",
     "Helpingai_T2-fork==0.3.2",
     "python-vlc>=3.0.20",
     "httpx==0.27.0",
@@ -25,7 +25,7 @@ cli_reqs = [
     "clipman==3.1.0",
     "pyperclip==1.8.2",
     "colorama==0.4.6",
-    "g4f>=0.3.0.8",
+    "g4f>=0.2.6.1",
     "python-dotenv==1.0.0",
 ]
 
@@ -33,7 +33,12 @@ api = [
     "fastapi[all]==0.110.1",
 ]
 
+termux = [
+    "g4f==0.2.6.1",
+]
+
 EXTRA_REQUIRE = {
+    "termux": termux,
     "cli": cli_reqs,
     "api": api,
     "all": ["g4f[all]>=0.2.6.1", "matplotlib", "gpt4all==2.2.0"] + cli_reqs + api,
