@@ -136,6 +136,29 @@ Alternatively, you can install non-binaries. *(Recommended)*
 
 > `pip install -U "python-tgt[api]"` will install REST API dependencies.
 
+#### Termux extras
+
+1. Developers:
+
+   ```sh
+   pip install --upgrade "python-tgpt[termux]"
+   ```
+
+2. Commandline:
+
+   ```sh
+   pip install --upgrade "python-tgpt[termux-cli]"
+   ```
+
+3. Full installation:
+
+   ```sh
+   pip install  --upgrade "python-tgpt[termux-all]"
+   ```
+
+> `pip install -U "python-tgt[termux-api]"` will install REST API dependencies
+
+
 ## Usage
 
 This package offers a convenient command-line interface.

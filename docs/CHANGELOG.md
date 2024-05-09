@@ -566,3 +566,9 @@ For instance:
 
 - feat: Extra installation requirement for Termux - `pip install python-tgpt[termux]`
 - fix: Limit g4f requirement for binaries to **v0.2.6.1**
+
+## v0.7.3
+
+**What's new?**
+
+- feat: Termux extra installation options : `termux-cli`, `termux-api` and `termux-all`

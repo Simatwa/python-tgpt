@@ -39,6 +39,9 @@ termux = [
 
 EXTRA_REQUIRE = {
     "termux": termux,
+    "termux-cli": termux + cli_reqs,
+    "termux-api": termux + api,
+    "termux-all": termux + cli_reqs + api,
     "cli": cli_reqs,
     "api": api,
     "all": ["g4f[all]>=0.2.6.1", "matplotlib", "gpt4all==2.2.0"] + cli_reqs + api,
