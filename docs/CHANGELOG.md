@@ -559,3 +559,10 @@ For instance:
 
 - fix: Failure to support g4f providers - `FastApi`
 - feat: Rename `/audio` endpoints to `/voice` - `FastAPI`
+
+## v0.7.2
+
+**What's new?**
+
+- feat: Extra installation requirement for Termux - `pip install python-tgpt[termux]`
+- fix: Limit g4f requirement for binaries to **v0.2.6.1**
