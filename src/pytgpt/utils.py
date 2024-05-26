@@ -14,11 +14,19 @@ from pathlib import Path
 from typing import Union
 from typing import NoReturn
 import requests
-import vlc
 import httpx
 import asyncio
 import urllib.parse
 from time import sleep as wait
+
+try:
+    import vlc
+
+    is_vlc_imported = True
+except Exception as e:
+    logging.debug(f"Unable to import vlc lib - {e}")
+    # Ref : #49
+    is_vlc_imported = False
 
 appdir = appdirs.AppDirs("pytgpt", "Smartwa")
 
@@ -1033,6 +1041,9 @@ class Audio:
             raise FileNotFoundError(f"File does not exist - '{path_to_audio_file}'")
 
         def play_using_vlc():
+            if not is_vlc_imported:
+                logging.warn("Failed to import vlc lib, check logs (debug)")
+                return
             # create instance
             instance = vlc.Instance()
             # Create a Media Player object
