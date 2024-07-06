@@ -2415,9 +2415,15 @@ class ImageGen:
         help="Disable prompt altering for effective image generation",
     )
     @click.option("-q", "--quiet", is_flag=True, help="Suppress progress bar")
+    @click.option(
+        "-s",
+        "--stream",
+        help="Stream the image download process.",
+        is_flag=True,
+    )
     @click.help_option("-h", "--help")
     def generate_image(
-        prompt, provider, directory, amount, name, timeout, proxy, no_additives, quiet
+        prompt, provider, directory, amount, name, timeout, proxy, no_additives, quiet, stream
     ):
         """Generate images with pollinations.ai"""
         provider_obj = this.image_providers_map.get(provider)
@@ -2427,12 +2433,12 @@ class ImageGen:
                 total=amount,
                 visible=quiet == False,
             )
-            imager = provider_obj(timeout=timeout, proxies=proxy if proxy else {})
+            imager:Prodia | Imager = provider_obj(timeout=timeout, proxies=proxy if proxy else {})
             for image in imager.generate(
                 prompt=prompt,
                 amount=amount,
                 additives=no_additives == False,
-                stream=True,
+                stream=stream, # Just a hack for temporary save. Raises "'async_generator' object is not iterable"
             ):
                 imager.save([image], name=name, dir=directory)
                 progress.update(task, advance=1)

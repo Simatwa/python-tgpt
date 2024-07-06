@@ -572,3 +572,9 @@ For instance:
 **What's new?**
 
 - feat: Termux extra installation options : `termux-cli`, `termux-api` and `termux-all`
+
+## v0.7.4
+
+**What's new?**
+
+- fix : Image generation failure.
