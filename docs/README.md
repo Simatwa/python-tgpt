@@ -514,7 +514,7 @@ $ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise com
 Instances :
 
 ```sh
-$ pytgpt interactve --awesome-prompt "Linux Terminal"
+$ pytgpt interactive --awesome-prompt "Linux Terminal"
 # Act like a Linux Terminal
 
 $ pytgpt interactive -ap DAN
