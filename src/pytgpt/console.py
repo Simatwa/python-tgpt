@@ -9,8 +9,6 @@ import re
 import rich
 import getpass
 import json
-import re
-import sys
 import datetime
 import time
 import subprocess
@@ -336,7 +334,7 @@ class Main(cmd.Cmd):
     intro = (
         "Welcome to AI Chat in terminal. "
         "Type 'help' or 'h' for usage info.\n"
-        f"Submit any bug at {pytgpt.__repo__}/issues/new"
+        f"Submit any bug at {pytgpt.__repo__}/issues/new/choose"
     )
 
     def __init__(
@@ -2423,7 +2421,16 @@ class ImageGen:
     )
     @click.help_option("-h", "--help")
     def generate_image(
-        prompt, provider, directory, amount, name, timeout, proxy, no_additives, quiet, stream
+        prompt,
+        provider,
+        directory,
+        amount,
+        name,
+        timeout,
+        proxy,
+        no_additives,
+        quiet,
+        stream,
     ):
         """Generate images with pollinations.ai"""
         provider_obj = this.image_providers_map.get(provider)
@@ -2433,12 +2440,14 @@ class ImageGen:
                 total=amount,
                 visible=quiet == False,
             )
-            imager:Prodia | Imager = provider_obj(timeout=timeout, proxies=proxy if proxy else {})
+            imager: Prodia | Imager = provider_obj(
+                timeout=timeout, proxies=proxy if proxy else {}
+            )
             for image in imager.generate(
                 prompt=prompt,
                 amount=amount,
                 additives=no_additives == False,
-                stream=stream, # Just a hack for temporary save. Raises "'async_generator' object is not iterable"
+                stream=stream,  # Just a hack for temporary save. Raises "'async_generator' object is not iterable"
             ):
                 imager.save([image], name=name, dir=directory)
                 progress.update(task, advance=1)

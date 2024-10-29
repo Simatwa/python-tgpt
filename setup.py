@@ -6,7 +6,7 @@ from setuptools import find_packages
 
 
 INSTALL_REQUIRE = [
-    "requests[socks]==2.31.0",
+    "requests[socks]>=2.31.0",
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
     "webchatgpt==0.3.0",
