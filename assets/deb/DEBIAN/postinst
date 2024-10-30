@@ -2,5 +2,5 @@
 
 ln -s /usr/lib/pytgpt/pytgpt /usr/bin/pytgpt
 
-echo "To get the most out of this script, install it from pypi <pip install python-tgpt>"
-echo "Submit any bug at https://github.com/Simatwa/python-tgpt/issues/new"
+echo "To get the most out of this package, install it from pypi <pip install python-tgpt>"
+echo "Submit any bug at https://github.com/Simatwa/python-tgpt/issues/new/choose"

@@ -1,4 +1,4 @@
-from .utils import appdir
+from pytgpt.utils import appdir
 import g4f
 from importlib import metadata
 import logging
