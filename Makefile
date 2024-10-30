@@ -28,7 +28,7 @@ test:
 	$(PYTHON) -m unittest discover -s tests -p 'test_*.py' -f -v
 
 # Target to run tgpt providers test
-test_tgpt:
+test-tgpt:
 	$(PYTHON) -m unittest discover -s tests -p 'test_*_tgpt.py' -f -v
 
 # Target to create an executable using PyInstaller
@@ -51,6 +51,7 @@ build: install
 
 # Target to create .deb file
 build-deb: install
+	$(PI) install --upgrade pyinstaller
 	$(PYINSTALLER) main.py \
 	--onedir \
 	--exclude pandas \
@@ -81,6 +82,7 @@ build-deb: install
 
 # Target to build minimal deb
 build-minimal-deb: install-minimal
+	$(PI) install --upgrade pyinstaller
 	$(PYINSTALLER) main.py \
 	--onedir \
 	--exclude pandas \
