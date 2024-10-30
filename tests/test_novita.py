@@ -1,22 +1,22 @@
 import unittest
 import tests.base as base
 from os import getenv
-from pytgpt.openai import OPENAI
-from pytgpt.openai import AsyncOPENAI
+from pytgpt.novita import NOVITA
+from pytgpt.novita import AsyncNOVITA
 
-API_KEY = getenv("OPENAI_API_KEY")
+API_KEY = getenv("NOVITA_API_KEY")
 
 
 class TestOpenai(base.llmBase):
     def setUp(self):
-        self.bot = OPENAI(API_KEY)
+        self.bot = NOVITA(API_KEY)
         self.prompt = base.prompt
 
 
 class TestAsyncOpenai(base.AsyncProviderBase):
 
     def setUp(self):
-        self.bot = AsyncOPENAI(API_KEY)
+        self.bot = AsyncNOVITA(API_KEY)
         self.prompt = base.prompt
 
 

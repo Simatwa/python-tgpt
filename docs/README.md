@@ -88,7 +88,7 @@ These are simply the hosts of the LLMs, which include:
 14. [Groq](https://console.groq.com/playground) *(API Key required)*
 15. [Perplexity](https://www.perplexity.ai)
 16. [YepChat](https://yep.com)
-
+17. [Novita](https://novita.ai) *(API key required)*
 
 <details>
 
@@ -344,6 +344,21 @@ Gpt4free providers
 ```python
 import pytgpt.gpt4free as gpt4free
 bot = gpt4free.GPT4FREE(provider="Koala")
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+<details>
+
+<summary>
+Novita
+
+</summary>
+
+```python
+import pytgpt.novita as novita
+bot = novita.NOVITA("<NOVITA-API-KEY>")
 print(bot.chat("<Your-prompt>"))
 ```
 

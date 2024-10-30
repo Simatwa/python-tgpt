@@ -28,6 +28,7 @@ tgpt_providers = [
     "groq",
     "perplexity",
     "yepchat",
+    "novita",
 ]
 
 gpt4free_providers = [

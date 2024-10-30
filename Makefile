@@ -1,5 +1,5 @@
 # Define targets
-.PHONY: install install-minimal test build build-deb build-minimal-deb clean
+.PHONY: install install-minimal test test_tgpt build build-deb build-minimal-deb clean
 
 # Define variables
 PYTHON := python3
@@ -26,6 +26,10 @@ install-minimal: clean
 # Target to run tests
 test:
 	$(PYTHON) -m unittest discover -s tests -p 'test_*.py' -f -v
+
+# Target to run tgpt providers test
+test_tgpt:
+	$(PYTHON) -m unittest discover -s tests -p 'test_*_tgpt.py' -f -v
 
 # Target to create an executable using PyInstaller
 build: install
