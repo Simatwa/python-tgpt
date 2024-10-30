@@ -102,6 +102,7 @@ setup(
         "gptcli",
         "poe-api",
         "perplexity",
+        "novita",
         "gpt4free",
     ],
     long_description=Path.open("README.md", encoding="utf-8").read(),
