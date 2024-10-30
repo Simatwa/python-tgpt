@@ -14,29 +14,31 @@ default: install test build
 
 # Target to install dependencies
 install: clean
+	$(PI) install -U pip
 	$(PI) install -r requirements.txt 
 	$(PI) install -e .
 	$(PI) install --upgrade g4f[all]
 
 # Target to install minimal dependencies
 install-minimal: clean
+	$(PI) install -U pip
 	$(PI) install -r requirements.txt
 	$(PI) install -e .
 
 # Target to run tests
-test: install
+test:
 	$(PYTHON) -m unittest discover -s tests -p 'test_*.py' -f -v
 
 # Target to run tgpt providers test
-test-tgpt: install
+test-tgpt:
 	$(PYTHON) -m unittest discover -s tests -p 'test_*_tgpt.py' -f -v
 
 # Target to run REST-api test
-test-api: install
+test-api:
 	$(PYTHON) -m unittest discover -s tests -p 'test_api.py' -f -v
 
 # Target to run pytgpt utils test
-test-utils: install
+test-utils:
 	$(PYTHON) -m unittest discover -s tests -p 'test_utils.py' -f -v
 
 # Target to create an executable using PyInstaller
