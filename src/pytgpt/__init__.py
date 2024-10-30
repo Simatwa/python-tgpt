@@ -1,4 +1,3 @@
-from pytgpt.utils import appdir
 import g4f
 from importlib import metadata
 import logging

@@ -2,8 +2,8 @@ from fastapi import APIRouter, HTTPException, status, Request
 from fastapi.responses import Response, StreamingResponse, RedirectResponse
 from fastapi.encoders import jsonable_encoder
 from json import dumps
-from pydantic import BaseModel, validator, PositiveInt
-from typing import Union, Any, Generator
+from pydantic import BaseModel, field_validator, PositiveInt
+from typing import Union, Any, AsyncGenerator
 from pytgpt import gpt4free_providers
 from uuid import uuid4
 from .utils import api_exception_handler
@@ -77,7 +77,7 @@ class TextGenerationPayload(BaseModel):
         }
     }
 
-    @validator("provider")
+    @field_validator("provider")
     def validate_provider(provider: str) -> object:
         if provider not in supported_providers:
             raise HTTPException(
@@ -162,7 +162,7 @@ class ImagePayload(BaseModel):
         }
     }
 
-    @validator("amount")
+    @field_validator("amount")
     def validate_amount(amount: int) -> PositiveInt:
         if amount > 10:
             raise HTTPException(
@@ -173,7 +173,7 @@ class ImagePayload(BaseModel):
             )
         return amount
 
-    @validator("provider")
+    @field_validator("provider")
     def validate_provider(provider: Union[str, None]) -> str:
 
         if provider is not None and not provider in image_providers:
@@ -209,7 +209,7 @@ class ImageBytesPayload(BaseModel):
         }
     }
 
-    @validator("provider")
+    @field_validator("provider")
     def validate_provider(provider: Union[str, None]) -> str:
         if provider is not None and not provider in image_providers:
             raise HTTPException(
@@ -265,7 +265,7 @@ class TextToAudioPayload(BaseModel):
         }
     }
 
-    @validator("voice")
+    @field_validator("voice")
     def validate_voice(voice) -> str:
         if not voice in Audio.all_voices:
             raise HTTPException(
@@ -345,7 +345,7 @@ async def non_stream(payload: TextGenerationPayload) -> ProviderResponse:
     )
 
 
-async def generate_streaming_response(payload: TextGenerationPayload) -> Generator:
+async def generate_streaming_response(payload: TextGenerationPayload) -> AsyncGenerator:
     provider_obj = await init_provider(payload)
     async_chat = await provider_obj.chat(payload.prompt, stream=True)
     async for text in async_chat:

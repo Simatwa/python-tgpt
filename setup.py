@@ -16,7 +16,7 @@ INSTALL_REQUIRE = [
     "g4f>=0.2.6.1",
     "Helpingai_T2-fork==0.3.2",
     "python-vlc>=3.0.20",
-    "httpx==0.27.0",
+    "httpx==0.27.2",
 ]
 
 cli_reqs = [
@@ -30,7 +30,7 @@ cli_reqs = [
 ]
 
 api = [
-    "fastapi[all]==0.110.1",
+    "fastapi[all]==0.115.4",
 ]
 
 termux = [
@@ -56,7 +56,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.7.5",
+    version="0.7.6",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
@@ -109,7 +109,6 @@ setup(
     long_description_content_type="text/markdown",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Intended Audience :: Developers",
         "Intended Audience :: Developers",
         "Natural Language :: English",
         "License :: Free For Home Use",

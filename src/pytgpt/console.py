@@ -22,7 +22,7 @@ from rich.live import Live
 from rich.table import Table
 from rich.prompt import Prompt
 from rich.progress import Progress
-from typing import Iterator
+from typing import Iterable
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
 from pytgpt.utils import AwesomePrompts
@@ -163,7 +163,7 @@ class this:
 
     @staticmethod
     def stream_output(
-        iterable: Iterator,
+        iterable: Iterable,
         title: str = "",
         is_markdown: bool = True,
         style: object = Style(),
@@ -176,7 +176,7 @@ class this:
         """Stdout streaming response
 
         Args:
-           iterable (Iterator): Iterator containing contents to be stdout
+           iterable (Iterable): Iterable containing contents to be stdout
            title (str, optional): Content title. Defaults to ''.
            is_markdown (bool, optional): Flag for markdown content. Defaults to True.
            style (object, optional): `rich.style` instance. Defaults to Style().

@@ -1,5 +1,5 @@
 # Define targets
-.PHONY: install install-minimal test test_tgpt build build-deb build-minimal-deb clean
+.PHONY: install install-minimal test test-tgpt test-api test-utils build build-deb build-minimal-deb clean
 
 # Define variables
 PYTHON := python3
@@ -15,21 +15,29 @@ default: install test build
 # Target to install dependencies
 install: clean
 	$(PI) install -r requirements.txt 
-	$(PI) install .
+	$(PI) install -e .
 	$(PI) install --upgrade g4f[all]
 
 # Target to install minimal dependencies
 install-minimal: clean
 	$(PI) install -r requirements.txt
-	$(PI) install .
+	$(PI) install -e .
 
 # Target to run tests
-test:
+test: install
 	$(PYTHON) -m unittest discover -s tests -p 'test_*.py' -f -v
 
 # Target to run tgpt providers test
-test-tgpt:
+test-tgpt: install
 	$(PYTHON) -m unittest discover -s tests -p 'test_*_tgpt.py' -f -v
+
+# Target to run REST-api test
+test-api: install
+	$(PYTHON) -m unittest discover -s tests -p 'test_api.py' -f -v
+
+# Target to run pytgpt utils test
+test-utils: install
+	$(PYTHON) -m unittest discover -s tests -p 'test_utils.py' -f -v
 
 # Target to create an executable using PyInstaller
 build: install

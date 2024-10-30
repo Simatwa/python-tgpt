@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from pytgpt import __version__
 from pytgpt.utils import api_static_dir
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, UTC
 from . import v1
 
 app = FastAPI(
@@ -51,7 +51,7 @@ async def server_status() -> ServerStatus:
     - `is_alive` : status
     - `as_at` : Time checked.
     """
-    return ServerStatus(as_at=datetime.utcnow())
+    return ServerStatus(as_at=datetime.now(UTC))
 
 
 app.include_router(v1.app, prefix="/v1", tags=["v1"])
