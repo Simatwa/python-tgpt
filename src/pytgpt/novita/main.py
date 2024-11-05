@@ -36,10 +36,10 @@ class NOVITA(OPENAI):
     """Novita AI provider"""
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault("model", model)
-        if not model in available_models:
+        model_choice = kwargs.setdefault("model", model)
+        if not model_choice in available_models:
             raise UnsupportedModelError(
-                f"Model '{model}' is not yet supported. Choose from {available_models}"
+                f"Model '{model_choice}' is not yet supported. Choose from {available_models}"
             )
         super().__init__(*args, **kwargs)
         self.chat_endpoint = "https://api.novita.ai/v3/openai/chat/completions"
@@ -49,10 +49,10 @@ class AsyncNOVITA(AsyncOPENAI):
     """Async Novita AI provider"""
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault("model", model)
-        if not model in available_models:
+        model_choice = kwargs.setdefault("model", model)
+        if not model_choice in available_models:
             raise UnsupportedModelError(
-                f"Model '{model}' is not yet supported choose from {available_models}"
+                f"Model '{model_choice}' is not yet supported. Choose from {available_models}"
             )
         super().__init__(*args, **kwargs)
         self.chat_endpoint = "https://api.novita.ai/v3/openai/chat/completions"
