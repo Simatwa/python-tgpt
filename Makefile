@@ -1,5 +1,5 @@
 # Define targets
-.PHONY: install install-minimal test test-tgpt test-api test-utils build build-deb build-minimal-deb clean
+.PHONY: install install-minimal test test-tgpt test-g4f test-api test-utils build build-deb build-minimal-deb clean
 
 # Define variables
 PYTHON := python3
@@ -36,6 +36,10 @@ test-tgpt:
 # Target to run REST-api test
 test-api:
 	$(PYTHON) -m unittest discover -s tests -p 'test_api.py' -f -v
+
+# Target to run gpt4free test
+test-g4f:
+	$(PYTHON) -m unittest discover -s tests -p 'test_gpt4free.py' -f -v
 
 # Target to run pytgpt utils test
 test-utils:
