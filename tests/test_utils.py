@@ -131,8 +131,8 @@ class TestAudio(unittest.TestCase):
         self.text = "This is a speech synthesis test"
 
     @unittest.skipUnless(
-        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
-        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
+        os.getenv("PYTGPT_TEST_MEDIA", "") == "true",
+        "PYTGPT_TEST_MEDIA environment variable is not set to 'true' ",
     )
     def test_text_to_audio(self):
         """Speech synthesis"""
@@ -142,8 +142,8 @@ class TestAudio(unittest.TestCase):
         self.assertIs(type(voice_bytes), bytes)
 
     @unittest.skipUnless(
-        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
-        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
+        os.getenv("PYTGPT_TEST_MEDIA", "") == "true",
+        "PYTGPT_TEST_MEDIA environment variable is not set to 'true' ",
     )
     def test_text_to_audio_save_to(self):
         """Save speech to a file"""
