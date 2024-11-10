@@ -1,5 +1,4 @@
 from pytgpt.base import Provider, AsyncProvider
-from pytgpt.opengpt import OPENGPT, AsyncOPENGPT
 from pytgpt.koboldai import KOBOLDAI, AsyncKOBOLDAI
 from pytgpt.phind import PHIND, AsyncPHIND
 from pytgpt.blackboxai import BLACKBOXAI, AsyncBLACKBOXAI
@@ -16,12 +15,9 @@ from typing import Any
 import logging
 
 
-provider_map: dict[
-    str, Union[OPENGPT, KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE]
-] = {
+provider_map: dict[str, Union[KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE]] = {
     "phind": PHIND,
     "perplexity": PERPLEXITY,
-    "opengpt": OPENGPT,
     "koboldai": KOBOLDAI,
     "blackboxai": BLACKBOXAI,
     "gpt4free": GPT4FREE,
@@ -56,9 +52,7 @@ class AUTO(Provider):
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
             exclude(list[str], optional): List of providers to be excluded. Defaults to [].
         """
-        self.provider: Union[
-            OPENGPT, KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE
-        ] = None
+        self.provider: Union[KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE] = None
         self.provider_name: str = None
         self.is_conversation = is_conversation
         self.max_tokens = max_tokens
@@ -263,7 +257,6 @@ class AsyncAUTO(AsyncProvider):
             exclude(list[str], optional): List of providers to be excluded. Defaults to [].
         """
         self.provider: Union[
-            AsyncOPENGPT,
             AsyncKOBOLDAI,
             AsyncPHIND,
             AsyncBLACKBOXAI,

@@ -28,7 +28,7 @@ from rich.progress import Progress
 
 from typing import Iterable
 
-#pytgpt
+# pytgpt
 
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
@@ -344,6 +344,7 @@ class busy_bar:
 
         return decorator
 
+
 class CustomCompleter(Completer):
     """Suggests query based on user prompts"""
 
@@ -371,13 +372,14 @@ class CustomCompleter(Completer):
                 )
                 return completions
             for count, suggestion in enumerate(
-                suggest_query(word, timeout=2, die_silently=True),
-                start=1):
+                suggest_query(word, timeout=2, die_silently=True), start=1
+            ):
                 completions.append(Completion(suggestion, start_position=-len(word)))
                 if count >= self.suggestions_limit:
                     break
             return completions
         return []
+
 
 class Main(cmd.Cmd):
     intro = (
@@ -506,21 +508,6 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
-            elif provider == "opengpt":
-                from pytgpt.opengpt import OPENGPT
-
-                self.bot = OPENGPT(
-                    is_conversation=disable_conversation,
-                    max_tokens=max_tokens,
-                    timeout=timeout,
-                    intro=intro,
-                    filepath=filepath,
-                    update_file=update_file,
-                    proxies=proxies,
-                    history_offset=history_offset,
-                    act=awesome_prompt,
-                )
-
             elif provider == "koboldai":
                 from pytgpt.koboldai import KOBOLDAI
 
@@ -562,26 +549,6 @@ class Main(cmd.Cmd):
                 self.bot = BLACKBOXAI(
                     is_conversation=disable_conversation,
                     max_tokens=max_tokens,
-                    timeout=timeout,
-                    intro=intro,
-                    filepath=filepath,
-                    update_file=update_file,
-                    proxies=proxies,
-                    history_offset=history_offset,
-                    act=awesome_prompt,
-                )
-
-            elif provider == "yepchat":
-                from pytgpt.yepchat import main as yepchat
-
-                self.bot = yepchat.YEPCHAT(
-                    is_conversation=disable_conversation,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    presence_penalty=top_p,
-                    frequency_penalty=top_k,
-                    top_p=top_p,
-                    model=getOr(model, yepchat.model),
                     timeout=timeout,
                     intro=intro,
                     filepath=filepath,
@@ -743,20 +710,35 @@ class Main(cmd.Cmd):
         self.path_to_last_response_audio = None
         if not non_interactive:
             self.completer_session = PromptSession(
-            "",
-            completer=ThreadedCompleter(
-                CustomCompleter(
-                    self,
-                    suggestions_limit,
-                    [
-                        "cd", "copy_this", "h", "last_response",  "rawdog",
-                        "settings", "with_copied",
-                        "clear",  "exec",  "help", "load", "reread",  "shell",
-                        "code", "exit", "history", "new_intro", "reset", "sys",
-                    ],
-                )
-            ),
-        )
+                "",
+                completer=ThreadedCompleter(
+                    CustomCompleter(
+                        self,
+                        suggestions_limit,
+                        [
+                            "cd",
+                            "copy_this",
+                            "h",
+                            "last_response",
+                            "rawdog",
+                            "settings",
+                            "with_copied",
+                            "clear",
+                            "exec",
+                            "help",
+                            "load",
+                            "reread",
+                            "shell",
+                            "code",
+                            "exit",
+                            "history",
+                            "new_intro",
+                            "reset",
+                            "sys",
+                        ],
+                    )
+                ),
+            )
         self.__init_time = time.time()
         self.__start_time = time.time()
         self.__end_time = time.time()
@@ -787,7 +769,7 @@ class Main(cmd.Cmd):
                 f"~[`{Fore.LIGHTWHITE_EX}🕒{Fore.BLUE}{current_time}-`"
                 f"{Fore.LIGHTWHITE_EX}💻{Fore.RED}{find_range(self.__init_time, time.time(), True)}-`"
                 f"{Fore.LIGHTWHITE_EX}⚡{Fore.YELLOW}{find_range(self.__start_time, self.__end_time)}s]`"
-               # f"\n╰─>"
+                # f"\n╰─>"
             )
             whitelist = ["[", "]", "~", "-", "(", ")"]
             for character in whitelist:
@@ -800,8 +782,9 @@ class Main(cmd.Cmd):
                 f"~[🕒{current_time}"
                 f"-💻{find_range(self.__init_time, time.time(), True)}"
                 f"-⚡{find_range(self.__start_time, self.__end_time)}s]"
-                #"\n╰─>"
+                # "\n╰─>"
             )
+
     def cmdloop(self, intro=None):
         """Repeatedly issue a prompt, accept input, parse an initial prefix
         off the received input, and dispatch to action methods, passing them
@@ -863,7 +846,6 @@ class Main(cmd.Cmd):
                     readline.set_completer(self.old_completer)
                 except ImportError:
                     pass
-
 
     def output_bond(
         self,
@@ -1470,7 +1452,7 @@ class ChatInteractive:
         ),
     )
     @click.option(
-        '-sl',
+        "-sl",
         "--suggestions-limit",
         type=click.INT,
         help="Prompt suggestions limit - 0 to disable suggestion",
@@ -1625,7 +1607,7 @@ class ChatInteractive:
             internal_exec=internal_exec,
             confirm_script=confirm_script,
             interpreter=interpreter,
-            suggestions_limit=suggestions_limit
+            suggestions_limit=suggestions_limit,
         )
         busy_bar.spin_index = busy_bar_index
         bot.code_theme = code_theme
@@ -1925,7 +1907,7 @@ class ChatGenerate:
             internal_exec=internal_exec,
             confirm_script=confirm_script,
             interpreter=interpreter,
-            non_interactive=True
+            non_interactive=True,
         )
         prompt = prompt if prompt else ""
         copied_placeholder = "{{copied}}"

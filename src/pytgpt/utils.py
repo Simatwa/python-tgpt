@@ -45,18 +45,19 @@ os.makedirs(api_static_dir.as_posix(), exist_ok=True)
 os.makedirs(api_static_image_dir.as_posix(), exist_ok=True)
 os.makedirs(api_static_audio_dir.as_posix(), exist_ok=True)
 
+
 @lru_cache()
-def suggest_query(prompt, timeout:int=20, die_silently:bool=False) -> list[str]:
+def suggest_query(prompt, timeout: int = 20, die_silently: bool = False) -> list[str]:
     """Suggest queries based on prompt"""
     link = "https://www.google.com/complete/search"
     params = {
-        "q" : prompt,
-        #"cp" : "11",
-        "client" : "gws-wiz-serp",
-        "xssi" : "t",
-        #"gs_pcrt" : "undefined",
-        "hl" : locale.getlocale()[0],
-        #"authuser" : "0",
+        "q": prompt,
+        # "cp" : "11",
+        "client": "gws-wiz-serp",
+        "xssi": "t",
+        # "gs_pcrt" : "undefined",
+        "hl": locale.getlocale()[0],
+        # "authuser" : "0",
         "pq": "ai chat suggestions",
         # "dpr" : "1",
     }
@@ -64,8 +65,12 @@ def suggest_query(prompt, timeout:int=20, die_silently:bool=False) -> list[str]:
         resp = requests.get(link, params=params, timeout=20)
         resp.raise_for_status()
         pattern = r'"([^"]+)",\d+'
-        suggestions =  re.findall(pattern, resp.text)
-        processed_suggestions = [re.sub(r"\\+[\w\\/]*", '', suggestion) for suggestion in suggestions if not suggestion.startswith('https://')]
+        suggestions = re.findall(pattern, resp.text)
+        processed_suggestions = [
+            re.sub(r"\\+[\w\\/]*", "", suggestion)
+            for suggestion in suggestions
+            if not suggestion.startswith("https://")
+        ]
         if prompt in processed_suggestions:
             processed_suggestions.remove(prompt)
         return processed_suggestions
@@ -73,6 +78,7 @@ def suggest_query(prompt, timeout:int=20, die_silently:bool=False) -> list[str]:
         if not die_silently:
             raise e
         return []
+
 
 def sanitize_stream(
     chunk: str, intro_value: str = "data:", to_json: bool = True

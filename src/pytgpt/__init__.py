@@ -13,7 +13,6 @@ __repo__ = "https://github.com/Simatwa/python-tgpt"
 tgpt_providers = [
     "auto",
     "openai",
-    "opengpt",
     "koboldai",
     "phind",
     "blackboxai",
@@ -22,7 +21,6 @@ tgpt_providers = [
     "poe",
     "groq",
     "perplexity",
-    "yepchat",
     "novita",
 ]
 

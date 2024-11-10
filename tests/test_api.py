@@ -72,8 +72,8 @@ class TestV1(unittest.TestCase):
         self.assertTrue(resp.is_success)
 
     @unittest.skipUnless(
-            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
-            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
+        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
     )
     def test_prompt_to_image_post(self):
         resp = self.client.post(
@@ -90,8 +90,8 @@ class TestV1(unittest.TestCase):
         self.assertEqual(len(resp_dict["urls"]), 2)
 
     @unittest.skipUnless(
-            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
-            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
+        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
     )
     def test_prompt_to_image_bytes_post(self):
         resp = self.client.post(
@@ -100,8 +100,8 @@ class TestV1(unittest.TestCase):
         self.assertIsNotNone(resp.headers.get("Content-Disposition"))
 
     @unittest.skipUnless(
-            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
-            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
+        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
     )
     def test_prompt_to_image_bytes_get(self):
         resp = self.client.get(
@@ -110,8 +110,8 @@ class TestV1(unittest.TestCase):
         self.assertIsNotNone(resp.headers.get("Content-Disposition"))
 
     @unittest.skipUnless(
-            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
-            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
+        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
     )
     def test_prompt_to_image_bytes_get_redirect(self):
         resp = self.client.get(

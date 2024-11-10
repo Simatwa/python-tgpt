@@ -131,8 +131,8 @@ class TestAudio(unittest.TestCase):
         self.text = "This is a speech synthesis test"
 
     @unittest.skipUnless(
-            os.getenv('PYTGPT_TEST_AUDIO', '')=="true",
-            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
+        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
     )
     def test_text_to_audio(self):
         """Speech synthesis"""
@@ -142,8 +142,8 @@ class TestAudio(unittest.TestCase):
         self.assertIs(type(voice_bytes), bytes)
 
     @unittest.skipUnless(
-            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
-            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+        os.getenv("PYTGPT_TEST_AUDIO", "") == "true",
+        "PYTGPT_TEST_AUDIO environment variable is not set to 'true' ",
     )
     def test_text_to_audio_save_to(self):
         """Save speech to a file"""
@@ -152,14 +152,16 @@ class TestAudio(unittest.TestCase):
         self.assertTrue(os.path.exists(saved_to))
         os.remove(saved_to)
 
+
 class TestOthers(unittest.TestCase):
 
     def setUp(self):
         pass
 
     def test_query_suggestions(self):
-        suggestions = suggest_query('hello', die_silently=True)
+        suggestions = suggest_query("hello", die_silently=True)
         self.assertIsInstance(suggestions, list)
+
 
 if __name__ == "__main__":
     unittest.main()

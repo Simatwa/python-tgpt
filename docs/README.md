@@ -75,7 +75,6 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 These are simply the hosts of the LLMs, they include:
 
 - [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
-- [OpenGPTs](https://opengpts-example-vz4y4ooboq-uc.a.run.app/)
 - [OpenAI](https://chat.openai.com) *(API key required)*
 - [Phind](https://www.phind.com)
 - [Blackboxai](https://www.blackbox.ai)
@@ -299,24 +298,6 @@ print(bot.chat("<Your-prompt>"))
 
 </details>
 
-
-<details>
-
-<summary>
-Opengpt
-
-</summary>
-
-```python
-import pytgpt.opengpt as opengpt
-bot = opengpt.OPENGPT()
-print(bot.chat("<Your-prompt>"))
-```
-
-</details>
-
-<details>
-
 <summary>
 phind
 
@@ -349,7 +330,7 @@ print(bot.chat("<Your-prompt>"))
 
 **Version 0.7.0** introduces asynchronous implementation to almost all providers except a few such as *perplexity*, which relies on other libraries which lacks such implementation.
 
-To make it easier, you just have to prefix `Async` to the common synchronous class name. For instance `OPENGPT` will be accessed as `AsyncOPENGPT`:
+To make it easier, you just have to prefix `Async` to the common synchronous class name. For instance `PHIND` will be accessed as `AsyncPHIND`:
 
 #### Streaming Whole ai response.
 
