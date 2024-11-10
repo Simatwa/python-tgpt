@@ -18,7 +18,7 @@ INSTALL_REQUIRE = [
 ]
 
 cli_reqs = [
-    "click==8.1.7",
+    "click==8.1.3",
     "rich==13.3.4",
     "clipman==3.1.0",
     "pyperclip==1.8.2",

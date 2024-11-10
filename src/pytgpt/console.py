@@ -371,7 +371,7 @@ class CustomCompleter(Completer):
                 )
                 return completions
             for count, suggestion in enumerate(
-                suggest_query(word, timeout=10, die_silently=True),
+                suggest_query(word, timeout=2, die_silently=True),
                 start=1):
                 completions.append(Completion(suggestion, start_position=-len(word)))
                 if count >= self.suggestions_limit:

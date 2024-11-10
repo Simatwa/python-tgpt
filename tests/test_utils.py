@@ -130,6 +130,10 @@ class TestAudio(unittest.TestCase):
         self.audio_generator = Audio()
         self.text = "This is a speech synthesis test"
 
+    @unittest.skipUnless(
+            os.getenv('PYTGPT_TEST_AUDIO', '')=="true",
+            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+    )
     def test_text_to_audio(self):
         """Speech synthesis"""
         voice_bytes = self.audio_generator.text_to_audio(
@@ -137,6 +141,10 @@ class TestAudio(unittest.TestCase):
         )
         self.assertIs(type(voice_bytes), bytes)
 
+    @unittest.skipUnless(
+            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
+            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+    )
     def test_text_to_audio_save_to(self):
         """Save speech to a file"""
         saved_to = self.audio_generator.text_to_audio(self.text, auto=True)
