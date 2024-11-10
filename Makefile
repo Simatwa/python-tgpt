@@ -48,6 +48,7 @@ test-utils:
 # Target to create an executable using PyInstaller
 build: install
 	$(PI) install --upgrade pyinstaller
+	$(PI) uninstall gpt4all -y
 	$(PYINSTALLER) main.py \
 	--onefile \
 	--exclude pandas \
@@ -59,7 +60,6 @@ build: install
 	--exclude matplotlib \
 	--exclude PyQt5 \
 	--exclude PyQt6 \
-	--exclude gpt4all \
 	--exclude share \
 	--icon assets/logo.png \
 	--noconfirm
@@ -67,6 +67,7 @@ build: install
 # Target to create .deb file
 build-deb: install
 	$(PI) install --upgrade pyinstaller
+	$(PI) uninstall gpt4all -y
 	$(PYINSTALLER) main.py \
 	--onedir \
 	--exclude pandas \
@@ -78,7 +79,6 @@ build-deb: install
 	--exclude matplotlib \
 	--exclude PyQt5 \
 	--exclude PyQt6 \
-	--exclude gpt4all \
 	--exclude share \
 	--name pytgpt \
 	--contents-directory . \
