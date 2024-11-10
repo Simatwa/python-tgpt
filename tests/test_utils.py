@@ -4,7 +4,6 @@ from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
 from pytgpt.utils import AwesomePrompts
 from pytgpt.utils import Audio
-from pytgpt.utils import suggest_query
 
 
 class TestOptimizers(unittest.TestCase):
@@ -144,14 +143,6 @@ class TestAudio(unittest.TestCase):
         self.assertTrue(os.path.exists(saved_to))
         os.remove(saved_to)
 
-class TestOthers(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def test_query_suggestions(self):
-        suggestions = suggest_query('hello', die_silently=True)
-        self.assertIsInstance(suggestions, list)
 
 if __name__ == "__main__":
     unittest.main()

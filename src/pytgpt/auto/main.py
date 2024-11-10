@@ -8,7 +8,6 @@ from pytgpt.perplexity import PERPLEXITY
 from pytgpt.gpt4free import GPT4FREE, AsyncGPT4FREE
 from pytgpt.gpt4free.utils import TestProviders
 from pytgpt.auto.errors import AllProvidersFailure
-from pytgpt.utils import Conversation
 from pytgpt.async_providers import tgpt_mapper as async_provider_map
 from typing import AsyncGenerator
 
@@ -78,7 +77,7 @@ class AUTO(Provider):
         return self.provider.last_response
 
     @property
-    def conversation(self) -> Conversation:
+    def conversation(self) -> object:
         return self.provider.conversation
 
     def ask(
@@ -289,7 +288,7 @@ class AsyncAUTO(AsyncProvider):
         return self.provider.last_response
 
     @property
-    def conversation(self) -> Conversation:
+    def conversation(self) -> object:
         return self.provider.conversation
 
     async def ask(

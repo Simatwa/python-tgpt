@@ -14,9 +14,6 @@ import time
 import subprocess
 from threading import Thread as thr
 from functools import wraps
-
-# rich
-
 from rich.panel import Panel
 from rich.style import Style
 from rich.markdown import Markdown
@@ -25,11 +22,7 @@ from rich.live import Live
 from rich.table import Table
 from rich.prompt import Prompt
 from rich.progress import Progress
-
 from typing import Iterable
-
-#pytgpt
-
 from pytgpt.utils import Optimizers
 from pytgpt.utils import default_path
 from pytgpt.utils import AwesomePrompts
@@ -37,20 +30,10 @@ from pytgpt.utils import RawDog
 from pytgpt.imager import Imager
 from pytgpt.imager import Prodia
 from pytgpt.utils import Audio
-from pytgpt.utils import suggest_query
-
 from WebChatGPT.console import chat as webchatgpt
-
-# colorama
 from colorama import Fore
 from colorama import init as init_colorama
-
 from dotenv import load_dotenv
-
-# prompt-toolkit
-from prompt_toolkit import PromptSession
-from prompt_toolkit.completion import ThreadedCompleter, Completer, Completion
-from prompt_toolkit.document import Document
 
 init_colorama(autoreset=True)
 
@@ -346,40 +329,6 @@ class busy_bar:
 
         return decorator
 
-class CustomCompleter(Completer):
-    """Suggests query based on user prompts"""
-
-    def __init__(
-        self,
-        caller: object,
-        suggestions_limit: int = 15,
-        special_commands: list[str] = [],
-    ):
-        self.suggestions_limit = suggestions_limit
-        self.caller = caller
-        self.special_commands = special_commands
-
-    def get_completions(self, document: Document, complete_event):
-        word = document.text
-        if word and self.suggestions_limit > 0 and not word.startswith("./"):
-            completions = []
-            first_word = word.strip().split(" ")[0]
-            if first_word in self.special_commands:
-                completions.append(
-                    Completion(
-                        f"{first_word} [RESERVED] "
-                        + getattr(self.caller, f"do_{first_word}").__doc__
-                    )
-                )
-                return completions
-            for count, suggestion in enumerate(
-                suggest_query(word, timeout=10, die_silently=True),
-                start=1):
-                completions.append(Completion(suggestion, start_position=-len(word)))
-                if count >= self.suggestions_limit:
-                    break
-            return completions
-        return []
 
 class Main(cmd.Cmd):
     intro = (
@@ -412,8 +361,6 @@ class Main(cmd.Cmd):
         internal_exec=False,
         confirm_script=False,
         interpreter="python",
-        suggestions_limit=15,
-        non_interactive=False,
         *args,
         **kwargs,
     ):
@@ -825,22 +772,6 @@ class Main(cmd.Cmd):
         self.read_aloud = False
         self.read_aloud_voice = "Brian"
         self.path_to_last_response_audio = None
-        if not non_interactive:
-            self.completer_session = PromptSession(
-            "",
-            completer=ThreadedCompleter(
-                CustomCompleter(
-                    self,
-                    suggestions_limit,
-                    [
-                        "cd", "copy_this", "h", "last_response",  "rawdog",
-                        "settings", "with_copied",
-                        "clear",  "exec",  "help", "load", "reread",  "shell",
-                        "code", "exit", "history", "new_intro", "reset", "sys",
-                    ],
-                )
-            ),
-        )
         self.__init_time = time.time()
         self.__start_time = time.time()
         self.__end_time = time.time()
@@ -871,7 +802,7 @@ class Main(cmd.Cmd):
                 f"~[`{Fore.LIGHTWHITE_EX}🕒{Fore.BLUE}{current_time}-`"
                 f"{Fore.LIGHTWHITE_EX}💻{Fore.RED}{find_range(self.__init_time, time.time(), True)}-`"
                 f"{Fore.LIGHTWHITE_EX}⚡{Fore.YELLOW}{find_range(self.__start_time, self.__end_time)}s]`"
-               # f"\n╰─>"
+                f"\n╰─>"
             )
             whitelist = ["[", "]", "~", "-", "(", ")"]
             for character in whitelist:
@@ -884,70 +815,8 @@ class Main(cmd.Cmd):
                 f"~[🕒{current_time}"
                 f"-💻{find_range(self.__init_time, time.time(), True)}"
                 f"-⚡{find_range(self.__start_time, self.__end_time)}s]"
-                #"\n╰─>"
+                "\n╰─>"
             )
-    def cmdloop(self, intro=None):
-        """Repeatedly issue a prompt, accept input, parse an initial prefix
-        off the received input, and dispatch to action methods, passing them
-        the remainder of the line as argument.
-
-        """
-
-        self.preloop()
-        if self.use_rawinput and self.completekey:
-            try:
-                import readline
-
-                self.old_completer = readline.get_completer()
-                readline.set_completer(self.complete)
-                if hasattr(readline, "backend") and readline.backend == "editline":
-                    if self.completekey == "tab":
-                        # libedit uses "^I" instead of "tab"
-                        command_string = "bind ^I rl_complete"
-                    else:
-                        command_string = f"bind {self.completekey} rl_complete"
-                else:
-                    command_string = f"{self.completekey}: complete"
-                readline.parse_and_bind(command_string)
-            except ImportError:
-                pass
-        try:
-            if intro is not None:
-                self.intro = intro
-            if self.intro:
-                self.stdout.write(str(self.intro) + "\n")
-            stop = None
-            while not stop:
-                if self.cmdqueue:
-                    line = self.cmdqueue.pop(0)
-                else:
-                    if self.use_rawinput:
-                        try:
-                            print(self.prompt, end="")
-                            line = self.completer_session.prompt("\n╰─>")
-                        except EOFError:
-                            line = "EOF"
-                    else:
-                        self.stdout.write(self.prompt)
-                        self.stdout.flush()
-                        line = self.stdin.readline()
-                        if not len(line):
-                            line = "EOF"
-                        else:
-                            line = line.rstrip("\r\n")
-                line = self.precmd(line)
-                stop = self.onecmd(line)
-                stop = self.postcmd(stop, line)
-            self.postloop()
-        finally:
-            if self.use_rawinput and self.completekey:
-                try:
-                    import readline
-
-                    readline.set_completer(self.old_completer)
-                except ImportError:
-                    pass
-
 
     def output_bond(
         self,
@@ -1375,7 +1244,7 @@ class Main(cmd.Cmd):
     def do_exit(self, line):
         """Quit this program"""
         if click.confirm("Are you sure to exit"):
-            click.secho("^-^ Okay Goodbye!", fg="yellow")
+            click.secho("Okay Goodbye!", fg="yellow")
             return True
 
 
@@ -1554,13 +1423,6 @@ class ChatInteractive:
         ),
     )
     @click.option(
-        '-sl',
-        "--suggestions-limit",
-        type=click.INT,
-        help="Prompt suggestions limit - 0 to disable suggestion",
-        default=15,
-    )
-    @click.option(
         "-vo",
         "--vertical-overflow",
         help="Vertical overflow behaviour on content display",
@@ -1668,7 +1530,6 @@ class ChatInteractive:
         awesome_prompt,
         proxy_path,
         provider,
-        suggestions_limit,
         vertical_overflow,
         whole,
         quiet,
@@ -1709,7 +1570,6 @@ class ChatInteractive:
             internal_exec=internal_exec,
             confirm_script=confirm_script,
             interpreter=interpreter,
-            suggestions_limit=suggestions_limit
         )
         busy_bar.spin_index = busy_bar_index
         bot.code_theme = code_theme
@@ -2009,7 +1869,6 @@ class ChatGenerate:
             internal_exec=internal_exec,
             confirm_script=confirm_script,
             interpreter=interpreter,
-            non_interactive=True
         )
         prompt = prompt if prompt else ""
         copied_placeholder = "{{copied}}"

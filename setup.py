@@ -27,7 +27,6 @@ cli_reqs = [
     "colorama==0.4.6",
     "g4f>=0.2.6.1",
     "python-dotenv==1.0.0",
-    "prompt-toolkit==3.0.48",
 ]
 
 api = [
@@ -57,7 +56,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.7.8",
+    version="0.7.7",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
