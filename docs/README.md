@@ -72,23 +72,19 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 
 ## Providers
 
-These are simply the hosts of the LLMs, which include:
+These are simply the hosts of the LLMs, they include:
 
-1. [Leo](https://brave.com/leo/) - **Brave**
-2. [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
-3. [OpenGPTs](https://opengpts-example-vz4y4ooboq-uc.a.run.app/)
-4. [OpenAI](https://chat.openai.com) *(API key required)*
-5. [WebChatGPT](https://github.com/Simatwa/WebChatGPT) - **OpenAI** *(Session ID required)*
-6. [Gemini](https://github.com/Simatwa/bard) - **Google** *(Session ID required)*
-9. [Phind](https://www.phind.com)
-10. [Llama2](https://www.llama2.ai)
-11. [Blackboxai](https://www.blackbox.ai)
-12. [gpt4all](https://gpt4all.io) *(Offline)*
-13. [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
-14. [Groq](https://console.groq.com/playground) *(API Key required)*
-15. [Perplexity](https://www.perplexity.ai)
-16. [YepChat](https://yep.com)
-17. [Novita](https://novita.ai) *(API key required)*
+- [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
+- [OpenGPTs](https://opengpts-example-vz4y4ooboq-uc.a.run.app/)
+- [OpenAI](https://chat.openai.com) *(API key required)*
+- [Phind](https://www.phind.com)
+- [Blackboxai](https://www.blackbox.ai)
+- [gpt4all](https://gpt4all.io) *(Offline)*
+- [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
+- [Groq](https://console.groq.com/playground) *(API Key required)*
+- [Perplexity](https://www.perplexity.ai)
+- [YepChat](https://yep.com)
+
 
 <details>
 
@@ -187,32 +183,30 @@ Starting from version 0.2.7, running `$ pytgpt` without any other command or opt
 
 <details>
 
-<summary> 
-
-### Developer Docs
-
+<summary>
+<h3>Developer Docs</h3>
 </summary>
 
 1. Generate a quick response
 
 ```python
-from pytgpt.leo import LEO
-bot = LEO()
+from pytgpt.phind import PHIND
+bot = PHIND()
 resp = bot.chat('<Your prompt>')
 print(resp)
-# Output : How may I help you.
+# Output : How can I assist you today?
 ```
 
 2. Get back whole response
 
 ```python
-from pytgpt.leo import LEO
-bot = LEO()
-resp = bot.ask('<Your Prompt')
+from pytgpt.phind import PHIND
+bot = PHIND()
+resp = bot.chat('<Your prompt>')
 print(resp)
 # Output
 """
-{'completion': "I'm so excited to share with you the incredible experiences...", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwJ2', 'exception': None}
+{'id': 'chatcmpl-gp6cwu2e5ez3ltoyti4z', 'object': 'chat.completion.chunk', 'created': 1731257890, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI assistant created by Phind to help with programming tasks. How can I assist you today?"}, 'finish_reason': None}]}
 """
 ```
 
@@ -223,17 +217,22 @@ Just add parameter `stream` with value  `true`.
 1. Text Generated only 
 
 ```python
-from pytgpt.leo import LEO
-bot = LEO()
-resp = bot.chat('<Your prompt>', stream=True)
-for value in resp:
-    print(value)
+from pytgpt.phind import PHIND
+bot = PHIND()
+response = bot.chat('hello', stream=True)
+for chunk in response:
+    print(chunk)
 # output
 """
-How may
-How may I help 
-How may I help you
-How may I help you today?
+Hello
+Hello!
+Hello! How
+Hello! How can
+Hello! How can I
+Hello! How can I assist
+Hello! How can I assist you
+Hello! How can I assist you today
+Hello! How can I assist you today?
 """
 ```
 
@@ -247,13 +246,10 @@ for value in resp:
     print(value)
 # Output
 """
-{'completion': "I'm so", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
-
-{'completion': "I'm so excited to share with.", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
-
-{'completion': "I'm so excited to share with you the incredible ", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
-
-{'completion': "I'm so excited to share with you the incredible experiences...", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
+{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': 'Hello'}, 'finish_reason': None}]}
+{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI"}, 'finish_reason': None}]}
+{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI assistant created by Phind to help with coding and technical tasks. How"}, 'finish_reason': None}]}
+{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI assistant created by Phind to help with coding and technical tasks. How can I assist you today?"}, 'finish_reason': None}]}
 """
 ```
 
@@ -349,24 +345,9 @@ print(bot.chat("<Your-prompt>"))
 
 </details>
 
-<details>
-
-<summary>
-Novita
-
-</summary>
-
-```python
-import pytgpt.novita as novita
-bot = novita.NOVITA("<NOVITA-API-KEY>")
-print(bot.chat("<Your-prompt>"))
-```
-
-</details>
-
 ### Asynchronous
 
-**Version 0.7.0** introduces asynchronous implementation to almost all providers except a few such as *perplexity & gemini*, which relies on other libraries which lacks such implementation.
+**Version 0.7.0** introduces asynchronous implementation to almost all providers except a few such as *perplexity*, which relies on other libraries which lacks such implementation.
 
 To make it easier, you just have to prefix `Async` to the common synchronous class name. For instance `OPENGPT` will be accessed as `AsyncOPENGPT`:
 
@@ -423,8 +404,8 @@ To obtain more tailored responses, consider utilizing [optimizers](pytgpt/utils.
 </summary>
 
 ```python
-from pytgpt.leo import LEO
-bot = LEO()
+from pytgpt.phind import PHIND
+bot = PHIND()
 resp = bot.ask('<Your Prompt>', optimizer='code')
 print(resp)
 ```
@@ -654,7 +635,6 @@ Commands:
   imager       Generate images with pollinations.ai
   interactive  Chat with AI interactively (Default)
   utils        Utility endpoint for pytgpt
-  webchatgpt   Reverse Engineered ChatGPT Web-Version
 ```
 
 </details>
