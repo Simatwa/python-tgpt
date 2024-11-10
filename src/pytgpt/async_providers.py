@@ -2,7 +2,6 @@ from pytgpt.phind import AsyncPHIND
 from pytgpt.yepchat import AsyncYEPCHAT
 from pytgpt.opengpt import AsyncOPENGPT
 from pytgpt.openai import AsyncOPENAI
-from pytgpt.llama2 import AsyncLLAMA2
 from pytgpt.koboldai import AsyncKOBOLDAI
 from pytgpt.groq import AsyncGROQ
 from pytgpt.blackboxai import AsyncBLACKBOXAI
@@ -15,7 +14,6 @@ mapper: dict[str, object] = {
     "koboldai": AsyncKOBOLDAI,
     "blackboxai": AsyncBLACKBOXAI,
     "gpt4free": AsyncGPT4FREE,
-    "llama2": AsyncLLAMA2,
     "yepchat": AsyncYEPCHAT,
     "groq": AsyncGROQ,
     "openai": AsyncOPENAI,
@@ -28,6 +26,5 @@ tgpt_mapper: dict[str, object] = {
     "koboldai": AsyncKOBOLDAI,
     # "gpt4free": AsyncGPT4FREE,
     "blackboxai": AsyncBLACKBOXAI,
-    "llama2": AsyncLLAMA2,
     "yepchat": AsyncYEPCHAT,
 }
