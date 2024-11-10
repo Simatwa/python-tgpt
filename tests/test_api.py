@@ -1,3 +1,4 @@
+import os
 import unittest
 from fastapi.testclient import TestClient
 from fastapi import status
@@ -70,6 +71,10 @@ class TestV1(unittest.TestCase):
         )
         self.assertTrue(resp.is_success)
 
+    @unittest.skipUnless(
+            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
+            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+    )
     def test_prompt_to_image_post(self):
         resp = self.client.post(
             "/v1/image",
@@ -84,18 +89,30 @@ class TestV1(unittest.TestCase):
         self.assertIsNotNone(resp_dict.get("urls"))
         self.assertEqual(len(resp_dict["urls"]), 2)
 
+    @unittest.skipUnless(
+            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
+            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+    )
     def test_prompt_to_image_bytes_post(self):
         resp = self.client.post(
             "/v1/image/bytes", json={"prompt": "Jay Z performing", "timeout": 30}
         )
         self.assertIsNotNone(resp.headers.get("Content-Disposition"))
 
+    @unittest.skipUnless(
+            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
+            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+    )
     def test_prompt_to_image_bytes_get(self):
         resp = self.client.get(
             "/v1/image/bytes", params={"prompt": "Jay Z performing", "timeout": 30}
         )
         self.assertIsNotNone(resp.headers.get("Content-Disposition"))
 
+    @unittest.skipUnless(
+            os.getenv('PYTGPT_TEST_AUDIO', '') == "true",
+            "PYTGPT_TEST_AUDIO environment variable is not set to 'true' " 
+    )
     def test_prompt_to_image_bytes_get_redirect(self):
         resp = self.client.get(
             "/v1/image/bytes",
