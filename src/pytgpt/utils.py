@@ -7,6 +7,7 @@ import appdirs
 import datetime
 import re
 import sys
+import locale
 import click
 from rich.markdown import Markdown
 from rich.console import Console
@@ -18,6 +19,7 @@ import httpx
 import asyncio
 import urllib.parse
 from time import sleep as wait
+from functools import lru_cache
 
 try:
     import vlc
@@ -43,6 +45,34 @@ os.makedirs(api_static_dir.as_posix(), exist_ok=True)
 os.makedirs(api_static_image_dir.as_posix(), exist_ok=True)
 os.makedirs(api_static_audio_dir.as_posix(), exist_ok=True)
 
+@lru_cache()
+def suggest_query(prompt, timeout:int=20, die_silently:bool=False) -> list[str]:
+    """Suggest queries based on prompt"""
+    link = "https://www.google.com/complete/search"
+    params = {
+        "q" : prompt,
+        #"cp" : "11",
+        "client" : "gws-wiz-serp",
+        "xssi" : "t",
+        #"gs_pcrt" : "undefined",
+        "hl" : locale.getlocale()[0],
+        #"authuser" : "0",
+        "pq": "ai chat suggestions",
+        # "dpr" : "1",
+    }
+    try:
+        resp = requests.get(link, params=params, timeout=20)
+        resp.raise_for_status()
+        pattern = r'"([^"]+)",\d+'
+        suggestions =  re.findall(pattern, resp.text)
+        processed_suggestions = [re.sub(r"\\+[\w\\/]*", '', suggestion) for suggestion in suggestions if not suggestion.startswith('https://')]
+        if prompt in processed_suggestions:
+            processed_suggestions.remove(prompt)
+        return processed_suggestions
+    except Exception as e:
+        if not die_silently:
+            raise e
+        return []
 
 def sanitize_stream(
     chunk: str, intro_value: str = "data:", to_json: bool = True

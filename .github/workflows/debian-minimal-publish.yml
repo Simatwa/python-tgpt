@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python-version: ["3.12"]
+        python-version: ["3.13"]
         include:
           - os: ubuntu-latest
             artifact_name: pytgpt.deb
@@ -23,7 +23,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
-        python-version: '3.12'
+        python-version: '3.13'
     - name: Install pip and pyinstaller
       run: python -m pip install --upgrade pip pyinstaller
     - name: Install python-tgpt
