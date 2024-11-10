@@ -24,7 +24,6 @@ tgpt_mapper: dict[str, object] = {
     "phind": AsyncPHIND,
     "opengpt": AsyncOPENGPT,
     "koboldai": AsyncKOBOLDAI,
-    # "gpt4free": AsyncGPT4FREE,
     "blackboxai": AsyncBLACKBOXAI,
     "yepchat": AsyncYEPCHAT,
 }

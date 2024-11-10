@@ -2,7 +2,6 @@ from pytgpt.base import Provider, AsyncProvider
 from pytgpt.opengpt import OPENGPT, AsyncOPENGPT
 from pytgpt.koboldai import KOBOLDAI, AsyncKOBOLDAI
 from pytgpt.phind import PHIND, AsyncPHIND
-from pytgpt.llama2 import LLAMA2, AsyncLLAMA2
 from pytgpt.blackboxai import BLACKBOXAI, AsyncBLACKBOXAI
 from pytgpt.perplexity import PERPLEXITY
 from pytgpt.gpt4free import GPT4FREE, AsyncGPT4FREE
@@ -18,13 +17,12 @@ import logging
 
 
 provider_map: dict[
-    str, Union[OPENGPT, KOBOLDAI, PHIND, LLAMA2, BLACKBOXAI, PERPLEXITY, GPT4FREE]
+    str, Union[OPENGPT, KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE]
 ] = {
     "phind": PHIND,
     "perplexity": PERPLEXITY,
     "opengpt": OPENGPT,
     "koboldai": KOBOLDAI,
-    "llama2": LLAMA2,
     "blackboxai": BLACKBOXAI,
     "gpt4free": GPT4FREE,
 }
