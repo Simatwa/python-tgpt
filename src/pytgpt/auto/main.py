@@ -57,7 +57,7 @@ class AUTO(Provider):
             exclude(list[str], optional): List of providers to be excluded. Defaults to [].
         """
         self.provider: Union[
-            OPENGPT, KOBOLDAI, PHIND, LLAMA2, BLACKBOXAI, PERPLEXITY, GPT4FREE
+            OPENGPT, KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE
         ] = None
         self.provider_name: str = None
         self.is_conversation = is_conversation
@@ -266,7 +266,6 @@ class AsyncAUTO(AsyncProvider):
             AsyncOPENGPT,
             AsyncKOBOLDAI,
             AsyncPHIND,
-            AsyncLLAMA2,
             AsyncBLACKBOXAI,
             AsyncGPT4FREE,
         ] = None

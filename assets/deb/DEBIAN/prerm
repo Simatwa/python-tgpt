@@ -1,0 +1,17 @@
+#!/bin/bash
+
+FILE_LIST=/usr/lib/pytgpt/entries.txt
+
+if [ -f "$FILE_LIST" ]; then
+    while read -r ENTRY; do
+        if [ -d "$ENTRY" ]; then
+            rm -rf "$ENTRY"
+        elif [ -f "$ENTRY" ]; then
+            rm -f "$ENTRY"
+        else
+            echo ""
+        fi
+    done < "$FILE_LIST"
+else
+    echo "The file list $FILE_LIST does not exist. Nothing to do."
+fi
