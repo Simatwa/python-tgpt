@@ -16,7 +16,6 @@ tgpt_providers = [
     "opengpt",
     "koboldai",
     "phind",
-    "llama2",
     "blackboxai",
     "gpt4all",
     "g4fauto",
