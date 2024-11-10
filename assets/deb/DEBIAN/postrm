@@ -1,5 +1,5 @@
 #!/bin/bash
 
 rm /usr/bin/pytgpt
-echo "You might want to run pytgpt from source - <pip install python-tgpt[cli]>
+echo "You might want to run pytgpt from source - <pip install python-tgpt[cli]>"
 echo "Submit any bug at <https://github.com/Simatwa/python-tgpt/issues/new>"
