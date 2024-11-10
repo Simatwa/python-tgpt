@@ -59,6 +59,7 @@ build: install
 	--exclude matplotlib \
 	--exclude PyQt5 \
 	--exclude PyQt6 \
+	--exclude gpt4all \
 	--exclude share \
 	--icon assets/logo.png \
 	--noconfirm
@@ -77,6 +78,7 @@ build-deb: install
 	--exclude matplotlib \
 	--exclude PyQt5 \
 	--exclude PyQt6 \
+	--exclude gpt4all \
 	--exclude share \
 	--name pytgpt \
 	--contents-directory . \
