@@ -74,15 +74,14 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 
 These are simply the hosts of the LLMs, they include:
 
-- [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
-- [OpenAI](https://chat.openai.com) *(API key required)*
 - [Phind](https://www.phind.com)
+- [Perplexity](https://www.perplexity.ai)
 - [Blackboxai](https://www.blackbox.ai)
+- [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
 - [gpt4all](https://gpt4all.io) *(Offline)*
 - [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
 - [Groq](https://console.groq.com/playground) *(API Key required)*
-- [Perplexity](https://www.perplexity.ai)
-- [YepChat](https://yep.com)
+- [OpenAI](https://chat.openai.com) *(API key required)*
 
 
 <details>
@@ -238,8 +237,8 @@ Hello! How can I assist you today?
 2. Whole Response
 
 ```python
-from pytgpt.leo import LEO
-bot = LEO()
+from pytgpt.phind import PHIND
+bot = PHIND()
 resp = bot.ask('<Your Prompt>', stream=True)
 for value in resp:
     print(value)
@@ -299,13 +298,41 @@ print(bot.chat("<Your-prompt>"))
 </details>
 
 <summary>
-phind
+Phind
 
 </summary>
 
 ```python
 import pytgpt.phind as phind
 bot = phind.PHIND()
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+<details>
+
+<summary>
+Perplexity
+
+</summary>
+
+```python
+import pytgpt.perplexity as perplexity
+bot = perplexity.PERPLEXITY()
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+<summary>
+Blackboxai
+
+</summary>
+
+```python
+import pytgpt.blackboxai as blackboxai
+bot = blackboxai.BLACKBOXAI()
 print(bot.chat("<Your-prompt>"))
 ```
 

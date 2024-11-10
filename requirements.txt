@@ -12,7 +12,7 @@ gpt4all==2.2.0
 poe-api-wrapper==1.7.0
 python-dotenv==1.0.0
 brotli==1.1.0
-Helpingai_T2-fork>=0.3.2
+Helpingai-T2==0.5
 fastapi[all]==0.115.4
 python-vlc>=3.0.20
 httpx>=0.27.2
