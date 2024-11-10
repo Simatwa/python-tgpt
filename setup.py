@@ -6,26 +6,23 @@ from setuptools import find_packages
 
 
 INSTALL_REQUIRE = [
-    "requests[socks]>=2.31.0",
+    "requests[socks]>=2.32.3",
     "appdirs==1.4.4",
     "pyyaml==6.0.1",
-    "webchatgpt==0.3.0",
-    "GoogleBard1>=2.1.4",
-    "poe-api-wrapper==1.3.6",
+    "poe-api-wrapper==1.7.0",
     "brotli==1.1.0",
-    "g4f>=0.2.6.1",
-    "Helpingai_T2-fork==0.3.2",
+    "g4f>=0.3.3.3",
+    "Helpingai_T2-fork>=0.3.2",
     "python-vlc>=3.0.20",
     "httpx==0.27.2",
 ]
 
 cli_reqs = [
-    "click==8.1.3",
+    "click==8.1.7",
     "rich==13.3.4",
     "clipman==3.1.0",
     "pyperclip==1.8.2",
     "colorama==0.4.6",
-    "g4f>=0.2.6.1",
     "python-dotenv==1.0.0",
     "prompt-toolkit==3.0.48",
 ]
@@ -45,7 +42,7 @@ EXTRA_REQUIRE = {
     "termux-all": termux + cli_reqs + api,
     "cli": cli_reqs,
     "api": api,
-    "all": ["g4f[all]>=0.2.6.1", "matplotlib", "gpt4all==2.2.0"] + cli_reqs + api,
+    "all": ["g4f[all]>=0.3.3.3", "matplotlib", "gpt4all==2.2.0"] + cli_reqs + api,
 }
 
 DOCS_PATH = Path(__file__).parents[0] / "docs/README.md"

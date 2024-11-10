@@ -39,8 +39,6 @@ from pytgpt.imager import Prodia
 from pytgpt.utils import Audio
 from pytgpt.utils import suggest_query
 
-from WebChatGPT.console import chat as webchatgpt
-
 # colorama
 from colorama import Fore
 from colorama import init as init_colorama
@@ -484,26 +482,6 @@ class Main(cmd.Cmd):
                         "Consider running 'pytgpt gpt4free test -y' first"
                     )
 
-            elif provider == "leo":
-                import pytgpt.leo as leo
-
-                self.bot = leo.LEO(
-                    is_conversation=disable_conversation,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    top_k=top_k,
-                    top_p=top_p,
-                    model=getOr(model, leo.main.model),
-                    brave_key=getOr(auth, leo.main.key),
-                    timeout=timeout,
-                    intro=intro,
-                    filepath=filepath,
-                    update_file=update_file,
-                    proxies=proxies,
-                    history_offset=history_offset,
-                    act=awesome_prompt,
-                )
-
             elif provider == "openai":
                 assert auth, (
                     "OpenAI's API-key is required. " "Use the flag `--key` or `-k`"
@@ -558,19 +536,6 @@ class Main(cmd.Cmd):
                     proxies=proxies,
                     history_offset=history_offset,
                     act=awesome_prompt,
-                )
-
-            elif provider == "gemini":
-                from pytgpt.gemini import GEMINI
-
-                assert auth, (
-                    "Path to gemini.google.com.cookies.json file is required. "
-                    "Use the flag `--key` or `-k`"
-                )
-                self.bot = GEMINI(
-                    cookie_file=auth,
-                    proxy=proxies,
-                    timeout=timeout,
                 )
 
             elif provider == "phind":
@@ -669,35 +634,6 @@ class Main(cmd.Cmd):
                     history_offset=history_offset,
                     act=awesome_prompt,
                 )
-
-            elif provider == "webchatgpt":
-                assert auth, (
-                    "Path to `chat.openai.cookies.com.json` is required. "
-                    "Use the flag `--key` or `-k`"
-                )
-
-                from pytgpt.webchatgpt import main
-
-                self.bot = main.WEBCHATGPT(
-                    cookie_file=auth,
-                    model=getOr(model, main.default_model),
-                    proxy=proxies,
-                    timeout=timeout,
-                    filepath=filepath,
-                    update_file=update_file,
-                    intro=intro,
-                    act=awesome_prompt,
-                )
-                intro_response = self.bot.chat(self.bot.conversation.intro, stream=True)
-                if not quiet:
-                    this.stream_output(
-                        intro_response,
-                        title="Intro Response",
-                        is_markdown=True,
-                        style=Style(
-                            color="cyan",
-                        ),
-                    )
 
             elif provider == "poe":
                 assert auth, (
@@ -2754,10 +2690,6 @@ class API:
 
 def make_commands():
     """Make pytgpt chained commands"""
-    # webchatgpt
-    # Intergration with WebChatGPT https://github.com/Simatwa/WebChatGPT
-    EntryGroup.tgpt2_.add_command(webchatgpt, "webchatgpt")
-
     # generate
     EntryGroup.tgpt2_.add_command(ChatGenerate.generate)
 
