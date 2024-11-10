@@ -578,3 +578,21 @@ For instance:
 **What's new?**
 
 - fix : Image generation failure.
+
+## v0.7.5
+
+**What's new?**
+
+- feat: New provider - [Novita](https://novita.ai)
+
+## v0.7.8
+
+**What's new?**
+
+- feat: Added prompt completions in interactive mode `cli`
+
+## v0.7.9
+
+**What's new?**
+
+- fix: Remove providers: yepchat, opengpt, leo etc
