@@ -4,6 +4,7 @@ from pytgpt.utils import AwesomePrompts
 from pytgpt.base import Provider, AsyncProvider
 from pytgpt import available_providers
 import g4f
+import os
 import pytgpt.exceptions as exceptions
 from typing import AsyncGenerator
 
@@ -110,11 +111,14 @@ class GPT4FREE(Provider):
         self.chat_completion = chat_completion
         self.ignore_working = ignore_working
         self.auth = auth
-        self.proxy = None if not proxies else list(proxies.values())[0]
+        self.proxy = (
+            os.getenv("https_proxy", None) if not proxies else list(proxies.values())[0]
+        )
+
         self.__chat_class = g4f.ChatCompletion if chat_completion else g4f.Completion
 
     def __str__(self):
-        return f"GPTFREE(provider={self.provider})"
+        return f"GPTFREE(provider='{self.provider}')"
 
     def ask(
         self,
