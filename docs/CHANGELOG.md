@@ -596,3 +596,10 @@ For instance:
 **What's new?**
 
 - fix: Remove providers: yepchat, opengpt, leo etc
+
+
+## v0.8.1
+
+**What's new?**
+
+- feat: New provider **Ai4chat**
