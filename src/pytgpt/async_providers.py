@@ -4,6 +4,7 @@ from pytgpt.koboldai import AsyncKOBOLDAI
 from pytgpt.groq import AsyncGROQ
 from pytgpt.blackboxai import AsyncBLACKBOXAI
 from pytgpt.novita import AsyncNOVITA
+from pytgpt.ai4chat import AsyncAI4CHAT
 from pytgpt.gpt4free import AsyncGPT4FREE
 
 mapper: dict[str, object] = {
@@ -20,4 +21,5 @@ tgpt_mapper: dict[str, object] = {
     "phind": AsyncPHIND,
     "koboldai": AsyncKOBOLDAI,
     "blackboxai": AsyncBLACKBOXAI,
+    "ai4chat": AsyncAI4CHAT
 }

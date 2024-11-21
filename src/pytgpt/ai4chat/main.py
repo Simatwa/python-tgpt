@@ -1,6 +1,8 @@
 import requests
 import json
 import httpx
+import html
+import re
 import pytgpt.exceptions as exceptions
 from pytgpt.utils import Optimizers
 from pytgpt.utils import Conversation
@@ -11,13 +13,11 @@ from typing import AsyncGenerator
 
 session = requests.Session()
 
-model = "gpt-3.5-turbo"
+model = 'gpt-4'
 
-
-class OPENAI(Provider):
+class AI4CHAT(Provider):
     def __init__(
         self,
-        api_key: str,
         is_conversation: bool = True,
         max_tokens: int = 600,
         temperature: float = 1,
@@ -33,10 +33,9 @@ class OPENAI(Provider):
         history_offset: int = 10250,
         act: str = None,
     ):
-        """Instantiates OPENAI
+        """Instantiates AI4CHAT
 
         Args:
-            api_key (key): OpenAI's API key.
             is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
             temperature (float, optional): Charge of the generated text's randomness. Defaults to 1.
@@ -54,19 +53,21 @@ class OPENAI(Provider):
         """
         self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
-        self.api_key = api_key
         self.model = model
         self.temperature = temperature
         self.presence_penalty = presence_penalty
         self.frequency_penalty = frequency_penalty
         self.top_p = top_p
-        self.chat_endpoint = "https://api.openai.com/v1/chat/completions"
+        self.chat_endpoint = "https://www.ai4chat.co/generate-response"
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
         self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "content-type": "application/json",
+            "referer": "https://www.ai4chat.co/gpt/talkdirtytome",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
         }
 
         self.__available_optimizers = (
@@ -105,28 +106,10 @@ class OPENAI(Provider):
             optimizer (str, optional): Prompt optimizer name - `[code, shell_command]`. Defaults to None.
             conversationally (bool, optional): Chat conversationally when using optimizer. Defaults to False.
         Returns:
-           dict : {}
+           dict[str, str]
         ```json
         {
-            "id": "chatcmpl-TaREJpBZsRVQFRFic1wIA7Q7XfnaD",
-            "object": "chat.completion",
-            "created": 1704623244,
-            "model": "gpt-3.5-turbo",
-            "usage": {
-                "prompt_tokens": 0,
-                "completion_tokens": 0,
-                "total_tokens": 0
-                },
-            "choices": [
-                {
-                    "message": {
-                        "role": "assistant",
-                        "content": "Hello! How can I assist you today?"
-                },
-                "finish_reason": "stop",
-                "index": 0
-                }
-            ]
+          "message" : "How can I help you?"
         }
         ```
         """
@@ -142,14 +125,13 @@ class OPENAI(Provider):
                 )
         session.headers.update(self.headers)
         payload = {
-            "frequency_penalty": self.frequency_penalty,
-            "messages": [{"content": conversation_prompt, "role": "user"}],
-            "model": self.model,
-            "presence_penalty": self.presence_penalty,
-            "stream": stream,
-            "temperature": self.temperature,
-            "top_p": self.top_p,
-        }
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": conversation_prompt
+                    }
+                ]
+            }
 
         def for_stream():
             response = session.post(
@@ -159,23 +141,20 @@ class OPENAI(Provider):
                 raise exceptions.FailedToGenerateResponseError(
                     f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
                 )
-
-            message_load = ""
             for value in response.iter_lines(
                 decode_unicode=True,
-                delimiter="" if raw else "data:",
+                delimiter="",
                 chunk_size=self.stream_chunk_size,
             ):
                 try:
-                    resp = json.loads(value)
-                    incomplete_message = self.get_message(resp)
-                    if incomplete_message:
-                        message_load += incomplete_message
-                        resp["choices"][0]["delta"]["content"] = message_load
-                        self.last_response.update(resp)
-                        yield value if raw else resp
-                    elif raw:
-                        yield value
+                    json_result:dict[str, str] = json.loads(value)
+                    message = json_result.get("message", "")
+                    clean_message = html.unescape(
+                        re.sub(r'<[^>]+>', '', message)
+                    )
+                    json_result['message'] = clean_message
+                    self.last_response.update(json_result)
+                    yield value if raw else json_result
                 except json.decoder.JSONDecodeError:
                     pass
             self.conversation.update_chat_history(
@@ -183,22 +162,9 @@ class OPENAI(Provider):
             )
 
         def for_non_stream():
-            response = session.post(
-                self.chat_endpoint, json=payload, stream=False, timeout=self.timeout
-            )
-            if (
-                not response.ok
-                or not response.headers.get("Content-Type", "") == "application/json"
-            ):
-                raise exceptions.FailedToGenerateResponseError(
-                    f"Failed to generate response - ({response.status_code}, {response.reason}) - {response.text}"
-                )
-            resp = response.json()
-            self.last_response.update(resp)
-            self.conversation.update_chat_history(
-                prompt, self.get_message(self.last_response)
-            )
-            return resp
+            for _ in for_stream():
+                pass
+            return self.last_response
 
         return for_stream() if stream else for_non_stream()
 
@@ -247,18 +213,12 @@ class OPENAI(Provider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        try:
-            if response["choices"][0].get("delta"):
-                return response["choices"][0]["delta"]["content"]
-            return response["choices"][0]["message"]["content"]
-        except KeyError:
-            return ""
+        return response.get('message', '')
 
 
-class AsyncOPENAI(AsyncProvider):
+class AsyncAI4CHAT(AsyncProvider):
     def __init__(
         self,
-        api_key: str,
         is_conversation: bool = True,
         max_tokens: int = 600,
         temperature: float = 1,
@@ -274,10 +234,9 @@ class AsyncOPENAI(AsyncProvider):
         history_offset: int = 10250,
         act: str = None,
     ):
-        """Instantiates OPENAI
+        """Instantiates AsyncAI4CHAT
 
         Args:
-            api_key (key): OpenAI's API key.
             is_conversation (bool, optional): Flag for chatting conversationally. Defaults to True.
             max_tokens (int, optional): Maximum number of tokens to be generated upon completion. Defaults to 600.
             temperature (float, optional): Charge of the generated text's randomness. Defaults to 1.
@@ -295,19 +254,21 @@ class AsyncOPENAI(AsyncProvider):
         """
         self.is_conversation = is_conversation
         self.max_tokens_to_sample = max_tokens
-        self.api_key = api_key
         self.model = model
         self.temperature = temperature
         self.presence_penalty = presence_penalty
         self.frequency_penalty = frequency_penalty
         self.top_p = top_p
-        self.chat_endpoint = "https://api.openai.com/v1/chat/completions"
+        self.chat_endpoint = "https://www.ai4chat.co/generate-response"
         self.stream_chunk_size = 64
         self.timeout = timeout
         self.last_response = {}
         self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "content-type": "application/json",
+            "referer": "https://www.ai4chat.co/gpt/talkdirtytome",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
         }
 
         self.__available_optimizers = (
@@ -351,25 +312,7 @@ class AsyncOPENAI(AsyncProvider):
            dict|AsyncGenerator : ai content.
         ```json
         {
-            "id": "chatcmpl-TaREJpBZsRVQFRFic1wIA7Q7XfnaD",
-            "object": "chat.completion",
-            "created": 1704623244,
-            "model": "gpt-3.5-turbo",
-            "usage": {
-                "prompt_tokens": 0,
-                "completion_tokens": 0,
-                "total_tokens": 0
-                },
-            "choices": [
-                {
-                    "message": {
-                        "role": "assistant",
-                        "content": "Hello! How can I assist you today?"
-                },
-                "finish_reason": "stop",
-                "index": 0
-                }
-            ]
+          "message" : "How can I help you?"
         }
         ```
         """
@@ -380,18 +323,17 @@ class AsyncOPENAI(AsyncProvider):
                     conversation_prompt if conversationally else prompt
                 )
             else:
-                raise Exception(
-                    f"Optimizer is not one of {self.__available_optimizers}"
+                raise exceptions.UnsupportedOptimizer(
+                    f"Optimizer '{optimizer}' is not one of {self.__available_optimizers}"
                 )
         payload = {
-            "frequency_penalty": self.frequency_penalty,
-            "messages": [{"content": conversation_prompt, "role": "user"}],
-            "model": self.model,
-            "presence_penalty": self.presence_penalty,
-            "stream": stream,
-            "temperature": self.temperature,
-            "top_p": self.top_p,
-        }
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": conversation_prompt
+                    }
+                ]
+            }
 
         async def for_stream():
             async with self.session.stream(
@@ -402,19 +344,17 @@ class AsyncOPENAI(AsyncProvider):
                         f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
                     )
 
-                message_load = ""
                 async for value in response.aiter_lines():
                     try:
+                        json_result:dict[str, str] = json.loads(value)
+                        message = json_result.get("message", "")
+                        clean_message = html.unescape(
+                            re.sub(r'<[^>]+>', '', message)
+                            )
+                        json_result['message'] = clean_message
+                        self.last_response.update(json_result)
+                        yield value if raw else json_result
 
-                        resp = sanitize_stream(value)
-                        incomplete_message = await self.get_message(resp)
-                        if incomplete_message:
-                            message_load += incomplete_message
-                            resp["choices"][0]["delta"]["content"] = message_load
-                            self.last_response.update(resp)
-                            yield value if raw else resp
-                        elif raw:
-                            yield value
                     except json.decoder.JSONDecodeError:
                         pass
             self.conversation.update_chat_history(
@@ -422,25 +362,10 @@ class AsyncOPENAI(AsyncProvider):
             )
 
         async def for_non_stream():
-            response = httpx.post(
-                self.chat_endpoint,
-                json=payload,
-                timeout=self.timeout,
-                headers=self.headers,
-            )
-            if (
-                not response.is_success
-                or not response.headers.get("Content-Type", "") == "application/json"
-            ):
-                raise Exception(
-                    f"Failed to generate response - ({response.status_code}, {response.reason_phrase})"
-                )
-            resp = response.json()
-            self.last_response.update(resp)
-            self.conversation.update_chat_history(
-                prompt, await self.get_message(self.last_response)
-            )
-            return resp
+            async for _ in for_stream():
+                pass
+
+            return self.last_response
 
         return for_stream() if stream else await for_non_stream()
 
@@ -490,9 +415,4 @@ class AsyncOPENAI(AsyncProvider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        try:
-            if response["choices"][0].get("delta"):
-                return response["choices"][0]["delta"]["content"]
-            return response["choices"][0]["message"]["content"]
-        except KeyError:
-            return ""
+        return response.get('message', '')

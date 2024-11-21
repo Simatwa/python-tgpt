@@ -100,15 +100,11 @@ These are simply the hosts of the LLMs, they include:
 
 ## Prerequisites
 
-- [x] [Python>=3.10](https://python.org) *(Optional)*
+- [x] [Python>=3.10](https://python.org)
 
 ## Installation and Usage
 
 ### Installation
-
-Download binaries for your system from [here.](https://github.com/Simatwa/python-tgpt/releases/latest/)
-
-Alternatively, you can install non-binaries. *(Recommended)*
 
 1. Developers:
 
@@ -433,8 +429,6 @@ bot = koboldai.KOBOLDAI(is_conversation=False)
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
 
-> [!CAUTION]
-> **Bard** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the class. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
 
 ### Image Generation
 
