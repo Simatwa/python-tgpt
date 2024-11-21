@@ -62,7 +62,7 @@ def suggest_query(prompt, timeout: int = 20, die_silently: bool = False) -> list
         # "dpr" : "1",
     }
     try:
-        resp = requests.get(link, params=params, timeout=20)
+        resp = requests.get(link, params=params, timeout=timeout)
         resp.raise_for_status()
         pattern = r'"([^"]+)",\d+'
         suggestions = re.findall(pattern, resp.text)

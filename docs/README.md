@@ -78,6 +78,7 @@ These are simply the hosts of the LLMs, they include:
 - [Perplexity](https://www.perplexity.ai)
 - [Blackboxai](https://www.blackbox.ai)
 - [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
+- [Ai4chat](https://www.ai4chat.co/)
 - [gpt4all](https://gpt4all.io) *(Offline)*
 - [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
 - [Groq](https://console.groq.com/playground) *(API Key required)*
