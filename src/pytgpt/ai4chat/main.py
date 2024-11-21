@@ -13,7 +13,8 @@ from typing import AsyncGenerator
 
 session = requests.Session()
 
-model = 'gpt-4'
+model = "gpt-4"
+
 
 class AI4CHAT(Provider):
     def __init__(
@@ -67,7 +68,7 @@ class AI4CHAT(Provider):
             "accept-language": "en-US,en;q=0.9",
             "content-type": "application/json",
             "referer": "https://www.ai4chat.co/gpt/talkdirtytome",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
         }
 
         self.__available_optimizers = (
@@ -124,14 +125,7 @@ class AI4CHAT(Provider):
                     f"Optimizer '{optimizer}' is not one of {self.__available_optimizers}"
                 )
         session.headers.update(self.headers)
-        payload = {
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": conversation_prompt
-                    }
-                ]
-            }
+        payload = {"messages": [{"role": "user", "content": conversation_prompt}]}
 
         def for_stream():
             response = session.post(
@@ -147,12 +141,10 @@ class AI4CHAT(Provider):
                 chunk_size=self.stream_chunk_size,
             ):
                 try:
-                    json_result:dict[str, str] = json.loads(value)
+                    json_result: dict[str, str] = json.loads(value)
                     message = json_result.get("message", "")
-                    clean_message = html.unescape(
-                        re.sub(r'<[^>]+>', '', message)
-                    )
-                    json_result['message'] = clean_message
+                    clean_message = html.unescape(re.sub(r"<[^>]+>", "", message))
+                    json_result["message"] = clean_message
                     self.last_response.update(json_result)
                     yield value if raw else json_result
                 except json.decoder.JSONDecodeError:
@@ -213,7 +205,7 @@ class AI4CHAT(Provider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response.get('message', '')
+        return response.get("message", "")
 
 
 class AsyncAI4CHAT(AsyncProvider):
@@ -268,7 +260,7 @@ class AsyncAI4CHAT(AsyncProvider):
             "accept-language": "en-US,en;q=0.9",
             "content-type": "application/json",
             "referer": "https://www.ai4chat.co/gpt/talkdirtytome",
-            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
         }
 
         self.__available_optimizers = (
@@ -326,14 +318,7 @@ class AsyncAI4CHAT(AsyncProvider):
                 raise exceptions.UnsupportedOptimizer(
                     f"Optimizer '{optimizer}' is not one of {self.__available_optimizers}"
                 )
-        payload = {
-                "messages": [
-                    {
-                        "role": "user",
-                        "content": conversation_prompt
-                    }
-                ]
-            }
+        payload = {"messages": [{"role": "user", "content": conversation_prompt}]}
 
         async def for_stream():
             async with self.session.stream(
@@ -346,12 +331,10 @@ class AsyncAI4CHAT(AsyncProvider):
 
                 async for value in response.aiter_lines():
                     try:
-                        json_result:dict[str, str] = json.loads(value)
+                        json_result: dict[str, str] = json.loads(value)
                         message = json_result.get("message", "")
-                        clean_message = html.unescape(
-                            re.sub(r'<[^>]+>', '', message)
-                            )
-                        json_result['message'] = clean_message
+                        clean_message = html.unescape(re.sub(r"<[^>]+>", "", message))
+                        json_result["message"] = clean_message
                         self.last_response.update(json_result)
                         yield value if raw else json_result
 
@@ -415,4 +398,4 @@ class AsyncAI4CHAT(AsyncProvider):
             str: Message extracted
         """
         assert isinstance(response, dict), "Response should be of dict data-type only"
-        return response.get('message', '')
+        return response.get("message", "")

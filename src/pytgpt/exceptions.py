@@ -5,5 +5,6 @@ class FailedToGenerateResponseError(Exception):
 class UnsupportedModelError(Exception):
     """Model passed is not supported by the provider"""
 
+
 class UnsupportedOptimizer(Exception):
     """Unknown optimizer passed"""

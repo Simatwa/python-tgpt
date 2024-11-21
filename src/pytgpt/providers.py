@@ -11,6 +11,6 @@ tgpt_mapper: dict[str, object] = {
     "koboldai": KOBOLDAI,
     "blackboxai": BLACKBOXAI,
     "ai4chat": AI4CHAT,
-    "auto" : AUTO,
-    "gpt4free" : GPT4FREE,
+    "auto": AUTO,
+    "gpt4free": GPT4FREE,
 }

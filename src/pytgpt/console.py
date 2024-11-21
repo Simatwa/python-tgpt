@@ -703,7 +703,6 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
-
             else:
                 raise NotImplementedError(
                     f"The provider `{provider}` is not yet implemented."

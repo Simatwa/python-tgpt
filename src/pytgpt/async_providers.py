@@ -21,5 +21,5 @@ tgpt_mapper: dict[str, object] = {
     "phind": AsyncPHIND,
     "koboldai": AsyncKOBOLDAI,
     "blackboxai": AsyncBLACKBOXAI,
-    "ai4chat": AsyncAI4CHAT
+    "ai4chat": AsyncAI4CHAT,
 }
