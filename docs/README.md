@@ -294,6 +294,8 @@ print(bot.chat("<Your-prompt>"))
 
 </details>
 
+<details>
+
 <summary>
 Phind
 
@@ -321,6 +323,8 @@ print(bot.chat("<Your-prompt>"))
 ```
 
 </details>
+
+<details>
 
 <summary>
 Blackboxai
