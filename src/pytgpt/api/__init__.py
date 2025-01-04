@@ -39,7 +39,7 @@ class ServerStatus(BaseModel):
     as_at: datetime
 
 
-@app.get("/", name="redirect-to-docs")
+@app.get("/", name="redirect-to-docs", include_in_schema=False)
 async def home():
     """Redirect to docs"""
     return RedirectResponse("/docs")
