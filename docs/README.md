@@ -83,6 +83,7 @@ These are simply the hosts of the LLMs, they include:
 - [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
 - [Groq](https://console.groq.com/playground) *(API Key required)*
 - [OpenAI](https://chat.openai.com) *(API key required)*
+- [DeepSeek](https://deepseek.com) *(API key required)*
 
 
 <details>

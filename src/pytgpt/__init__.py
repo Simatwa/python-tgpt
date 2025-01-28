@@ -23,6 +23,7 @@ tgpt_providers = [
     "perplexity",
     "novita",
     "ai4chat",
+    "deepseek",
 ]
 
 gpt4free_providers = [
