@@ -15,10 +15,10 @@ INSTALL_REQUIRE = [
     "Helpingai-T2==0.5",
     "python-vlc>=3.0.20",
     "httpx==0.27.2",
+    "click==8.1.3",
 ]
 
 cli_reqs = [
-    "click==8.1.3",
     "rich==13.3.4",
     "clipman==3.1.0",
     "pyperclip==1.8.2",
@@ -54,7 +54,7 @@ if not PATH.exists():
 
 setup(
     name="python-tgpt",
-    version="0.8.1",
+    version="0.8.2",
     license="MIT",
     author="Smartwa",
     maintainer="Smartwa",
