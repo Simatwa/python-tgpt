@@ -4,7 +4,6 @@ from pytgpt.ai4chat import AI4CHAT
 from pytgpt.gpt4free import GPT4FREE
 from pytgpt.auto import AUTO
 
-
 tgpt_mapper: dict[str, object] = {
     "phind": PHIND,
     "koboldai": KOBOLDAI,
