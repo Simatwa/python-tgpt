@@ -28,7 +28,7 @@ cli_reqs = [
 ]
 
 api = [
-    "fastapi[all]==0.115.4",
+    "fastapi[standard]==0.115.4",
 ]
 
 termux = [

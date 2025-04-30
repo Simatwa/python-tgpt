@@ -15,7 +15,6 @@ tgpt_providers = [
     "openai",
     "koboldai",
     "phind",
-    "blackboxai",
     "gpt4all",
     "g4fauto",
     "poe",

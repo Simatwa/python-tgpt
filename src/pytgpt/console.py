@@ -542,22 +542,6 @@ class Main(cmd.Cmd):
                     quiet=quiet,
                 )
 
-            elif provider == "blackboxai":
-
-                from pytgpt.blackboxai import BLACKBOXAI
-
-                self.bot = BLACKBOXAI(
-                    is_conversation=disable_conversation,
-                    max_tokens=max_tokens,
-                    timeout=timeout,
-                    intro=intro,
-                    filepath=filepath,
-                    update_file=update_file,
-                    proxies=proxies,
-                    history_offset=history_offset,
-                    act=awesome_prompt,
-                )
-
             elif provider == "gpt4all":
                 assert auth, (
                     "Path to LLM (.gguf or .bin) file is required. "
