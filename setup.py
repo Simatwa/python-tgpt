@@ -88,7 +88,6 @@ setup(
         "chatgpt-sdk",
         "chatgpt-api",
         "llama-api",
-        "opengpt",
         "koboldai",
         "openai",
         "gpt4free",
