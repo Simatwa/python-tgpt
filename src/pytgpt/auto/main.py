@@ -1,7 +1,6 @@
 from pytgpt.base import Provider, AsyncProvider
 from pytgpt.koboldai import KOBOLDAI, AsyncKOBOLDAI
 from pytgpt.phind import PHIND, AsyncPHIND
-from pytgpt.blackboxai import BLACKBOXAI, AsyncBLACKBOXAI
 from pytgpt.perplexity import PERPLEXITY
 from pytgpt.gpt4free import GPT4FREE, AsyncGPT4FREE
 from pytgpt.gpt4free.utils import TestProviders
@@ -15,11 +14,10 @@ from typing import Any
 import logging
 
 
-provider_map: dict[str, Union[KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE]] = {
+provider_map: dict[str, Union[KOBOLDAI, PHIND, PERPLEXITY, GPT4FREE]] = {
     "phind": PHIND,
     "perplexity": PERPLEXITY,
     "koboldai": KOBOLDAI,
-    "blackboxai": BLACKBOXAI,
     "gpt4free": GPT4FREE,
 }
 
@@ -259,7 +257,6 @@ class AsyncAUTO(AsyncProvider):
         self.provider: Union[
             AsyncKOBOLDAI,
             AsyncPHIND,
-            AsyncBLACKBOXAI,
             AsyncGPT4FREE,
         ] = None
         self.provider_name: str = None

@@ -15,6 +15,7 @@ mapper: dict[str, object] = {
     "novita": AsyncNOVITA,
 }
 
+
 tgpt_mapper: dict[str, object] = {
     "phind": AsyncPHIND,
     "koboldai": AsyncKOBOLDAI,
