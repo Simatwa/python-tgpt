@@ -50,7 +50,7 @@ class AUTO(Provider):
             act (str|int, optional): Awesome prompt key or index. (Used as intro). Defaults to None.
             exclude(list[str], optional): List of providers to be excluded. Defaults to [].
         """
-        self.provider: Union[KOBOLDAI, PHIND, BLACKBOXAI, PERPLEXITY, GPT4FREE] = None
+        self.provider: Union[KOBOLDAI, PHIND, PERPLEXITY, GPT4FREE] = None
         self.provider_name: str = None
         self.is_conversation = is_conversation
         self.max_tokens = max_tokens
