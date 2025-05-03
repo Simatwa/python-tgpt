@@ -165,7 +165,7 @@ class AUTO(Provider):
 
             except Exception as e:
                 logging.debug(
-                    f"Failed to generate response using GPT4FREE-base provider {provider_name} - {e}"
+                    f"Failed to generate response using GPT4FREE-based provider {provider_name} - {e}"
                 )
 
         raise AllProvidersFailure(
