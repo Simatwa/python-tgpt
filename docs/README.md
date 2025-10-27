@@ -11,14 +11,8 @@
 <a href=""><img alt="Python version" src="https://img.shields.io/pypi/pyversions/python-tgpt"/></a>
 <a href="https://pypi.org/project/python-tgpt"><img alt="PyPi" src="https://img.shields.io/pypi/v/python-tgpt?color=green"/></a>
 <a href="https://github.com/psf/black"><img alt="Black" src="https://img.shields.io/badge/code%20style-black-000000.svg"/></a>
-<a href="https://python-tgpt.onrender.com"><img alt="Website status" src="https://img.shields.io/website?url=https://python-tgpt.onrender.com"/></a>
-<a href="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml"><img alt="Python Package flow" src="https://github.com/Simatwa/python-tgpt/actions/workflows/python-package.yml/badge.svg?branch=master"/></a>
 <a href="https://pepy.tech/project/python-tgpt"><img src="https://static.pepy.tech/personalized-badge/python-tgpt?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Downloads"></a>
-<a href="https://github.com/Simatwa/python-tgpt/releases/latest"><img src="https://img.shields.io/github/downloads/Simatwa/python-tgpt/total?label=Asset%20Downloads&color=success" alt="Downloads"></img></a>
-<a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/v/release/Simatwa/python-tgpt?color=success&label=Release&logo=github" alt="Latest release"></img></a>
 <a href="https://github.com/Simatwa/python-tgpt/releases"><img src="https://img.shields.io/github/release-date/Simatwa/python-tgpt?label=Release date&logo=github" alt="release date"></img></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com/Simatwa/python-tgpt"/></a>      
-<a href="https://wakatime.com/badge/github/Simatwa/tgpt2"><img src="https://wakatime.com/badge/github/Simatwa/tgpt2.svg" alt="wakatime"></a>
 </p>
 
 <h3 align="center">
@@ -28,7 +22,6 @@ python-tgpt
 <p align="center">
 <img src="https://github.com/Simatwa/python-tgpt/blob/main/assets/demo-1.gif?raw=True" width='80%'/>
 </p>
-
 
 ```python
 >>> import pytgpt.phind as phind
@@ -52,9 +45,8 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 ### Features
 
 - 🐍 Python package
-- [🌐 FastAPI for web integration](https://python-tgpt.onrender.com)
+- 🌐 FastAPI for web integration
 - ⌨️ Command-line interface
-- 🧠 Multiple LLM providers - **45+**
 - 🌊 Stream and non-stream response
 - 🚀 Ready to use (No API key required)
 - 🎯 Customizable script generation and execution
@@ -69,28 +61,11 @@ The name *python-tgpt* draws inspiration from its parent project [tgpt](https://
 - 🤖 [Telegram bot](https://t.me/pytgpt_bot) - interface
 - 🔄 Asynchronous support for all major operations.
 
-
-## Providers
-
-These are simply the hosts of the LLMs, they include:
-
-- [Phind](https://www.phind.com)
-- [Perplexity](https://www.perplexity.ai)
-- [Blackboxai](https://www.blackbox.ai)
-- [Koboldai](https://koboldai-koboldcpp-tiefighter.hf.space)
-- [Ai4chat](https://www.ai4chat.co/)
-- [gpt4all](https://gpt4all.io) *(Offline)*
-- [Poe](https://poe.com) - Poe|Quora *(Session ID required)*
-- [Groq](https://console.groq.com/playground) *(API Key required)*
-- [OpenAI](https://chat.openai.com) *(API key required)*
-- [DeepSeek](https://deepseek.com) *(API key required)*
-
-
 <details>
 
 <summary>
 
-41+ providers proudly offered by [gpt4free](https://github.com/xtekky/gpt4free).
+Providers offered by [gpt4free](https://github.com/xtekky/gpt4free).
 
 </summary>
 
@@ -102,11 +77,15 @@ These are simply the hosts of the LLMs, they include:
 
 ## Prerequisites
 
-- [x] [Python>=3.10](https://python.org)
+- [x] [Python>=3.10](https://python.org) *(Optional)*
 
 ## Installation and Usage
 
 ### Installation
+
+Download binaries for your system from [here.](https://github.com/Simatwa/python-tgpt/releases/latest/)
+
+Alternatively, you can install non-binaries. *(Recommended)*
 
 1. Developers:
 
@@ -127,29 +106,6 @@ These are simply the hosts of the LLMs, they include:
    ```
 
 > `pip install -U "python-tgt[api]"` will install REST API dependencies.
-
-#### Termux extras
-
-1. Developers:
-
-   ```sh
-   pip install --upgrade "python-tgpt[termux]"
-   ```
-
-2. Commandline:
-
-   ```sh
-   pip install --upgrade "python-tgpt[termux-cli]"
-   ```
-
-3. Full installation:
-
-   ```sh
-   pip install  --upgrade "python-tgpt[termux-all]"
-   ```
-
-> `pip install -U "python-tgt[termux-api]"` will install REST API dependencies
-
 
 ## Usage
 
@@ -179,30 +135,32 @@ Starting from version 0.2.7, running `$ pytgpt` without any other command or opt
 
 <details>
 
-<summary>
-<h3>Developer Docs</h3>
+<summary> 
+
+### Developer Docs
+
 </summary>
 
 1. Generate a quick response
 
 ```python
-from pytgpt.phind import PHIND
-bot = PHIND()
+from pytgpt.leo import LEO
+bot = LEO()
 resp = bot.chat('<Your prompt>')
 print(resp)
-# Output : How can I assist you today?
+# Output : How may I help you.
 ```
 
 2. Get back whole response
 
 ```python
-from pytgpt.phind import PHIND
-bot = PHIND()
-resp = bot.chat('<Your prompt>')
+from pytgpt.leo import LEO
+bot = LEO()
+resp = bot.ask('<Your Prompt')
 print(resp)
 # Output
 """
-{'id': 'chatcmpl-gp6cwu2e5ez3ltoyti4z', 'object': 'chat.completion.chunk', 'created': 1731257890, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI assistant created by Phind to help with programming tasks. How can I assist you today?"}, 'finish_reason': None}]}
+{'completion': "I'm so excited to share with you the incredible experiences...", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwJ2', 'exception': None}
 """
 ```
 
@@ -213,39 +171,37 @@ Just add parameter `stream` with value  `true`.
 1. Text Generated only 
 
 ```python
-from pytgpt.phind import PHIND
-bot = PHIND()
-response = bot.chat('hello', stream=True)
-for chunk in response:
-    print(chunk)
+from pytgpt.leo import LEO
+bot = LEO()
+resp = bot.chat('<Your prompt>', stream=True)
+for value in resp:
+    print(value)
 # output
 """
-Hello
-Hello!
-Hello! How
-Hello! How can
-Hello! How can I
-Hello! How can I assist
-Hello! How can I assist you
-Hello! How can I assist you today
-Hello! How can I assist you today?
+How may
+How may I help 
+How may I help you
+How may I help you today?
 """
 ```
 
 2. Whole Response
 
 ```python
-from pytgpt.phind import PHIND
-bot = PHIND()
+from pytgpt.leo import LEO
+bot = LEO()
 resp = bot.ask('<Your Prompt>', stream=True)
 for value in resp:
     print(value)
 # Output
 """
-{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': 'Hello'}, 'finish_reason': None}]}
-{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI"}, 'finish_reason': None}]}
-{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI assistant created by Phind to help with coding and technical tasks. How"}, 'finish_reason': None}]}
-{'id': 'chatcmpl-icz6a4m1nbbclw9hhgol', 'object': 'chat.completion.chunk', 'created': 1731258032, 'model': 'phind-instant-llama-3_1-08-31-2024-checkpoint-1500', 'choices': [{'index': 0, 'delta': {'content': "Hello! I'm an AI assistant created by Phind to help with coding and technical tasks. How can I assist you today?"}, 'finish_reason': None}]}
+{'completion': "I'm so", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
+
+{'completion': "I'm so excited to share with.", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
+
+{'completion': "I'm so excited to share with you the incredible ", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
+
+{'completion': "I'm so excited to share with you the incredible experiences...", 'stop_reason': None, 'truncated': False, 'stop': None, 'model': 'llama-2-13b-chat', 'log_id': 'cmpl-3NmRt5A5Djqo2jXtXLBwxx', 'exception': None}
 """
 ```
 
@@ -295,46 +251,32 @@ print(bot.chat("<Your-prompt>"))
 
 </details>
 
+
 <details>
 
 <summary>
-Phind
+Opengpt
+
+</summary>
+
+```python
+import pytgpt.opengpt as opengpt
+bot = opengpt.OPENGPT()
+print(bot.chat("<Your-prompt>"))
+```
+
+</details>
+
+<details>
+
+<summary>
+phind
 
 </summary>
 
 ```python
 import pytgpt.phind as phind
 bot = phind.PHIND()
-print(bot.chat("<Your-prompt>"))
-```
-
-</details>
-
-<details>
-
-<summary>
-Perplexity
-
-</summary>
-
-```python
-import pytgpt.perplexity as perplexity
-bot = perplexity.PERPLEXITY()
-print(bot.chat("<Your-prompt>"))
-```
-
-</details>
-
-<details>
-
-<summary>
-Blackboxai
-
-</summary>
-
-```python
-import pytgpt.blackboxai as blackboxai
-bot = blackboxai.BLACKBOXAI()
 print(bot.chat("<Your-prompt>"))
 ```
 
@@ -357,9 +299,9 @@ print(bot.chat("<Your-prompt>"))
 
 ### Asynchronous
 
-**Version 0.7.0** introduces asynchronous implementation to almost all providers except a few such as *perplexity*, which relies on other libraries which lacks such implementation.
+**Version 0.7.0** introduces asynchronous implementation to almost all providers except a few such as *perplexity & gemini*, which relies on other libraries which lacks such implementation.
 
-To make it easier, you just have to prefix `Async` to the common synchronous class name. For instance `PHIND` will be accessed as `AsyncPHIND`:
+To make it easier, you just have to prefix `Async` to the common synchronous class name. For instance `OPENGPT` will be accessed as `AsyncOPENGPT`:
 
 #### Streaming Whole ai response.
 
@@ -414,8 +356,8 @@ To obtain more tailored responses, consider utilizing [optimizers](pytgpt/utils.
 </summary>
 
 ```python
-from pytgpt.phind import PHIND
-bot = PHIND()
+from pytgpt.leo import LEO
+bot = LEO()
 resp = bot.ask('<Your Prompt>', optimizer='code')
 print(resp)
 ```
@@ -435,6 +377,8 @@ bot = koboldai.KOBOLDAI(is_conversation=False)
 
 Utilize the `--disable-conversation` flag in the console to achieve the same functionality.
 
+> [!CAUTION]
+> **Bard** autohandles context due to the obvious reason; the `is_conversation` parameter is not necessary at all hence not required when initializing the class. Also be informed that majority of providers offered by *gpt4free* requires *Google Chrome* inorder to function.
 
 ### Image Generation
 
@@ -518,7 +462,7 @@ $ git diff | pytgpt generate "Here is a diff file: {{stream}} Make a concise com
 Instances :
 
 ```sh
-$ pytgpt interactive --awesome-prompt "Linux Terminal"
+$ pytgpt interactve --awesome-prompt "Linux Terminal"
 # Act like a Linux Terminal
 
 $ pytgpt interactive -ap DAN
@@ -643,6 +587,7 @@ Commands:
   imager       Generate images with pollinations.ai
   interactive  Chat with AI interactively (Default)
   utils        Utility endpoint for pytgpt
+  webchatgpt   Reverse Engineered ChatGPT Web-Version
 ```
 
 </details>
