@@ -12,7 +12,6 @@ INSTALL_REQUIRE = [
     "poe-api-wrapper==1.7.0",
     "brotli==1.1.0",
     "g4f>=0.3.3.3",
-    "Helpingai-T2==0.5",
     "python-vlc>=3.0.20",
     "httpx==0.27.2",
     "click==8.1.3",

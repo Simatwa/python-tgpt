@@ -77,7 +77,7 @@ class this:
 
     default_provider = "auto"
 
-    getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)
+    getExc = lambda e: e.args[1] if len(e.args) > 1 else str(e)  # noqa: E731
 
     context_settings = dict(auto_envvar_prefix="PYTGPT")
 
