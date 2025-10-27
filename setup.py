@@ -7,22 +7,22 @@ from setuptools import find_packages
 
 INSTALL_REQUIRE = [
     "requests[socks]>=2.32.3",
-    "appdirs==1.4.4",
-    "pyyaml==6.0.1",
+    "appdirs>=1.4.4",
+    "pyyaml>=6.0.1",
     "poe-api-wrapper==1.7.0",
-    "brotli==1.1.0",
-    "g4f>=0.3.3.3",
+    "brotli>=1.1.0",
+    "g4f==0.3.3.3",
     "python-vlc>=3.0.20",
-    "httpx==0.27.2",
-    "click==8.1.3",
+    "httpx>=0.27.2",
+    "click>=8.1.3",
 ]
 
 cli_reqs = [
-    "rich==13.3.4",
+    "rich>=13.3.4",
     "clipman==3.1.0",
     "pyperclip==1.8.2",
-    "colorama==0.4.6",
-    "python-dotenv==1.0.0",
+    "colorama>=0.4.6",
+    "python-dotenv>=1.0.0",
     "prompt-toolkit==3.0.48",
 ]
 

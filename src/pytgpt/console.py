@@ -628,22 +628,6 @@ class Main(cmd.Cmd):
                     act=awesome_prompt,
                 )
 
-            elif provider == "perplexity":
-                from pytgpt.perplexity import PERPLEXITY
-
-                self.bot = PERPLEXITY(
-                    is_conversation=disable_conversation,
-                    max_tokens=max_tokens,
-                    timeout=timeout,
-                    intro=intro,
-                    filepath=filepath,
-                    update_file=update_file,
-                    proxies=proxies,
-                    history_offset=history_offset,
-                    act=awesome_prompt,
-                    quiet=quiet,
-                )
-
             elif provider == "novita":
                 assert auth, (
                     "Novita's API-key is required. " "Use the flag `--key` or `-k`"
@@ -2422,7 +2406,7 @@ class Gpt4free:
             quiet=quiet,
             timeout=timeout,
             selenium=selenium,
-            do_log=disable_logging == False,
+            do_log=disable_logging is False,
         )
         if best:
             click.secho(test.best)
@@ -2528,7 +2512,7 @@ class ImageGen:
             task = progress.add_task(
                 f"[cyan]Generating ...[{amount}]",
                 total=amount,
-                visible=quiet == False,
+                visible=quiet is False,
             )
             imager: Prodia | Imager = provider_obj(
                 timeout=timeout, proxies=proxy if proxy else {}
@@ -2536,7 +2520,7 @@ class ImageGen:
             for image in imager.generate(
                 prompt=prompt,
                 amount=amount,
-                additives=no_additives == False,
+                additives=no_additives is False,
                 stream=stream,  # Just a hack for temporary save. Raises "'async_generator' object is not iterable"
             ):
                 imager.save([image], name=name, dir=directory)

@@ -19,7 +19,6 @@ tgpt_providers = [
     "g4fauto",
     "poe",
     "groq",
-    "perplexity",
     "novita",
     "ai4chat",
     "deepseek",
@@ -32,8 +31,6 @@ gpt4free_providers = [
 available_providers = tgpt_providers + gpt4free_providers
 
 __all__ = [
-    "appdir",
-    "imager",
 ] + available_providers
 
 logging.getLogger("httpx").setLevel(logging.ERROR)
