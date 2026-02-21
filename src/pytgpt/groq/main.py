@@ -10,7 +10,8 @@ from typing import AsyncGenerator
 
 session = requests.Session()
 
-model = "mixtral-8x7b-32768"
+model = "allam-2-7b"
+# https://console.groq.com/docs/rate-limits
 
 
 class GROQ(Provider):
